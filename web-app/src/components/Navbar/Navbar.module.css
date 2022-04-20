@@ -1,0 +1,8 @@
+.sidebar{
+    position: fixed !important;
+}
+
+.collapsed{
+    width: 80px !important;
+    min-width: 80px !important;
+}
