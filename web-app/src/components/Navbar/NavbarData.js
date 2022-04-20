@@ -1,7 +1,12 @@
 import React from 'react';
-import {BsFillHouseFill, BsCalendarWeek, BsChatDots, } from 'react-icons/bs';
+import {BsFillFilePersonFill, BsFillHouseFill, BsCalendarWeek, BsChatDots, } from 'react-icons/bs';
 
 export const NavbarData = [
+    {
+        title: 'Profile',
+        icon: <BsFillFilePersonFill />,
+        to: '/profile',
+    },
     {
         title: 'Dashboard',
         icon: <BsFillHouseFill />,
