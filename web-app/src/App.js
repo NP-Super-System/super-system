@@ -8,7 +8,7 @@ import Calendar from './pages/Calendar/Calendar';
 import Forum from './pages/Forum/Forum';
 
 //Components
-import Navbar from './components/Navbar/Navbar';
+import Sidebar from './components/Sidebar/Sidebar';
 
 import './App.css';
 
@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Sidebar />
         <Routes>
           <Route path='/profile' element={<Profile />} />
           <Route path='/' element={<Dashboard />} />

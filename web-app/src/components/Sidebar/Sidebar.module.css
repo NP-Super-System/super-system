@@ -1,0 +1,77 @@
+:root{
+    --sidebar-bg-colour: rgb(29, 29, 29);
+    --active-blue: rgb(0, 112, 204);
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 240px;
+
+    background-color: var(--sidebar-bg-colour);
+
+    transition: 0.5s;
+}
+.collapsed{
+    width: 80px !important;
+}
+
+.logo{
+    background: linear-gradient(270deg, #44f5ff, #007db7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-weight: bold;
+    padding: 1em;
+}
+
+.profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 0.5em;
+
+    text-decoration: none;
+}
+.profile_active{
+    background-color: var(--active-blue);
+    transition: 0.25s;
+}
+.profile_icon{
+    margin-right: 1em;
+}
+.profile_name{
+    color: white;
+}
+
+.menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.menu_item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    text-decoration: none;
+    color: white;
+
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 0.5em;
+}
+.menu_item_active{
+    background-color: var(--active-blue);
+    transition: 0.25s;
+}
+.menu_item_icon{
+    margin-right: 1em;
+}
+.menu_item_title{
+    
+}

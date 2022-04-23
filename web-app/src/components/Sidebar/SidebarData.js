@@ -1,25 +1,31 @@
 import React from 'react';
 import {BsFillFilePersonFill, BsFillHouseFill, BsCalendarWeek, BsChatDots, } from 'react-icons/bs';
 
-export const NavbarData = [
+export const SidebarData = [
     {
         title: 'Profile',
-        icon: <BsFillFilePersonFill />,
-        to: '/profile',
+        section: 'profile',
+        show: false,
     },
     {
         title: 'Dashboard',
         icon: <BsFillHouseFill />,
         to: '/',
+        section: '',
+        show: true,
     },
     {
         title: 'Calendar',
         icon: <BsCalendarWeek />,
         to: '/calendar',
+        section: 'calendar',
+        show: true,
     },
     {
         title: 'Forum',
         icon: <BsChatDots />,
         to: '/forum',
+        section: 'forum',
+        show: true,
     },
 ];
