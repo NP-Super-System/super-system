@@ -1,0 +1,15 @@
+.smallCard {
+    margin: 10px;
+
+}
+
+.bigCard {
+    padding: 10px 20px;
+    width: 40%;
+    margin: 50px;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}

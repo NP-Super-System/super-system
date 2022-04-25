@@ -6,6 +6,7 @@ import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Calendar from './pages/Calendar/Calendar';
 import Forum from './pages/Forum/Forum';
+import Course from './pages/Course/Course';
 
 //Components
 import Sidebar from './components/Sidebar/Sidebar';
@@ -22,6 +23,7 @@ function App() {
           <Route path='/' element={<Dashboard />} />
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/forum' element={<Forum />} />
+          <Route path='/course' element={<Course />} />
         </Routes>
       </BrowserRouter>
     </div>
