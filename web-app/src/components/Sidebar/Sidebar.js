@@ -16,7 +16,6 @@ const Sidebar = props=>{
     useEffect(()=>{
         const curPath = window.location.pathname.split('/')[1];
         const activeItem = SidebarData.findIndex(item => item.section === curPath);
-        // setActiveIndex(curPath.length === 0 ? 1 : activeItem); // index 1 == /dashboard
         setActiveIndex(activeItem);
 
         return ()=>{
@@ -48,7 +47,7 @@ const Sidebar = props=>{
             <div className={styles.menu}>
                 {
                     SidebarData.map( (item, i)=>{
-                        return item.show ? <Link key={`${i}`} to={item.to} className={`${styles.menu_item} ${activeIndex === i ? styles.menu_item_active : ''}`}>
+                        return item.show ? <Link key={`${i}`} to={item.to} className={activeIndex === i ? styles.menu_item_active : styles.menu_item}>
                             <div className={styles.menu_item_icon}>
                                 {item.icon}
                             </div>

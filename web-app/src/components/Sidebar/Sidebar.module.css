@@ -48,7 +48,6 @@
 .profile_name{
     color: white;
 }
-
 .menu{
     display: flex;
     flex-direction: column;
@@ -65,13 +64,26 @@
     padding: 0.5em 1em 0.5em 1em;
     margin-bottom: 0.5em;
 }
+.menu_item:hover{
+    color: var(--active-blue);
+}
 .menu_item_active{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    text-decoration: none;
+    color: white;
+
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 0.5em;
+
     background-color: var(--active-blue);
     transition: 0.25s;
 }
+.menu_item_active:hover{
+    color: white;
+}
 .menu_item_icon{
     margin-right: 1em;
-}
-.menu_item_title{
-    
 }
