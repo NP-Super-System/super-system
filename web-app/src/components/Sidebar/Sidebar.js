@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { BsPerson } from 'react-icons/bs';
 import {Link, useLocation} from 'react-router-dom';
 
 import styles from './Sidebar.module.css';
@@ -17,7 +16,8 @@ const Sidebar = props=>{
     useEffect(()=>{
         const curPath = window.location.pathname.split('/')[1];
         const activeItem = SidebarData.findIndex(item => item.section === curPath);
-        setActiveIndex(curPath.length === 0 ? 1 : activeItem); // index 1 == /dashboard
+        // setActiveIndex(curPath.length === 0 ? 1 : activeItem); // index 1 == /dashboard
+        setActiveIndex(activeItem);
 
         return ()=>{
 

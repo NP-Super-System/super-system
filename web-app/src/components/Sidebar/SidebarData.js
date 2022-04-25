@@ -10,8 +10,8 @@ export const SidebarData = [
     {
         title: 'Dashboard',
         icon: <BsFillHouseFill />,
-        to: '/',
-        section: '',
+        to: '/home',
+        section: 'home',
         show: true,
     },
     {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 //Pages
 import Profile from './pages/Profile/Profile';
@@ -20,10 +20,14 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path='/profile' element={<Profile />} />
-          <Route path='/' element={<Dashboard />} />
+          <Route path='/home' element={<Dashboard />} />
+          <Route path='/home/:courseCode' element={<Course />} />
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/forum' element={<Forum />} />
-          <Route path='/course' element={<Course />} />
+          <Route 
+            path='*'
+            element={<Navigate to='/home' replace/>}
+          />
         </Routes>
       </BrowserRouter>
     </div>

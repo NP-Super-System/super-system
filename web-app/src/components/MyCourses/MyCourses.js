@@ -18,7 +18,7 @@ class MyCourses extends React.Component{
                 <Card className={styles.bigCard}>     
                     <Card.Title>My Courses</Card.Title>       
                     {CourseData.map((item, index) => 
-                        <Link key={`${index}`} to={'/course'} className={styles.link}>
+                        <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
                         <Card className={styles.smallCard}>
                             <Card.Img variant="top" src={item.pic} />
                             <Card.Body>

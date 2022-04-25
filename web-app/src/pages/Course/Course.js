@@ -1,19 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 
 import styles from './Course.module.css';
 
-class Course extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    
-    render(){
-        return (
-            <div className='container'>
-                Course
-            </div>
-        );
-    }
+const Course = props=>{
+
+    const {courseCode} = useParams();
+
+    useEffect(()=>{
+        
+        return ()=>{
+
+        }
+    });
+
+    return (
+        <div>
+            Course code: {courseCode || 'No course id provided'}
+        </div>
+    );
 }
 
 export default Course;
