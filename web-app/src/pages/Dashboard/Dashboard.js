@@ -1,6 +1,8 @@
 import React from 'react';
-import MyCourses from '../../components/MyCourses/MyCourses';
+
 import styles from './Dashboard.module.css';
+
+import MyCourses from '../../components/MyCourses/MyCourses';
 
 class Dashboard extends React.Component{
     constructor(props){
