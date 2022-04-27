@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Spinner } from 'react-bootstrap';
 
 //Pages
 import Login from './pages/Login/Login';
@@ -33,7 +34,8 @@ function App() {
       {
         isLoading ?
 
-        <div>Loading...</div>
+        // <div>Loading...</div>
+        <Spinner animation="border" variant="primary" />
         // Replace this with a loading animation or loading page
 
         :

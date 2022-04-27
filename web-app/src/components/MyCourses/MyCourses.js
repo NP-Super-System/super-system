@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './MyCourses.module.css';
-import Card from "react-bootstrap/Card";
+import { Card, ProgressBar } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import { CourseData } from './MyCoursesData';
@@ -15,7 +15,7 @@ class MyCourses extends React.Component{
     render() {
         return (
             <div>
-                <Card className={styles.bigCard}>     
+                <Card>     
                     <Card.Title>My Courses</Card.Title>       
                     {CourseData.map((item, index) => 
                         <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
@@ -26,6 +26,7 @@ class MyCourses extends React.Component{
                                 <Card.Text>
                                     {item.desc}
                                 </Card.Text>
+                                <ProgressBar now={item.progress} label={`${item.progress}%`} />
                             </Card.Body>
                         </Card>  
                         </Link>   
