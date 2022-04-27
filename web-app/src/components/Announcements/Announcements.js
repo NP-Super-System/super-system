@@ -14,10 +14,10 @@ class MyCourses extends React.Component{
 
     render() {
         return (
-            <div>
-                <Card>     
-                    <Card.Title>Announcements</Card.Title>       
-                    {AnnouncementsData.map((item, index) => 
+            <Card>     
+                <Card.Title>Announcements</Card.Title>       
+                {
+                    AnnouncementsData.map((item, index) => 
                         <p key={`${index}`}>
                             <b>{item.title}</b> 
                             <br /> 
@@ -26,10 +26,9 @@ class MyCourses extends React.Component{
                         // <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
                             
                         // </Link>   
-                    )}  
-                             
-                </Card>
-            </div>
+                    )
+                }        
+            </Card>
         )
     }
 }

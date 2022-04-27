@@ -12,20 +12,24 @@ class Deadlines extends React.Component{
         super(props);
     }
 
-    render(props) {
+    render() {
         return (
-            <div>
-                <Card className={styles}>     
-                    <Card.Title>Deadlines</Card.Title>       
-                    {DeadlinesData.map((item, index) => 
-                        <p><b>{item.date} {item.title}</b> <br /> {item.desc} <br /></p>
+            <Card>     
+                <Card.Title>Deadlines</Card.Title>       
+                {
+                    DeadlinesData.map((item, index) => 
+                        <p key={`${index}`}>
+                            <b>{item.date} {item.title}</b> 
+                            <br /> 
+                            {item.desc} 
+                            <br />
+                        </p>
                         // <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
                             
                         // </Link>   
-                    )}  
-                             
-                </Card>
-            </div>
+                    )
+                }  
+            </Card>
         )
     }
 }
