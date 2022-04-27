@@ -12,13 +12,17 @@ class MyCourses extends React.Component{
         super(props);
     }
 
-    render(props) {
+    render() {
         return (
             <div>
-                <Card className={styles}>     
+                <Card>     
                     <Card.Title>Announcements</Card.Title>       
                     {AnnouncementsData.map((item, index) => 
-                        <p><b>{item.title}</b> <br /> {item.desc}</p>
+                        <p key={`${index}`}>
+                            <b>{item.title}</b> 
+                            <br /> 
+                            {item.desc}
+                        </p>
                         // <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
                             
                         // </Link>   
