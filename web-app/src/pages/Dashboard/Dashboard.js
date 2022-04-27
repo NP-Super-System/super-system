@@ -14,7 +14,6 @@ class Dashboard extends React.Component{
     render(){
         return (
             <div className='container-fluid'>
-                Dashboard
                 <Container>
                     <Row>
                         <Col><MyCourses /></Col>

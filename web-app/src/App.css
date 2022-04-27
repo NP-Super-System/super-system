@@ -1,5 +1,6 @@
 html, body{
   height: 100%;
+  padding-top: 0.25em;
 }
 
 .App {
@@ -7,6 +8,8 @@ html, body{
 }
 
 .container{
+  display: flex;
+  flex-direction: column;
   margin-left: 240px;
   width: calc(100vw - 240px);
 }

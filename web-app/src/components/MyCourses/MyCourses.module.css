@@ -1,15 +1,57 @@
-.smallCard {
-    margin: 10px;
-
-}
+/* VERSION 1 (picture on top) */
 
 .bigCard {
-    padding: 10px 20px;
-    width: 40%;
-    margin: 50px;
+    padding: 0.5em 1em;
+}
+
+.cardList{
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .link {
     text-decoration: none;
     color: black;
+    width: 100%;
+}
+
+.smallCard {
+    flex: 1;
+    width: 100%;
+    padding: 1em;
+}
+
+/* VERSION 2 (picture on the left) */
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.course_link{
+    display: flex;
+    flex-direction: row;
+
+    text-decoration: none;
+    color: black;
+    width: 100%;
+
+    padding: 0.5em;
+    margin-bottom: 1.5em;
+}
+
+.course_img{
+    width: 30%;
+    margin-right: 1em;
+    border-radius: 5px;
+    /* border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; */
+}
+
+.course_content{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    justify-content: center;
+    width: 100%;
 }

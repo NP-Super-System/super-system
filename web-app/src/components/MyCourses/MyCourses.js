@@ -10,30 +10,54 @@ import { CourseData } from './MyCoursesData';
 class MyCourses extends React.Component{
     constructor(props) {
         super(props);
+        this.state = {
+            
+        }
     }
 
     render() {
         return (
-            <div>
-                <Card>     
-                    <Card.Title>My Courses</Card.Title>       
-                    {CourseData.map((item, index) => 
+            <Card className={styles.bigCard}>     
+                <Card.Title>My Courses</Card.Title>
+
+                {/* VERSION 1 - PICTURE ON TOP (SIMILAR TO POLITEMALL) */}
+                {/* <div className={styles.cardList}>
+                    {CourseData.map((item, index) =>
                         <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
-                        <Card className={styles.smallCard}>
-                            <Card.Img variant="top" src={item.pic} />
-                            <Card.Body>
-                                <Card.Title>{item.name}</Card.Title>
-                                <Card.Text>
-                                    {item.desc}
-                                </Card.Text>
-                                <ProgressBar now={item.progress} label={`${item.progress}%`} />
-                            </Card.Body>
-                        </Card>  
-                        </Link>   
+                            <Card className={styles.smallCard}>
+                                <Card.Img variant="top" src={item.pic} />
+                                <Card.Body>
+                                    <Card.Title>{item.name}</Card.Title>
+                                    <Card.Text>
+                                        {item.desc}
+                                    </Card.Text>
+                                    <ProgressBar now={item.progress} label={`${item.progress}%`} />
+                                </Card.Body>
+                            </Card>  
+                        </Link>
                     )}  
-                             
-                </Card>
-            </div>
+                </div> */}
+                
+                {/* VERSION 2 - PICTURE ON THE LEFT */}
+                <div className={styles.wrapper}>
+                    {
+                        CourseData.map( (item, i)=>{
+                            return <Link key={`${i}`} to={`/home/${item.code}`} className={styles.course_link}>
+                                <img className={styles.course_img} src={require('../../media/waterfall.jpeg')}/>
+                                {/* <img className={styles.course_img} src={require(item.pic)}/> */}
+                                <div className={styles.course_content}>
+                                    <Card.Title>{item.name}</Card.Title>
+                                    <Card.Text>
+                                        {item.desc}
+                                    </Card.Text>
+                                    <ProgressBar now={item.progress} label={`${item.progress}%`} />
+                                </div>
+                            </Link>
+                        } )
+                    }
+                </div>
+                            
+            </Card>
         )
     }
 }
