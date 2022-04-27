@@ -7,9 +7,11 @@ import Login from './pages/Login/Login';
 
 import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Course from './pages/Course/Course';
 import Calendar from './pages/Calendar/Calendar';
 import Forum from './pages/Forum/Forum';
-import Course from './pages/Course/Course';
+import Quiz from './pages/Quiz/Quiz';
+import Event from './pages/Event/Event';
 
 //Components
 import Sidebar from './components/Sidebar/Sidebar';
@@ -46,6 +48,8 @@ function App() {
             <Route path='/home/:courseCode' element={<Course />} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />
+            <Route path='/quiz' element={<Quiz />} />
+            <Route path='/event' element={<Event />} />
             <Route 
               path='*'
               element={<Navigate to='/home' replace/>}

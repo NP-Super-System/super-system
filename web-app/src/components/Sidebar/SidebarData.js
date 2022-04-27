@@ -1,5 +1,5 @@
 import React from 'react';
-import {BsFillFilePersonFill, BsFillHouseFill, BsCalendarWeek, BsChatDots, } from 'react-icons/bs';
+import { BsFillHouseFill, BsCalendarWeek, BsChatSquareDots, BsFillQuestionSquareFill, BsCalendarEvent, } from 'react-icons/bs';
 
 export const SidebarData = [
     {
@@ -23,9 +23,23 @@ export const SidebarData = [
     },
     {
         title: 'Forum',
-        icon: <BsChatDots />,
+        icon: <BsChatSquareDots />,
         to: '/forum',
         section: 'forum',
+        show: true,
+    },
+    {
+        title: 'Quizzes',
+        icon: <BsFillQuestionSquareFill />,
+        to: '/quiz',
+        section: 'quiz',
+        show: true,
+    },
+    {
+        title: 'Events',
+        icon: <BsCalendarEvent />,
+        to: '/event',
+        section: 'event',
         show: true,
     },
 ];

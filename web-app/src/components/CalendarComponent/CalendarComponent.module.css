@@ -1,0 +1,10 @@
+.months{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+
+    height: auto;
+
+    border: 1px solid rgb(229,231,235);
+}
