@@ -14,18 +14,20 @@ class MyCourses extends React.Component{
 
     render() {
         return (
-            <Card>     
+            <Card className={styles.wrapper}>     
                 <Card.Title>Announcements</Card.Title>       
                 {
                     AnnouncementsData.map((item, index) => 
-                        <p key={`${index}`}>
-                            <b>{item.title}</b> 
-                            <br /> 
-                            {item.desc}
-                        </p>
-                        // <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
-                            
-                        // </Link>   
+                        // <p key={`${index}`}>
+                        //     <b>{item.title}</b> 
+                        //     <br /> 
+                        //     {item.desc}
+                        // </p>
+                        <Link key={`${index}`} to={`/home/${item.to}`} className={styles.announcement}>
+                            <h5 className={styles.announcement_title}>{item.title}</h5>
+                            <span className={styles.announcement_datetime}>{item.datetime}</span>
+                            <span className={styles.announcement_desc}>{item.desc}</span>
+                        </Link>
                     )
                 }        
             </Card>

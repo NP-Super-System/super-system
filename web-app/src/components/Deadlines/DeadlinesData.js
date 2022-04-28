@@ -4,11 +4,13 @@ export const DeadlinesData = [
     {
         title: 'Deadline 1', 
         desc: 'ASG 1 Submission',
-        date: '27/4',
+        to: '/',
+        datetime: '27/4/2022 11:59pm',
     },
     {
         title: 'Deadline 2', 
         desc: 'ASG 2 Submission',
-        date: '5/5',
+        to: '/',
+        datetime: '5/5/2022 11:59pm',
     },
 ];

@@ -1,0 +1,32 @@
+.wrapper{
+    padding: 1em;
+    max-width: 30rem;
+}
+
+.deadline{
+    display: flex;
+    flex-direction: column;
+
+    text-decoration: none;
+    color: black;
+    border: 1px solid gray;
+    border-radius: 5px;
+
+    margin-bottom: 1em;
+    padding: 1em;
+
+    text-align: left;
+}
+
+.deadline_title{
+    margin-bottom: 0.5em;
+}
+
+.deadline_datetime{
+    color: red;
+    margin-bottom: 0.5em;
+}
+
+.deadline_desc{
+
+}
