@@ -24,7 +24,8 @@ const CalendarComponent = props=>{
                     return <React.Fragment key={i}>
                         {
                             row.map( (day, j)=>{
-                                return <Day key={j} day={day} monthIndex={monthIndex}/>
+                                const isToday = day.format('DD/MM/YYYY') == dayjs().format('DD/MM/YYYY');
+                                return <Day key={j} day={day} monthIndex={monthIndex} isToday={isToday}/>
                             } )
                         }
                     </React.Fragment>

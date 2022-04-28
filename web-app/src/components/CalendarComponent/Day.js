@@ -9,7 +9,7 @@ Number.prototype.mod = function(n) {
 const Day = props=>{
     return (
         <div className={styles.wrapper}>
-            <header className={props.day.format('M')-1 == props.monthIndex.mod(12) ? styles.black_header : styles.gray_header}>
+            <header className={props.day.format('M')-1 != props.monthIndex.mod(12) ? styles.gray_header : props.isToday ? styles.today_header : styles.black_header}>
                 {props.day.format('DD')}
             </header>
             <div className={styles.content}>

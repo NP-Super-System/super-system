@@ -1,3 +1,23 @@
 .header{
-    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 0.5em;
+}
+
+.button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1em;
+    background: none;
+    border: none;
+}
+
+.date{
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-left: 1em;
 }

@@ -5,6 +5,11 @@
     border: 1px solid rgb(229,231,235);
 }
 
+.today_header{
+    color: rgb(0, 123, 255);
+    font-weight: bold;
+}
+
 .black_header{
     color: black;
 }
