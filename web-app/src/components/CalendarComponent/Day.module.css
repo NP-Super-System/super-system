@@ -5,18 +5,33 @@
     border: 1px solid rgb(229,231,235);
 }
 
-.today_header{
-    color: rgb(0, 123, 255);
-    font-weight: bold;
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 0.25em;
 }
 
-.black_header{
+.daytext{
+    width: min-content;
+    padding: 0.25em;
+    width: 2em;
+    height: 2em;
+}
+
+.black_daytext{
     color: black;
 }
 
-.gray_header{
-    /* color: rgb(229,231,235); */
+.gray_daytext{
     color: rgb(194, 194, 194);
+}
+
+.today_daytext{
+    color: white;
+    background-color: rgb(0, 123, 255);
+    border-radius: 1em;
 }
 
 .content{
