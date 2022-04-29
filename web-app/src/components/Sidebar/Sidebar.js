@@ -31,7 +31,7 @@ const Sidebar = props=>{
             <Link to='/profile' className={`${styles.profile} ${activeIndex === 0 ? styles.profile_active : ''}`}>
                 <div className={styles.profile_icon}>
                     <img 
-                        src={require(`../../media/${useDefaultProfilePic ? 'default-' : ''}profile-pic.jpeg`)}
+                        src={`media/${useDefaultProfilePic ? 'default-' : ''}profile-pic.jpeg`}
                         alt='Profile Picture' 
                         style={{
                             width: 50,

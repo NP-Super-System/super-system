@@ -43,7 +43,7 @@ class MyCourses extends React.Component{
                     {
                         CourseData.map( (item, i)=>{
                             return <Link key={`${i}`} to={`/home/${item.code}`} className={styles.course_link}>
-                                <img className={styles.course_img} src={require('../../media/waterfall.jpeg')}/>
+                                <img className={styles.course_img} src={item.pic} alt="Course"/>
                                 {/* <img className={styles.course_img} src={require(item.pic)}/> */}
                                 <div className={styles.course_content}>
                                     <Card.Title>{item.name}</Card.Title>
