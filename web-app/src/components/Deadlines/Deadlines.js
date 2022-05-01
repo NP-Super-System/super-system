@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import { DeadlinesData } from './DeadlinesData';
+import { Container, Row, Col } from 'react-bootstrap';
 
 
 class Deadlines extends React.Component{
@@ -25,9 +26,15 @@ class Deadlines extends React.Component{
                         //     <br />
                         // </p>
                         <Link key={`${index}`} to={`/home/${item.to}`} className={styles.deadline}>
-                            <h5 className={styles.deadline_title}>{item.title}</h5>
-                            <span className={styles.deadline_datetime}>{item.datetime}</span>
-                            <span className={styles.deadline_desc}>{item.desc}</span>
+                            <Row>
+                                <Col>
+                                    <span className={styles.deadline_datetime}>{item.datetime}</span>
+                                </Col>
+                                <Col>
+                                    <h5 className={styles.deadline_title}>{item.title}</h5>
+                                    <span className={styles.deadline_desc}>{item.desc}</span>
+                                </Col>
+                            </Row>
                         </Link>  
                     )
                 }  

@@ -16,6 +16,16 @@ class MyCourses extends React.Component{
     }
 
     render() {
+        function variant(progress) {
+            if (progress > 66) {
+                return ''
+            }
+            if (progress > 33) {
+                return 'warning'
+            }
+            return 'danger'
+        }
+
         return (
             <Card className={styles.bigCard}>     
                 <Card.Title>My Courses</Card.Title>
@@ -50,7 +60,7 @@ class MyCourses extends React.Component{
                                     <Card.Text>
                                         {item.desc}
                                     </Card.Text>
-                                    <ProgressBar now={item.progress} label={`${item.progress}%`} />
+                                    <ProgressBar variant={variant(item.progress)} now={item.progress} label={`${item.progress}%`} />
                                 </div>
                             </Link>
                         } )

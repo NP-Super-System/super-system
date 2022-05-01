@@ -35,7 +35,7 @@ function App() {
         isLoading ?
 
         // <div>Loading...</div>
-        <Spinner animation="border" variant="primary" />
+        <Spinner className="loader" animation="border" variant="primary" />
         // Replace this with a loading animation or loading page
 
         :

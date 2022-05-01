@@ -13,3 +13,9 @@ html, body{
   margin-left: 240px;
   width: calc(100vw - 240px);
 }
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
