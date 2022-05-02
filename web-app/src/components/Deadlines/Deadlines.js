@@ -19,21 +19,15 @@ class Deadlines extends React.Component{
                 <Card.Title>Deadlines</Card.Title>       
                 {
                     DeadlinesData.map((item, index) => 
-                        // <p key={`${index}`}>
-                        //     <b>{item.datetime} {item.title}</b> 
-                        //     <br /> 
-                        //     {item.desc} 
-                        //     <br />
-                        // </p>
                         <Link key={`${index}`} to={`/home/${item.to}`} className={styles.deadline}>
                             <Row>
-                                <Col>
-                                    <span className={styles.deadline_datetime}>{item.datetime}</span>
-                                </Col>
-                                <Col>
-                                    <h5 className={styles.deadline_title}>{item.title}</h5>
-                                    <span className={styles.deadline_desc}>{item.desc}</span>
-                                </Col>
+                                <span className={styles.deadline_module}>{item.module}</span>
+                            </Row>
+                            <Row>
+                                <span className={styles.deadline_datetime}>{item.datetime}</span>
+                            </Row>
+                            <Row>
+                                <span className={styles.deadline_desc}>{item.desc}</span>
                             </Row>
                         </Link>  
                     )

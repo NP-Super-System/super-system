@@ -18,8 +18,8 @@
     text-align: left;
 }
 
-.deadline_title{
-    margin-bottom: 0.5em;
+.deadline_module{
+    font-weight: bold;
 }
 
 .deadline_datetime{
@@ -28,5 +28,5 @@
 }
 
 .deadline_desc{
-
+    font-size: 1.1em;
 }
