@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Course';
 import Calendar from './pages/Calendar/Calendar';
 import Forum from './pages/Forum/Forum';
+import ForumCreate from './pages/Forum/ForumCreate';
 import Quiz from './pages/Quiz/Quiz';
 import Event from './pages/Event/Event';
 
@@ -34,9 +35,7 @@ function App() {
       {
         isLoading ?
 
-        // <div>Loading...</div>
         <Spinner className="loader" animation="border" variant="primary" />
-        // Replace this with a loading animation or loading page
 
         :
 
@@ -50,6 +49,7 @@ function App() {
             <Route path='/home/:courseCode' element={<Course />} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />
+            <Route path='/forum/create' element={<ForumCreate />} />
             <Route path='/quiz' element={<Quiz />} />
             <Route path='/event' element={<Event />} />
             <Route 
