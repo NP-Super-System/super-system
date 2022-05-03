@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 
 import styles from './Forum.module.css';
 
@@ -32,13 +32,13 @@ const Forum = props=>{
                     <Button variant='primary'>Create Post</Button>
                 </Link>
             </header>
-            <div className={styles.post_list}>
+            <Col className={styles.post_list}>
                 {
                     posts.map( (post, i) => {
                         return <ForumPost key={`${i}`} title={post.title} body={post.body} />
                     } )
                 }
-            </div>
+            </Col>
         </div>
     );
 }

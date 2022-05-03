@@ -1,3 +1,8 @@
 .form{
     padding: 1em;
+    text-align: left;
+}
+
+.preview{
+    margin-top: 0.5em;
 }
