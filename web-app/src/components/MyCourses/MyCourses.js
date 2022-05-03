@@ -52,7 +52,7 @@ class MyCourses extends React.Component{
                 <div className={styles.wrapper}>
                     {
                         CourseData.map( (item, i)=>{
-                            return <Link key={`${i}`} to={`/home/${item.code}`} className={styles.course_link}>
+                            return <Link key={`${i}`} to={`/home/Course/${item.code}`} className={styles.course_link}>
                                 <img className={styles.course_img} src={item.pic} alt="Course"/>
                                 {/* <img className={styles.course_img} src={require(item.pic)}/> */}
                                 <div className={styles.course_content}>

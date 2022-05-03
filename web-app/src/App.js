@@ -9,7 +9,9 @@ import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Course';
+import Announcement from './pages/Announcement/Announcement';
 import Calendar from './pages/Calendar/Calendar';
+import Deadline from './pages/Deadline/Deadline';
 import Forum from './pages/Forum/Forum';
 import ForumCreate from './pages/Forum/ForumCreate';
 import Quiz from './pages/Quiz/Quiz';
@@ -45,8 +47,10 @@ function App() {
           <Sidebar />
           <Routes>
             <Route path='/profile' element={<Profile />} />
-            <Route path='/home' element={<Dashboard />} />
-            <Route path='/home/:courseCode' element={<Course />} />
+            <Route path='/home' element={<Dashboard />} />        
+            <Route path='/home/Announcement/:announcementNum' element={<Announcement />} />    
+            <Route path='/home/Course/:courseCode' element={<Course />} />
+            <Route path='/home/Deadline/:deadlineId' element={<Deadline />} />    
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />
             <Route path='/forum/create' element={<ForumCreate />} />
