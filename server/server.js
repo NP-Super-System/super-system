@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const bodyParser = require('body-parser');
+const crypto = require('crypto');
 const methodOverride = require('method-override');
 
 // Import MongoDB Schemas
@@ -68,7 +70,9 @@ const storage = new GridFsStorage({
 const uploadImage = multer({storage});
 
 // Add forum post
-app.post('/add-forum-post', uploadImage.single('image'), (req, res)=>{
+app.post('/add-forum-post', uploadImage.single('file'), (req, res)=>{
+    console.log(req.body);
+
     const {title, body} = req.body;
     const post = {title, body};
     const forumPost = new ForumPost(post);
@@ -81,10 +85,6 @@ app.post('/add-forum-post', uploadImage.single('image'), (req, res)=>{
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
     ForumPost.find()
-        .then(result => {
-            console.log(result)
-            res.send(result)
-        })
+        .then(result => res.send(result))
         .catch(err => console.log(err));
-    
 });
