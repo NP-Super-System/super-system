@@ -29,10 +29,10 @@ export const SidebarData = [
         show: true,
     },
     {
-        title: 'Quizzes',
+        title: 'Challenges',
         icon: <BsFillQuestionSquareFill />,
-        to: '/quiz',
-        section: 'quiz',
+        to: '/challenges',
+        section: 'challenges',
         show: true,
     },
     {

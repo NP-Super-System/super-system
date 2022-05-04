@@ -23,7 +23,7 @@ class MyCourses extends React.Component{
                         //     <br /> 
                         //     {item.desc}
                         // </p>
-                        <Link key={`${index}`} to={`/home/Announcement/${item.to}`} className={styles.announcement}>
+                        <Link key={`${index}`} to={`/home/announcement/${item.to}`} className={styles.announcement}>
                             <h5 className={styles.announcement_title}>{item.title}</h5>
                             <span className={styles.announcement_datetime}>{item.datetime}</span>
                             <span className={styles.announcement_desc}>{item.desc}</span>

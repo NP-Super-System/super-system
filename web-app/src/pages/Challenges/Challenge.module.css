@@ -1,0 +1,33 @@
+.wrapper{
+    padding: 1em;
+    max-width: 30rem;
+}
+
+.announcement{
+    display: flex;
+    flex-direction: column;
+
+    text-decoration: none;
+    color: black;
+    border: 1px solid rgb(215, 215, 215);
+    border-radius: 5px;
+
+    margin-bottom: 1em;
+    padding: 1em;
+
+    text-align: left;
+}
+
+.announcement_title{
+    margin-bottom: 0.5em;
+}
+
+.announcement_datetime{
+    font-style: italic;
+    color: gray;
+    margin-bottom: 0.5em;
+}
+
+.announcement_desc{
+
+}

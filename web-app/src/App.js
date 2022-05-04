@@ -14,7 +14,9 @@ import Calendar from './pages/Calendar/Calendar';
 import Deadline from './pages/Deadline/Deadline';
 import Forum from './pages/Forum/Forum';
 import ForumCreate from './pages/Forum/ForumCreate';
-import Quiz from './pages/Quiz/Quiz';
+import Challenges from './pages/Challenges/Challenges';
+import Challenge from './pages/Challenges/Challenge';
+
 import Event from './pages/Event/Event';
 
 //Components
@@ -48,13 +50,14 @@ function App() {
           <Routes>
             <Route path='/profile' element={<Profile />} />
             <Route path='/home' element={<Dashboard />} />        
-            <Route path='/home/Announcement/:announcementNum' element={<Announcement />} />    
-            <Route path='/home/Course/:courseCode' element={<Course />} />
-            <Route path='/home/Deadline/:deadlineId' element={<Deadline />} />    
+            <Route path='/home/announcement/:announcementNum' element={<Announcement />} />    
+            <Route path='/home/course/:courseCode' element={<Course />} />
+            <Route path='/home/deadline/:deadlineId' element={<Deadline />} />    
+            <Route path='/challenges/:challengeId' element={<Challenge />} />    
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />
             <Route path='/forum/create' element={<ForumCreate />} />
-            <Route path='/quiz' element={<Quiz />} />
+            <Route path='/challenges' element={<Challenges />} />
             <Route path='/event' element={<Event />} />
             <Route 
               path='*'

@@ -19,7 +19,7 @@ class Deadlines extends React.Component{
                 <Card.Title>Deadlines</Card.Title>       
                 {
                     DeadlinesData.map((item, index) => 
-                        <Link key={`${index}`} to={`/home/Deadline/${item.to}`} className={styles.deadline}>
+                        <Link key={`${index}`} to={`/home/deadline/${item.to}`} className={styles.deadline}>
                             <Row>
                                 <span className={styles.deadline_module}>{item.module}</span>
                             </Row>
