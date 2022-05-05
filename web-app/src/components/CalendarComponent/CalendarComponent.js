@@ -12,16 +12,14 @@ const CalendarComponent = props=>{
     const { monthIndex } = useContext(GlobalContext);
 
     useEffect(() => {
-        // console.table(currentMonth);
-
         setCurrentMonth(getMonth(monthIndex));
     }, [monthIndex]);
 
     return (
         <div className={styles.months}>
             {
-                currentMonth.map( (row, i)=>{
-                    return <React.Fragment key={i}>
+                currentMonth.map( (row, i)=>
+                    <React.Fragment key={i}>
                         {
                             row.map( (day, j)=>{
                                 const isToday = day.format('DD/MM/YYYY') == dayjs().format('DD/MM/YYYY');
@@ -29,7 +27,7 @@ const CalendarComponent = props=>{
                             } )
                         }
                     </React.Fragment>
-                } )
+                )
             }
         </div>
     );

@@ -1,5 +1,20 @@
 import React from 'react';
-import { BsFillHouseFill, BsCalendarWeek, BsChatSquareDots, BsFillQuestionSquareFill, BsCalendarEvent, } from 'react-icons/bs';
+import { 
+    BsGrid, 
+    BsFillGridFill, 
+    
+    BsCalendarWeek, 
+    BsCalendarWeekFill, 
+
+    BsChatSquareDots, 
+    BsFillChatSquareDotsFill, 
+
+    BsQuestionSquare, 
+    BsQuestionSquareFill, 
+
+    BsCalendarEvent,
+    BsCalendarEventFill,
+} from 'react-icons/bs';
 
 export const SidebarData = [
     {
@@ -9,7 +24,8 @@ export const SidebarData = [
     },
     {
         title: 'Dashboard',
-        icon: <BsFillHouseFill />,
+        icon: <BsGrid />,
+        iconActive: <BsFillGridFill />,
         to: '/home',
         section: 'home',
         show: true,
@@ -17,6 +33,7 @@ export const SidebarData = [
     {
         title: 'Calendar',
         icon: <BsCalendarWeek />,
+        iconActive: <BsCalendarWeekFill />,
         to: '/calendar',
         section: 'calendar',
         show: true,
@@ -24,13 +41,15 @@ export const SidebarData = [
     {
         title: 'Forum',
         icon: <BsChatSquareDots />,
+        iconActive: <BsFillChatSquareDotsFill />,
         to: '/forum',
         section: 'forum',
         show: true,
     },
     {
         title: 'Challenges',
-        icon: <BsFillQuestionSquareFill />,
+        icon: <BsQuestionSquare />,
+        iconActive: <BsQuestionSquareFill />,
         to: '/challenges',
         section: 'challenges',
         show: true,
@@ -38,6 +57,7 @@ export const SidebarData = [
     {
         title: 'Events',
         icon: <BsCalendarEvent />,
+        iconActive: <BsCalendarEventFill />,
         to: '/event',
         section: 'event',
         show: true,

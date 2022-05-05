@@ -2,7 +2,7 @@
     padding: 1em;
 }
 
-.announcement{
+.challenge{
     display: flex;
     flex-direction: column;
 
@@ -17,17 +17,12 @@
     text-align: left;
 }
 
-.announcement_title{
-    margin-bottom: 0.5em;
+.challenge_details{
+    display: flex;
+    flex-direction: column;
 }
 
-.announcement_datetime{
-    font-style: italic;
-    color: gray;
-    margin-bottom: 0.5em;
-}
-
-.right {
-    position: absolute;
-    right: 50px;
+.challenge_points{
+    text-align: center;
+    float: right;
 }

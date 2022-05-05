@@ -12,7 +12,7 @@ const Calendar = props=>{
         return ()=>{
 
         }
-    });
+    }, []);
 
     return (
         <div className='container'>
