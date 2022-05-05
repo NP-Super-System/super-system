@@ -15,7 +15,7 @@ const Announcement = props=>{
     });
 
     return (
-        <div>
+        <div  className='container'>
             Announcement: {announcementNum || 'No announcement number provided'}
         </div>
     );

@@ -15,7 +15,7 @@ const Deadline = props=>{
     });
 
     return (
-        <div>
+        <div  className='container'>
             Deadline: {deadlineId || 'No dateline id provided'}
         </div>
     );

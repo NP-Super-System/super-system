@@ -13,7 +13,7 @@ class Dashboard extends React.Component{
     }
     render(){
         return (
-            <div className='container-fluid'>
+            <div className='container'>
                 <Container>
                     <Row>
                         <Col><MyCourses /></Col>

@@ -15,7 +15,7 @@ const Course = props=>{
     });
 
     return (
-        <div>
+        <div  className='container'>
             Course code: {courseCode || 'No course id provided'}
         </div>
     );
