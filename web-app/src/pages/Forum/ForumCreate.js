@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import axios from 'axios';
+import {Navigate, useNavigate} from 'react-router-dom';
 
 import styles from './ForumCreate.module.css';
 
@@ -16,14 +17,11 @@ const ForumCreate = props=>{
 
         const file = e.target.files[0];
 
-        console.log('change image');
         setSelectedImage(file); 
     }
 
-    // this stupid piece of shit code wont fucking work istfg
-
-    // const onSubmit = e=>{
-    //     
+    // const onSubmit = async e=>{
+        
     //     e.preventDefault();
         
     //     const serverUrl = 'http://localhost:5000/add-forum-post';
@@ -32,8 +30,6 @@ const ForumCreate = props=>{
     //     formData.append('title', title);
     //     formData.append('body', body);
     //     formData.append('file', selectedImage);
-    //     console.log(formData);
-    //     console.log(selectedImage);
         
     //     const config = {
     //         headers: {
@@ -42,7 +38,12 @@ const ForumCreate = props=>{
     //     }
 
     //     axios.post(serverUrl, formData, config)
-    //         .then(res => window.location = '/forum')
+    //         .then(res => {
+    //             console.log('redirect back to forum page');
+    //             console.log(res);
+    //             setRedirectToForum(true);
+    //             navigate('/forum');
+    //         })
     //         .catch(err => console.log(err));
     // }
 
@@ -50,7 +51,6 @@ const ForumCreate = props=>{
         if (!selectedImage) return;
 
         const objectUrl = URL.createObjectURL(selectedImage);
-        console.log(objectUrl);
         setPreview(objectUrl);
 
         // free memory when ever this component is unmounted

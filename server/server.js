@@ -46,7 +46,6 @@ let gfs;
 conn.once('open', ()=>{
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('forum-post-images');
 });
 
 // Storage engine
@@ -60,25 +59,31 @@ const storage = new GridFsStorage({
                 const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'uploads'
+                    bucketName: 'upload',
                 };
                 resolve(fileInfo);
             });
         });
     }
 });
-const uploadImage = multer({storage});
+const upload = multer({storage});
 
 // Add forum post
-app.post('/add-forum-post', uploadImage.single('file'), (req, res)=>{
+app.post('/add-forum-post', upload.single('file'), (req, res)=>{
     console.log(req.body);
-
     const {title, body} = req.body;
-    const post = {title, body};
+
+    const fileId = req.file ? req.file.id.toString() : '';
+
+    const post = {title, body, fileId};
     const forumPost = new ForumPost(post);
 
     forumPost.save()
-        .then(result => res.redirect(`${appUrl}/forum`)) //redirect to forum page after submitting post
+        .then(result => {
+            //redirect to forum page after submitting post
+            console.log('Successfully posted!');
+            res.redirect(`${appUrl}/forum`);
+        })
         .catch(err => console.log(err));
 });
 

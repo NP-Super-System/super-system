@@ -13,9 +13,11 @@ class ForumPost extends React.Component{
     }
     render(){
         return (
-            <Row className={styles.wrapper}>
-                <h5 className={styles.title}>{this.props.title}</h5>
-                <div className={styles.body}>{this.props.body}</div>
+            <Row>
+                <Card className={styles.wrapper}>
+                    <h5 className={styles.title}>{this.props.title}</h5>
+                    <div className={styles.body}>{this.props.body}</div>
+                </Card>
             </Row>
         )
     }

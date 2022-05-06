@@ -10,6 +10,7 @@ const forumPostSchema = new Schema({
         required: true,
     },
     body: String,
+    fileId: String,
 
 }, { timestamps: true });
 
