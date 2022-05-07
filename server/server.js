@@ -1,21 +1,25 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const methodOverride = require('method-override');
+
+// Load environment variables
+require('dotenv').config();
 
 // Import MongoDB Schemas
 const mongoose = require('mongoose');
 const ForumPost = require('./models/ForumPost');
 
+//Import AWS S3 upload function
+const { uploadFile, getFileStream } = require('./s3');
+
 //Import Middleware for image upload
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
-
-// Load environment variables
-require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -67,15 +71,26 @@ const storage = new GridFsStorage({
     }
 });
 const upload = multer({storage});
+//REMOVE
+const uploadLocal = multer({dest: 'uploads/'});
 
 // Add forum post
-app.post('/add-forum-post', upload.single('file'), (req, res)=>{
-    console.log(req.body);
+app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
+    let imgKey = '';
+    try{
+        const uploadFileRes = await uploadFile(req.file);
+        console.log(uploadFileRes);
+        imgKey = uploadFileRes.key || '';
+
+        //Remove file from server
+        fs.unlinkSync(`./uploads/${imgKey}`);
+    }
+    catch(err){console.log('Image does not exist or upload to s3 failed');}
+
     const {title, body} = req.body;
 
-    const fileId = req.file ? req.file.id.toString() : '';
-
-    const post = {title, body, fileId};
+    const post = {title, body, imgKey};
+    console.log(post);
     const forumPost = new ForumPost(post);
 
     forumPost.save()
@@ -90,6 +105,16 @@ app.post('/add-forum-post', upload.single('file'), (req, res)=>{
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
     ForumPost.find()
-        .then(result => res.send(result))
+        .then(result => {
+            res.send(result);
+        })
         .catch(err => console.log(err));
+});
+
+// Get image from s3
+app.get('/get-image/:key', (req, res) => {
+    const key = req.params.key;
+    const readStream = getFileStream(key);
+
+    readStream.pipe(res);
 });

@@ -35,7 +35,7 @@ const Forum = props=>{
             <Col className={styles.post_list}>
                 {
                     posts.map( (post, i) => {
-                        return <ForumPost key={`${i}`} title={post.title} body={post.body} />
+                        return <ForumPost key={`${i}`} title={post.title} body={post.body} imgKey={post.imgKey}/>
                     } )
                 }
             </Col>
