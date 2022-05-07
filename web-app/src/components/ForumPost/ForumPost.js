@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Card } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import styles from './ForumPost.module.css';
@@ -13,13 +13,13 @@ class ForumPost extends React.Component{
     }
     render(){
         return (
-            <Row>
-                <Card className={styles.wrapper}>
+            <Card className={styles.wrapper}>
+                <div className={styles.text_content}>
                     <h5 className={styles.title}>{this.props.title}</h5>
                     <div className={styles.body}>{this.props.body}</div>
-                    {this.props.imgKey && <img src={`http://localhost:5000/get-image/${this.props.imgKey}`} />}
-                </Card>
-            </Row>
+                </div>
+                {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
+            </Card>
         )
     }
 }

@@ -5,6 +5,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 import styles from './Forum.module.css';
 
 import ForumPost from '../../components/ForumPost/ForumPost';
+import { Card } from 'react-bootstrap';
 
 const Forum = props=>{
 
@@ -32,13 +33,20 @@ const Forum = props=>{
                     <Button variant='primary'>Create Post</Button>
                 </Link>
             </header>
-            <Col className={styles.post_list}>
-                {
-                    posts.map( (post, i) => {
-                        return <ForumPost key={`${i}`} title={post.title} body={post.body} imgKey={post.imgKey}/>
-                    } )
-                }
-            </Col>
+            <div className={styles.wrapper}>
+                <Col className={styles.post_list}>
+                    {
+                        posts.map( (post, i) => {
+                            return <ForumPost key={`${i}`} title={post.title} body={post.body} imgKey={post.imgKey}/>
+                        } )
+                    }
+                </Col>
+                <Col className={styles.friends_list}>
+                    <Card>
+                        <Card.Title>Friends List</Card.Title>
+                    </Card>
+                </Col>
+            </div>
         </div>
     );
 }

@@ -7,10 +7,25 @@
     margin-bottom: 0.5em;
 }
 
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    margin: auto;
+    width: 100%;
+    padding: 0;
+}
+
 .filter{
     margin-right: 0.5em;
 }
 
 .post_list{
     padding: 1em;
+}
+
+.friends_list{
+    padding: 1em;
+    max-width: 360px;
 }

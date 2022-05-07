@@ -1,6 +1,13 @@
+:root{
+  --body-bg-colour: rgb(240, 240, 240);
+  --sidebar-bg-colour: rgb(29, 29, 29);
+  --active-blue: rgb(0, 112, 204);
+}
+
 html, body{
   height: 100%;
   padding-top: 0.25em;
+  background-color: var(--body-bg-colour);
 }
 
 .App {
