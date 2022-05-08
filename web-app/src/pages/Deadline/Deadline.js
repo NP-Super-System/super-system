@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import styles from './Deadline.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const Deadline = props=>{
 
     const {deadlineId} = useParams();
@@ -15,9 +17,9 @@ const Deadline = props=>{
     });
 
     return (
-        <div  className='container'>
+        <PageContainer>
             Deadline: {deadlineId || 'No dateline id provided'}
-        </div>
+        </PageContainer>
     );
 }
 

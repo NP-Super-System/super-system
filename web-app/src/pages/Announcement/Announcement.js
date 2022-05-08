@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import styles from './Announcement.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const Announcement = props=>{
 
     const {announcementNum} = useParams();
@@ -15,9 +17,9 @@ const Announcement = props=>{
     });
 
     return (
-        <div  className='container'>
+        <PageContainer>
             Announcement: {announcementNum || 'No announcement number provided'}
-        </div>
+        </PageContainer>
     );
 }
 

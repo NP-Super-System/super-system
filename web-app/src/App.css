@@ -6,20 +6,22 @@
 
 html, body{
   height: 100%;
-  padding-top: 0.25em;
   background-color: var(--body-bg-colour);
 }
 
 .App {
   text-align: center;
+  width: 100%;
 }
 
-.container{
-  display: flex;
+/* .container{
+  display: inline-flex;
   flex-direction: column;
-  margin-left: 240px;
-  width: calc(100vw - 240px);
-}
+  justify-content: center;
+  margin: 0 !important;
+  padding: 0 0 0 200px;
+  width: 100%;
+} */
 
 .loader {
   position: fixed;

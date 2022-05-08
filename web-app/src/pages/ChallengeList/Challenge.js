@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './Challenge.module.css';
 
+import PageContainer from '../../layout/PageContainer';
 import { questions } from './ChallengeData.js';
 
 const Challenge = props => {
@@ -28,7 +29,7 @@ const Challenge = props => {
 	};
 
 	return (
-		<div className='container'>
+		<PageContainer>
 			{
 				showScore ?
 
@@ -54,7 +55,7 @@ const Challenge = props => {
 					</div>
 				</>
 			}
-		</div>
+		</PageContainer>
 	);
 }
 

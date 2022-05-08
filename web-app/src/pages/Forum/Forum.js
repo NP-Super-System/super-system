@@ -4,6 +4,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 
 import styles from './Forum.module.css';
 
+import PageContainer from '../../layout/PageContainer';
 import ForumPost from '../../components/ForumPost/ForumPost';
 import { Card } from 'react-bootstrap';
 
@@ -26,7 +27,7 @@ const Forum = props=>{
     }, []);
 
     return (
-        <div className='container'>
+        <PageContainer>
             <header className={styles.header}>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
                 <Link to='/forum/create'>
@@ -47,7 +48,7 @@ const Forum = props=>{
                     </Card>
                 </Col>
             </div>
-        </div>
+        </PageContainer>
     );
 }
 

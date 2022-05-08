@@ -2,12 +2,14 @@ import React from 'react';
 
 import styles from './Event.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const Event = props=>{
 
     return (
-        <div className='container'>
+        <PageContainer>
             Event
-        </div>
+        </PageContainer>
     );
 }
 

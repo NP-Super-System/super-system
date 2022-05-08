@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './Dashboard.module.css';
 
+import PageContainer from '../../layout/PageContainer';
 import MyCourses from '../../components/MyCourses/MyCourses';
 import Announcements from '../../components/Announcements/Announcements'
 import Deadline from '../../components/Deadlines/Deadlines'
@@ -13,18 +14,15 @@ class Dashboard extends React.Component{
     }
     render(){
         return (
-            <div className='container-fluid'>
-                <Container>
-                    <Row>
-                        <Col><MyCourses /></Col>
-                        <Col>
-                            <Announcements />
-                            <br />
-                            <Deadline />
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
+            <PageContainer>
+                <Row>
+                    <Col><MyCourses /></Col>
+                    <Col>
+                        <Announcements />
+                        <Deadline />
+                    </Col>
+                </Row>
+            </PageContainer>
         );
     }
 }

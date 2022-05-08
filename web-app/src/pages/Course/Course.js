@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import styles from './Course.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const Course = props=>{
 
     const {courseCode} = useParams();
@@ -15,9 +17,9 @@ const Course = props=>{
     });
 
     return (
-        <div  className='container'>
+        <PageContainer>
             Course code: {courseCode || 'No course id provided'}
-        </div>
+        </PageContainer>
     );
 }
 

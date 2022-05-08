@@ -2,12 +2,14 @@ import React from 'react';
 
 import styles from './Game.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const Game = props=>{
 
     return (
-        <div className='container'>
+        <PageContainer>
             Game
-        </div>
+        </PageContainer>
     );
 }
 

@@ -1,7 +1,9 @@
+// Packages
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from 'react-bootstrap';
+import { useScreenType } from './layout/useScreenType';
 
 // Pages
 import Login from './pages/Login/Login';
@@ -19,12 +21,14 @@ import Challenge from './pages/ChallengeList/Challenge';
 import Event from './pages/Event/Event';
 
 // Components
-import Sidebar from './components/Sidebar/Sidebar';
+import Sidebar from './nav-components/Sidebar/Sidebar';
+import Navbar from './nav-components/Navbar/Navbar';
 
 import './App.css';
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
+  const screenType = useScreenType();
 
   useEffect(()=>{
     // Reload when isAuthenticated value changes
@@ -43,7 +47,15 @@ function App() {
         isAuthenticated ?
 
         <BrowserRouter>
-          <Sidebar user={user}/>
+          {
+            screenType == 'show-sidebar' ?
+
+            <Sidebar user={user}/>
+
+            :
+
+            <Navbar user={user}/>
+          }
           <Routes>
             <Route path='/profile' element={<Profile />} />
             <Route path='/home' element={<Dashboard />} />        

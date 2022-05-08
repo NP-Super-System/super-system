@@ -2,15 +2,16 @@ import React from 'react';
 
 import styles from './Profile.module.css';
 
+import PageContainer from '../../layout/PageContainer';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
 const Profile = props=>{
 
     return (
-        <div className='container'>
+        <PageContainer>
             Profile
             <LogoutButton />
-        </div>
+        </PageContainer>
     );
 }
 
