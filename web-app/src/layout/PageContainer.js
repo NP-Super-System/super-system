@@ -13,7 +13,7 @@ const PageContainer = props => {
 
     return (
         <div className={
-            `container ${screenType == 'show-sidebar' ? styles.container : styles.container_no_sidebar}`
+            `container ${screenType == 'show-sidebar' ? styles.container_sidebar : styles.container_navbar}`
         }>
             {props.children}
         </div>

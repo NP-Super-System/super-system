@@ -1,5 +1,8 @@
 import React from 'react';
-import { 
+import {
+    BsPerson,
+    BsPersonFill,
+    
     BsGrid, 
     BsFillGridFill, 
     
@@ -19,6 +22,9 @@ import {
 export const NavData = [
     {
         title: 'Profile',
+        icon: <BsPerson />,
+        iconActive: <BsPersonFill />,
+        to: '/profile',
         section: 'profile',
         show: false,
     },

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter, Link, useLocation} from 'react-router-dom';
-import {Navbar as NavbarBS, Nav, NavItem, Container, Image} from 'react-bootstrap';
+import {Link, useLocation} from 'react-router-dom';
+import {Navbar as NavbarBS, Nav, Container, Image} from 'react-bootstrap';
+import { LinkContainer } from "react-router-bootstrap";
 
 import styles from './Navbar.module.css';
 import './NavbarBootstrap.css';
@@ -9,24 +10,30 @@ import { NavData } from '../NavData';
 
 const Navbar = props => {
 
-    useEffect(() => {
+    const [activeIndex, setActiveIndex] = useState(0);
 
-    }, []);
+    const location = useLocation();
+
+    useEffect(()=>{
+        const curPath = window.location.pathname.split('/')[1];
+        const activeItem = NavData.findIndex(item => item.section === curPath);
+        setActiveIndex(activeItem);
+    }, [location]);
 
     return (
-        <NavbarBS bg='dark' expand='lg'>
+        <NavbarBS bg='dark' expand='lg' collapseOnSelect={true}>
             <Container>
-                <NavbarBS.Brand>SUPER-SYSTEM</NavbarBS.Brand>
+                <NavbarBS.Brand>Super-System</NavbarBS.Brand>
                 <NavbarBS.Toggle aria-controls="navbar-pages-nav">
                     <Image src="https://img.icons8.com/material-outlined/24/FFFFFF/menu--v1.png"/>
                 </NavbarBS.Toggle>
-                <NavbarBS.Collapse id='navbar-pages-nav'>
+                <NavbarBS.Collapse id='navbar-pages-nav'>   
                     <Nav>
                         {
                             NavData.map( (item, i) => 
-                                <NavItem key={`${i}`}>
-                                    <Nav.Link href={item.to}>{item.title}</Nav.Link>
-                                </NavItem>
+                                <LinkContainer key={`${i}`} to={item.to} className={activeIndex === i ? styles.nav_item_active : styles.nav_item}>
+                                    <Nav.Link>{item.title}</Nav.Link>
+                                </LinkContainer>
                             )
                         }
                     </Nav>

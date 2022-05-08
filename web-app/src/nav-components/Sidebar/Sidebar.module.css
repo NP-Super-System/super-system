@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+
 .sidebar{
     position: fixed;
     top: 0;
@@ -15,13 +17,19 @@
 }
 
 .logo{
-    background: linear-gradient(270deg, #44f5ff, #007db7);
+    
+    /* background: linear-gradient(270deg, #44f5ff, #007db7);
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent; */
 
-    font-weight: bold;
-    padding: 1em;
+    /* font-family: 'Dosis', sans-serif; */
+    font-family: 'Shadows Into Light', cursive;
+    color: white;
+    font-size: 2em;
+
+    /* font-weight: bold; */
+    padding: 0.5em;
 }
 
 .profile{

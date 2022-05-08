@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+
+.navbar{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
 .navbar-brand{
+    font-family: 'Shadows Into Light', cursive;
     color: white !important;
+    margin-right: 2em;
 }
 .nav-link{
     color: white !important;

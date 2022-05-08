@@ -1,4 +1,4 @@
-.container{
+.container_sidebar{
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
@@ -7,11 +7,11 @@
     width: 100%;
 }
 
-.container_no_sidebar{
+.container_navbar{
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 60px 0 0 0 !important;
     width: 100%;
 }
