@@ -15,9 +15,10 @@ import Announcement from './pages/Announcement/Announcement';
 import Calendar from './pages/Calendar/Calendar';
 import Deadline from './pages/Deadline/Deadline';
 import Forum from './pages/Forum/Forum';
-import ForumCreate from './pages/Forum/ForumCreate';
+import ForumCreate from './pages/ForumCreate/ForumCreate';
 import ChallengeList from './pages/ChallengeList/ChallengeList';
-import Challenge from './pages/ChallengeList/Challenge';
+import Challenge from './pages/Challenge/Challenge';
+import ChallengeCreate from './pages/ChallengeCreate/ChallengeCreate';
 import Event from './pages/Event/Event';
 
 // Components
@@ -66,7 +67,8 @@ function App() {
             <Route path='/forum' element={<Forum />} />
             <Route path='/forum/create' element={<ForumCreate />} />
             <Route path='/challenges' element={<ChallengeList />} />
-            <Route path='/challenges/:challengeId' element={<Challenge />} />  
+            <Route path='/challenges/:challengeId' element={<Challenge />} />
+            <Route path='/create-challenge/' element={<ChallengeCreate />} />
             <Route path='/event' element={<Event />} />
             <Route 
               path='*'

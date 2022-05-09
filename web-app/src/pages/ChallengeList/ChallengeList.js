@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, Button } from 'react-bootstrap';
+import { useScreenType } from '../../layout/useScreenType';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
@@ -10,6 +11,8 @@ import PageContainer from '../../layout/PageContainer';
 import { ChallengeListData } from './ChallengeListData';
 
 const ChallengeList = props => {
+
+    const screenType = useScreenType();
 
     const rating = rate => {
         const items = []
@@ -31,8 +34,14 @@ const ChallengeList = props => {
 
     return (
         <PageContainer>
-			<div className={styles.wrapper}>
-                <Card.Title>Challenges</Card.Title>       
+			<header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
+                <Card.Title>Challenges</Card.Title>
+                <input type='text' placeholder='Search filters' className={styles.filter}/>
+                <Link to='/create-challenge'>
+                    <Button variant='primary'>Create Challenge</Button>
+                </Link>
+            </header>       
+            <div className={styles.wrapper}>
                 {
                     ChallengeListData.map( (item, i) => 
                         (
