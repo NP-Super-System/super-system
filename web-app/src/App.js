@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from 'react-bootstrap';
-import { useScreenType } from './layout/useScreenType';
+import { useScreenType } from './modules/useScreenType';
 
 // Pages
 import Login from './pages/Login/Login';

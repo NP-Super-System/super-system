@@ -20,14 +20,17 @@
     padding: 0.5em 1em 0.15em 1em;
 }
 .user_picture{
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
 
-    margin-right: 1em;
+    margin-right: 0.75em;
 }
 .user_name{
-
+    margin-right: 1.5em;
+}
+.post_age{
+    font-size: 0.85em;
 }
 
 .text_content{

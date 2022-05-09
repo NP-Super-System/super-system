@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Col, Row, Form, Button } from 'react-bootstrap';
 import { IoIosSend } from 'react-icons/io';
+import { getPostAge } from '../../modules/getPostAge';
 
 import styles from './ForumPost.module.css';
 
@@ -42,6 +43,7 @@ const ForumPost = props => {
                             referrerpolicy="no-referrer"
                             />
                         <span className={styles.op_name}>{postData.userName}</span>
+                        <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
                     <div className={styles.body}>{postData.body}</div>
@@ -86,6 +88,7 @@ const ForumPost = props => {
                                                     className={styles.comment_user_picture}
                                                     referrerpolicy="no-referrer"/>
                                                 <span className={styles.comment_user_name}>{item.userName}</span>
+                                                <span className={styles.comment_age}>{getPostAge(item.createdAt)}</span>
                                             </div>
                                             <span>{item.text}</span>
                                         </Card>

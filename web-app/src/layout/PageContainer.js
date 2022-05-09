@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useScreenType } from './useScreenType';
+import { useScreenType } from '../modules/useScreenType';
 
 import styles from './PageContainer.module.css';
 

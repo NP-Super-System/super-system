@@ -20,10 +20,13 @@
     width: 30px;
     height: 30px;
     border-radius: 15px;
-    margin-right: 0.5em;
+    margin-right: 0.75em;
 }
 .op_name{
-
+    margin-right: 1.5em;
+}
+.post_age{
+    font-size: 0.85em;
 }
 
 .title{
@@ -82,8 +85,11 @@
     width: 30px;
     height: 30px;
     border-radius: 15px;
-    margin-right: 0.5em;
+    margin-right: 0.75em;
 }
 .comment_user_name{
-
+    margin-right: 1.5em;
+}
+.comment_age{
+    font-size: 0.85em;
 }

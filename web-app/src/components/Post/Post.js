@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { BsChatLeft, BsArrow90DegRight, BsLayers } from 'react-icons/bs';
+import { getPostAge } from '../../modules/getPostAge';
 
 import styles from './Post.module.css';
 
@@ -25,6 +26,7 @@ class Post extends React.Component{
                         className={styles.user_picture}
                         referrerpolicy="no-referrer"/>
                     <span className={styles.user_name}>{this.props.userName}</span>
+                    <span className={styles.post_age}>{getPostAge(this.props.createdAt)}</span>
                 </div>
 
                 <div className={styles.text_content}>

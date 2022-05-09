@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Button, Row, Col } from 'react-bootstrap';
-import { useScreenType } from '../../layout/useScreenType';
+import { Link } from 'react-router-dom';
+import { Button, Col } from 'react-bootstrap';
+import { useScreenType } from '../../modules/useScreenType';
 
 import styles from './Forum.module.css';
 
@@ -30,29 +30,25 @@ const Forum = props=>{
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
+            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.header_add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
                 <Link to='/forum/create'>
                     <Button variant='primary'>Create Post</Button>
                 </Link>
             </header>
             <div className={styles.wrapper}>
-                <Col className={screenType == 'phone' || styles.post_list}>
+                <Col className={screenType === 'phone' || styles.post_list}>
                     {
                         posts.map( (post, i) => 
                             <Post key={`${i}`}
                                 postId={post._id.toString()}
-                                userName={post.userName}
-                                userPicture={post.userPicture}
-                                title={post.title} 
-                                body={post.body} 
-                                imgKey={post.imgKey}
+                                {...post}
                             />
                         )
                     }
                 </Col>
                 {
-                    screenType == 'phone' ||
+                    screenType === 'phone' ||
 
                     <Col className={styles.friends_list}>
                         <Card>

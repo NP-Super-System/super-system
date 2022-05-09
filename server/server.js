@@ -123,6 +123,7 @@ app.post('/add-comment', async (req, res)=>{
             text: commentText,
             likeCount: 0,
             dislikeCount: 0,
+            createdAt: new Date().toISOString(),
         }
 
         forumPost.comments.push(comment);

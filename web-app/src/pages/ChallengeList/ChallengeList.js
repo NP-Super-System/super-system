@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
 import { Card, Row, Col, Button } from 'react-bootstrap';
-import { useScreenType } from '../../layout/useScreenType';
+import { useScreenType } from '../../modules/useScreenType';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
