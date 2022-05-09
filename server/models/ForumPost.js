@@ -5,12 +5,20 @@ const Schema = mongoose.Schema;
 
 const forumPostSchema = new Schema({
 
+    userName: {
+        type: String,
+        required: true,
+    },
+    userPicture: String,
+
     title: {
         type: String,
         required: true,
     },
     body: String,
     imgKey: String,
+
+    comments: [Object],
 
 }, { timestamps: true });
 

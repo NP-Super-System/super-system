@@ -16,6 +16,7 @@ import Calendar from './pages/Calendar/Calendar';
 import Deadline from './pages/Deadline/Deadline';
 import Forum from './pages/Forum/Forum';
 import ForumCreate from './pages/ForumCreate/ForumCreate';
+import ForumPost from './pages/ForumPost/ForumPost';
 import ChallengeList from './pages/ChallengeList/ChallengeList';
 import Challenge from './pages/Challenge/Challenge';
 import ChallengeCreate from './pages/ChallengeCreate/ChallengeCreate';
@@ -65,7 +66,8 @@ function App() {
             <Route path='/home/deadline/:deadlineId' element={<Deadline />} />      
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />
-            <Route path='/forum/create' element={<ForumCreate />} />
+            <Route path='/forum/create' element={<ForumCreate user={user}/>} />
+            <Route path='/forum/post/:postId' element={<ForumPost user={user}/>} />
             <Route path='/challenges' element={<ChallengeList />} />
             <Route path='/challenges/:challengeId' element={<Challenge />} />
             <Route path='/create-challenge/' element={<ChallengeCreate />} />

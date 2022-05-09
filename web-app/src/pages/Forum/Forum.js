@@ -6,7 +6,7 @@ import { useScreenType } from '../../layout/useScreenType';
 import styles from './Forum.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import ForumPost from '../../components/ForumPost/ForumPost';
+import Post from '../../components/Post/Post';
 import { Card } from 'react-bootstrap';
 
 const Forum = props=>{
@@ -37,11 +37,18 @@ const Forum = props=>{
                 </Link>
             </header>
             <div className={styles.wrapper}>
-                <Col className={styles.post_list}>
+                <Col className={screenType == 'phone' || styles.post_list}>
                     {
-                        posts.map( (post, i) => {
-                            return <ForumPost key={`${i}`} title={post.title} body={post.body} imgKey={post.imgKey}/>
-                        } )
+                        posts.map( (post, i) => 
+                            <Post key={`${i}`}
+                                postId={post._id.toString()}
+                                userName={post.userName}
+                                userPicture={post.userPicture}
+                                title={post.title} 
+                                body={post.body} 
+                                imgKey={post.imgKey}
+                            />
+                        )
                     }
                 </Col>
                 {

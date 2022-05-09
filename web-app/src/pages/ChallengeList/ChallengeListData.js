@@ -33,4 +33,5 @@ export const ChallengeListData = [
         rating: 0,
         points: 5,
     },
+    
 ]; 

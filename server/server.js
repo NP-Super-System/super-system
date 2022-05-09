@@ -52,7 +52,7 @@ conn.once('open', ()=>{
     gfs = Grid(conn.db, mongoose.mongo);
 });
 
-// Storage engine
+// Storage engine (for files in general - subject to change)
 const storage = new GridFsStorage({
     url: dbUri,
     file: (req, file) => {
@@ -71,7 +71,7 @@ const storage = new GridFsStorage({
     }
 });
 const upload = multer({storage});
-//REMOVE
+
 const uploadLocal = multer({dest: 'uploads/'});
 
 // Add forum post
@@ -87,9 +87,16 @@ app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
     }
     catch(err){console.log('Image does not exist or upload to s3 failed');}
 
-    const {title, body} = req.body;
+    const {userName, userPicture, title, body} = req.body;
 
-    const post = {title, body, imgKey};
+    const post = {
+        userName, 
+        userPicture, 
+        title, 
+        body, 
+        imgKey, 
+        comments: [],
+    };
     console.log(post);
     const forumPost = new ForumPost(post);
 
@@ -102,19 +109,57 @@ app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
         .catch(err => console.log(err));
 });
 
+// Post comment
+app.post('/add-comment', async (req, res)=>{
+    const {postId, userName, userPicture, commentText} = req.body;
+    console.log(req.body);
+
+    const forumPost = await ForumPost.findOne({_id: postId});
+    if(forumPost){
+
+        const comment = {
+            userName,
+            userPicture,
+            text: commentText,
+            likeCount: 0,
+            dislikeCount: 0,
+        }
+
+        forumPost.comments.push(comment);
+        await forumPost.save();
+    }
+
+    res.redirect(`${appUrl}/forum/post/${postId}`);
+});
+
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
     ForumPost.find()
         .then(result => {
             res.send(result);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.redirect(`${appUrl}/home`);
+        });
+});
+
+// Get specific forum post
+app.get('/get-forum-post/:postId', (req, res)=>{
+    const { postId } = req.params;
+    ForumPost.findOne({_id: postId})
+        .then(result => {
+            res.send(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect(`${appUrl}/forum`);
+        });
 });
 
 // Get image from s3
 app.get('/get-image/:key', (req, res) => {
-    const key = req.params.key;
+    const { key } = req.params;
     const readStream = getFileStream(key);
-
     readStream.pipe(res);
 });

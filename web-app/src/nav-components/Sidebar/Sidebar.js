@@ -37,6 +37,7 @@ const Sidebar = props=>{
                             height: 50,
                             borderRadius: 25,
                         }}
+                        referrerpolicy="no-referrer"
                     />
                 </div>
                 <div className={styles.profile_name}>

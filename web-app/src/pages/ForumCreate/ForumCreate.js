@@ -5,6 +5,8 @@ import {Navigate, useNavigate} from 'react-router-dom';
 
 import styles from './ForumCreate.module.css';
 
+import PageContainer from '../../layout/PageContainer';
+
 const ForumCreate = props=>{
 
     const [title, setTitle] = useState('');
@@ -58,7 +60,7 @@ const ForumCreate = props=>{
     }, [selectedImage]);
 
     return (
-        <div className='container'>
+        <PageContainer>
             <form action='http://localhost:5000/add-forum-post' method='POST' encType='multipart/form-data' className={styles.form}>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Title</Form.Label>
@@ -73,9 +75,11 @@ const ForumCreate = props=>{
                     <Form.Label>Text</Form.Label>
                     <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/>
                 </Form.Group>
+                <input type='hidden' name='userName' value={props.user.name} />
+                <input type='hidden' name='userPicture' value={props.user.picture || `media/default-profile-pic.jpeg`} />
                 <Button variant='primary' type='submit'>Post</Button>
             </form>
-        </div>
+        </PageContainer>
     );
 }
 

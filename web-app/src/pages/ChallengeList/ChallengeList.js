@@ -35,7 +35,6 @@ const ChallengeList = props => {
     return (
         <PageContainer>
 			<header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
-                <Card.Title>Challenges</Card.Title>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
                 <Link to='/create-challenge'>
                     <Button variant='primary'>Create Challenge</Button>

@@ -1,0 +1,63 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-self: flex-end;
+
+    margin: 0 auto;
+    margin-bottom: 0.75em;
+    /* padding: 0 0 0 0; */
+
+    max-width: 600px;
+
+}
+
+.user_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 0.5em 1em 0.15em 1em;
+}
+.user_picture{
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+
+    margin-right: 1em;
+}
+.user_name{
+
+}
+
+.text_content{
+    padding: 1em;
+}
+.title{
+    
+}
+.body{
+    
+}
+.image{
+    width: 100%;
+    align-self: center;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 0.5em 1em;
+}
+.action_button{
+    margin-right: 0.5em;
+    background-color: white;
+    color: black;
+    border: none;
+    transition: 0.1s;
+}
+.action_icon{
+    margin-right: 0.5em;
+}
