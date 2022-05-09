@@ -1,8 +1,9 @@
 .nav_item{
     border-radius: 5px;
+    color: white !important;
 }
 
 .nav_item_active{
     border-radius: 5px;
-    background-color: var(--active-blue);
+    color: var(--active-blue) !important;
 }

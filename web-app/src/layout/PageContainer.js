@@ -12,9 +12,7 @@ const PageContainer = props => {
     }, []);
 
     return (
-        <div className={
-            `container ${screenType == 'show-sidebar' ? styles.container_sidebar : styles.container_navbar}`
-        }>
+        <div className={screenType == 'show-sidebar' ? styles.container_sidebar : styles.container_navbar}>
             {props.children}
         </div>
     );

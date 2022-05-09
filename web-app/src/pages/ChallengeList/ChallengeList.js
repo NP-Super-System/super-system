@@ -22,8 +22,6 @@ const ChallengeList = props => {
             items.push(<BsStar key={`${j}`} />)
         }
 
-        
-
         return items;
     }
 

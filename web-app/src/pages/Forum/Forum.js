@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Button, Row, Col } from 'react-bootstrap';
+import { useScreenType } from '../../layout/useScreenType';
 
 import styles from './Forum.module.css';
 
@@ -10,7 +11,8 @@ import { Card } from 'react-bootstrap';
 
 const Forum = props=>{
 
-    const [posts, setPosts] = useState([])
+    const screenType = useScreenType();
+    const [posts, setPosts] = useState([]);
 
     useEffect(()=>{
         // Get all forum posts from server
@@ -28,7 +30,7 @@ const Forum = props=>{
 
     return (
         <PageContainer>
-            <header className={styles.header}>
+            <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
                 <Link to='/forum/create'>
                     <Button variant='primary'>Create Post</Button>
@@ -42,11 +44,15 @@ const Forum = props=>{
                         } )
                     }
                 </Col>
-                <Col className={styles.friends_list}>
-                    <Card>
-                        <Card.Title>Friends List</Card.Title>
-                    </Card>
-                </Col>
+                {
+                    screenType == 'phone' ||
+
+                    <Col className={styles.friends_list}>
+                        <Card>
+                            <Card.Title>Friends List</Card.Title>
+                        </Card>
+                    </Col>
+                }
             </div>
         </PageContainer>
     );
