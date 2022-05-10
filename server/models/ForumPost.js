@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const PostComment = require('./PostComment');
+
 // Schema for forum posts
 
 const forumPostSchema = new Schema({
@@ -21,7 +23,7 @@ const forumPostSchema = new Schema({
     likedUsers: [String],
     dislikedUsers: [String],
 
-    comments: [Object],
+    comments: [{type: Schema.Types.ObjectId, ref: PostComment}],
 
 }, { timestamps: true });
 

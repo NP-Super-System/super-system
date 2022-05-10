@@ -11,7 +11,9 @@ require('dotenv').config();
 
 // Import MongoDB Schemas
 const mongoose = require('mongoose');
-const ForumPost = require('./models/ForumPost');
+const PostReply = require('./models/PostReply');
+const PostComment = require('./models/PostComment');
+const ForumPost  = require('./models/ForumPost');
 
 //Import AWS S3 upload function
 const { uploadFile, getFileStream } = require('./s3');
@@ -77,6 +79,10 @@ const upload = multer({storage});
 
 const uploadLocal = multer({dest: 'uploads/'});
 
+// ----------------------------------------------------
+// ------------------- POST REQUESTS -------------------
+// ----------------------------------------------------
+
 // Add forum post
 app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
     let imgKey = '';
@@ -129,17 +135,47 @@ app.post('/add-comment', async (req, res)=>{
         return;
     }
 
-    const comment = {
+    const commentData = {
         userName,
         userPicture,
         text: commentText,
-        likeCount: 0,
-        dislikeCount: 0,
-        createdAt: new Date().toISOString(),
+        likedUsers: [],
+        dislikedUsers: [],
+        replies: [],
     }
+    const comment = new PostComment(commentData);
+    await comment.save();
 
     forumPost.comments.push(comment);
     await forumPost.save();
+
+    res.redirect(`${appUrl}/forum/post/${postId}`);
+});
+
+// Post reply to comment
+app.post('/add-reply-to-comment', async (req, res) => {
+    const {postId, commentId, userName, userPicture, replyText} = req.body;
+    console.log(req.body);
+
+    const postComment = await PostComment.findOne({_id: commentId});
+
+    if(!postComment){
+        res.redirect(`${appUrl}/forum`);
+        return;
+    }
+
+    const replyData = {
+        userName,
+        userPicture,
+        text: replyText,
+        likedUsers: [],
+        dislikedUsers: [],
+    }
+    const reply = new PostReply(replyData);
+    await reply.save();
+
+    postComment.replies.push(reply);
+    await postComment.save();
 
     res.redirect(`${appUrl}/forum/post/${postId}`);
 });
@@ -270,6 +306,10 @@ app.post('/undislike-post', async(req, res) => {
     res.send(result);
 });
 
+// ----------------------------------------------------
+// ------------------- GET REQUESTS -------------------
+// ----------------------------------------------------
+
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
     ForumPost.find()
@@ -285,14 +325,22 @@ app.get('/get-all-forum-posts', (req, res)=>{
 // Get specific forum post
 app.get('/get-forum-post/:postId', (req, res)=>{
     const { postId } = req.params;
+
     ForumPost.findOne({_id: postId})
-        .then(result => {
-            res.send(result);
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'replies',
+            }
         })
-        .catch(err => {
-            console.log(err);
-            res.redirect(`${appUrl}/forum`);
-        });
+        .exec( (err, result) => {
+            if(err){
+                console.log(err);
+                res.redirect(`${appUrl}/forum`);
+                return;
+            }
+            res.send(result);
+        } )
 });
 
 // Get image from s3

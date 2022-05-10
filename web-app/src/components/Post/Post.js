@@ -6,8 +6,8 @@ import { getPostAge } from '../../modules/getPostAge';
 
 import styles from './Post.module.css';
 
-import LikeWrapper from '../LikeWrapper/LikeWrapper';
-import DislikeWrapper from '../DislikeWrapper/DislikeWrapper';
+import LikePostWrapper from '../LikePostWrapper/LikePostWrapper';
+import DislikePostWrapper from '../DislikePostWrapper/DislikePostWrapper';
 
 class Post extends React.Component{
     constructor(props){
@@ -55,7 +55,7 @@ class Post extends React.Component{
                 {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
                 
                 <div className={styles.actions}>
-                    <LikeWrapper
+                    <LikePostWrapper
                         liked={this.state.isLiked}
                         postId={this.props.postId}
                         userEmail={this.props.user.email}
@@ -72,8 +72,8 @@ class Post extends React.Component{
                                 className={styles.action_icon}/>
                             <span>{(this.likeCount + (this.state.isLiked ? 1 : 0)) || 'Like'}</span>
                         </Button>
-                    </LikeWrapper>
-                    <DislikeWrapper
+                    </LikePostWrapper>
+                    <DislikePostWrapper
                         disliked={this.state.isDisliked}
                         postId={this.props.postId}
                         userEmail={this.props.user.email}
@@ -88,7 +88,7 @@ class Post extends React.Component{
                                 src={this.thumbsUpImgSrc}
                                 className={styles.dislike_icon}/>
                         </Button>
-                    </DislikeWrapper>
+                    </DislikePostWrapper>
                     <Link to={`/forum/post/${this.props.postId}`} className={styles.action_link}>
                         <Button variant='primary' className={styles.action_button}>
                             <BsChatLeft className={styles.action_icon}/>

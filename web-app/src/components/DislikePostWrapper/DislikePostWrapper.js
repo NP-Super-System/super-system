@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const DislikeWrapper = props => {
+const DislikePostWrapper = props => {
 
     // 'children' should only contain a submit button
     const { disliked, postId, userEmail, updateIsDisliked, children } = props;
@@ -74,4 +74,4 @@ const DislikeWrapper = props => {
     );
 }
 
-export default DislikeWrapper;
+export default DislikePostWrapper;

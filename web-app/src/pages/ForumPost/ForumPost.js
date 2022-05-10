@@ -7,6 +7,7 @@ import { getPostAge } from '../../modules/getPostAge';
 import styles from './ForumPost.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import PostComment from '../../components/PostComment/PostComment';
 
 const ForumPost = props => {
 
@@ -52,7 +53,7 @@ const ForumPost = props => {
                         className={styles.image}
                         onClick={() => { window.open(imageSrc, 'post-image') }}
                         referrerPolicy='no-referrer'
-                    />
+                        />
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>
                             <Form.Control 
@@ -70,7 +71,7 @@ const ForumPost = props => {
                             type='submit'
                             className={styles.comment_form_submit}>
                             <IoIosSend style={{marginRight: '0.5em'}}/>
-                            Comment
+                            <span>Comment</span>
                         </Button>
                     </form>
                     <div className={styles.comments}>
@@ -82,17 +83,10 @@ const ForumPost = props => {
                                     postData.comments.length > 0 ?
 
                                     postData.comments.map( (item, i) => 
-                                        <Card key={`${i}`} className={styles.comment}>
-                                            <div className={styles.comment_user_content}>
-                                                <Image 
-                                                    src={item.userPicture}
-                                                    className={styles.comment_user_picture}
-                                                    referrerPolicy="no-referrer"/>
-                                                <span className={styles.comment_user_name}>{item.userName}</span>
-                                                <span className={styles.comment_age}>{getPostAge(item.createdAt)}</span>
-                                            </div>
-                                            <span>{item.text}</span>
-                                        </Card>
+                                        <PostComment 
+                                            key={`${i}`}
+                                            postId={postId}
+                                            {...item}/>
                                     )
 
                                     :

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const LikeWrapper = props => {
+const LikePostWrapper = props => {
 
     // 'children' should only contain a submit button
     const { liked, postId, userEmail, updateIsLiked, children } = props;
@@ -74,4 +74,4 @@ const LikeWrapper = props => {
     );
 }
 
-export default LikeWrapper;
+export default LikePostWrapper;

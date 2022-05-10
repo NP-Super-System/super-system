@@ -1,0 +1,72 @@
+.comment{
+    padding: 0.5em 1em 0.75em 1em;
+    margin-bottom: 1em;
+}
+.comment_user_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5em 0 0.5em 0;
+}
+.comment_user_picture{
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin-right: 0.75em;
+}
+.comment_user_name{
+    margin-right: 1.5em;
+}
+.comment_age{
+    font-size: 0.85em;
+}
+.comment_text{
+    padding: 0.5em 0;
+}
+
+.comment_actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.comment_action_button{
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+
+    background-color: white;
+    color: black;
+    border: none;
+}
+.comment_action_button:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
+.comment_action_button:focus{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
+.comment_action_icon{
+    margin-right: 0.5em;
+}
+
+.reply_form{
+    padding: 1em 0;
+}
+.reply_form_text{
+    margin-bottom: 0.5em;
+}
+.reply_form_submit{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    float: right;
+}
+.reply_form_submit_icon{
+    margin-right: 0.5em;
+}
+
+.replies{
+
+}
