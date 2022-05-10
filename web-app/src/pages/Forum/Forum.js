@@ -43,6 +43,7 @@ const Forum = props=>{
                             <Post key={`${i}`}
                                 postId={post._id.toString()}
                                 {...post}
+                                user={props.user}
                             />
                         )
                     }

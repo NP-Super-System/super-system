@@ -65,7 +65,7 @@ function App() {
             <Route path='/home/course/:courseCode' element={<Course />} />
             <Route path='/home/deadline/:deadlineId' element={<Deadline />} />      
             <Route path='/calendar' element={<Calendar />} />
-            <Route path='/forum' element={<Forum />} />
+            <Route path='/forum' element={<Forum user={user}/>} />
             <Route path='/forum/create' element={<ForumCreate user={user}/>} />
             <Route path='/forum/post/:postId' element={<ForumPost user={user}/>} />
             <Route path='/challenges' element={<ChallengeList />} />

@@ -18,6 +18,9 @@ const forumPostSchema = new Schema({
     body: String,
     imgKey: String,
 
+    likedUsers: [String],
+    dislikedUsers: [String],
+
     comments: [Object],
 
 }, { timestamps: true });

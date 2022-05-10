@@ -54,13 +54,64 @@
 
     padding: 0.5em 1em;
 }
+.action_link{
+    text-decoration: none;
+}
 .action_button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     margin-right: 0.5em;
     background-color: white;
     color: black;
     border: none;
     transition: 0.1s;
 }
+.action_button:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
 .action_icon{
     margin-right: 0.5em;
+}
+
+.like_button:hover, .like_button:focus{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
+.like_button_liked{
+    background-color: #0b5ed7;
+    color: white;
+}
+.like_button_liked:hover{
+    background-color: #1d4f99;
+    color: white;
+}
+.like_button_liked:focus{
+    background-color: #1d4f99;
+    color: white;
+}
+
+.dislike_button{
+    margin-right: 1.5em !important;
+}
+.dislike_button:focus{
+    background-color: rgb(216, 216, 216);
+}
+.dislike_button_disliked{
+    background-color: rgb(204, 58, 58);
+}
+.dislike_button_disliked:hover{
+    background-color: rgb(129, 50, 50);
+}
+.dislike_button_disliked:focus{
+    background-color: rgb(129, 50, 50);
+}
+.dislike_icon{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
 }

@@ -13,6 +13,7 @@ const ForumPost = props => {
     const { postId } = useParams();
 
     const [postData, setPostData] = useState({});
+    const [imageSrc, setImageSrc] = useState('');
 
     useEffect(()=>{
         // Get specific forum post from server
@@ -20,15 +21,14 @@ const ForumPost = props => {
             .then(
                 res => res.json()
                     .then(data => {
-                        setPostData(data);
                         console.log(data);
+                        setPostData(data);
+                        setImageSrc(`http://localhost:5000/get-image/${data.imgKey || ''}`);
                     })
                     .catch(err => console.log(err))
             )
             .catch(err => console.log(err));
     }, []);
-
-    const imageSrc = `http://localhost:5000/get-image/${postData.imgKey || ''}`;
 
     return (
         <PageContainer>
@@ -40,7 +40,7 @@ const ForumPost = props => {
                         <Image
                             src={postData.userPicture}
                             className={styles.op_picture}
-                            referrerpolicy="no-referrer"
+                            referrerPolicy="no-referrer"
                             />
                         <span className={styles.op_name}>{postData.userName}</span>
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
@@ -51,6 +51,7 @@ const ForumPost = props => {
                         src={imageSrc} 
                         className={styles.image}
                         onClick={() => { window.open(imageSrc, 'post-image') }}
+                        referrerPolicy='no-referrer'
                     />
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>
@@ -86,7 +87,7 @@ const ForumPost = props => {
                                                 <Image 
                                                     src={item.userPicture}
                                                     className={styles.comment_user_picture}
-                                                    referrerpolicy="no-referrer"/>
+                                                    referrerPolicy="no-referrer"/>
                                                 <span className={styles.comment_user_name}>{item.userName}</span>
                                                 <span className={styles.comment_age}>{getPostAge(item.createdAt)}</span>
                                             </div>

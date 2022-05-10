@@ -29,6 +29,9 @@ const server = app.listen(port, ()=>{
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true,
+}));
 app.use(methodOverride('_method'));
 
 // Web app Url (will change in the future)
@@ -91,10 +94,15 @@ app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
 
     const post = {
         userName, 
-        userPicture, 
+        userPicture,
+
         title, 
         body, 
-        imgKey, 
+        imgKey,
+
+        likedUsers: [],
+        dislikedUsers: [],
+
         comments: [],
     };
     console.log(post);
@@ -111,26 +119,155 @@ app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
 
 // Post comment
 app.post('/add-comment', async (req, res)=>{
-    const {postId, userName, userPicture, commentText} = req.body;
+    const { postId, userName, userPicture, commentText } = req.body;
     console.log(req.body);
 
     const forumPost = await ForumPost.findOne({_id: postId});
-    if(forumPost){
 
-        const comment = {
-            userName,
-            userPicture,
-            text: commentText,
-            likeCount: 0,
-            dislikeCount: 0,
-            createdAt: new Date().toISOString(),
-        }
-
-        forumPost.comments.push(comment);
-        await forumPost.save();
+    if(!forumPost){
+        res.redirect(`${appUrl}/forum`);
+        return;
     }
 
+    const comment = {
+        userName,
+        userPicture,
+        text: commentText,
+        likeCount: 0,
+        dislikeCount: 0,
+        createdAt: new Date().toISOString(),
+    }
+
+    forumPost.comments.push(comment);
+    await forumPost.save();
+
     res.redirect(`${appUrl}/forum/post/${postId}`);
+});
+
+const removeLikedUser = (forumPost, userEmail) => {
+    if(!forumPost.likedUsers.includes(userEmail)) return;
+
+    let index = forumPost.likedUsers.indexOf(userEmail);
+    forumPost.likedUsers.splice(index, 1);
+}
+
+const removeDislikedUser = (forumPost, userEmail) => {
+    if(!forumPost.dislikedUsers.includes(userEmail)) return;
+
+    let index = forumPost.dislikedUsers.indexOf(userEmail);
+    forumPost.dislikedUsers.splice(index, 1);
+}
+
+// Like post
+app.post('/like-post', async(req, res) => {
+    const { postId, userEmail } = req.body;
+    console.log(req.body);
+
+    const forumPost = await ForumPost.findOne({_id: postId});
+
+    if(!forumPost){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Post does not exist');
+        return;
+    }
+
+    if(forumPost.likedUsers.includes(userEmail)){
+        console.log('User has already liked post');
+        res.send();
+        return;
+    }
+
+    forumPost.likedUsers.push(userEmail);
+    console.log(`${userEmail} has liked the post!`);
+
+    removeDislikedUser(forumPost, userEmail);
+
+    const result = await forumPost.save();
+
+    res.send(result);
+});
+
+// Unlike post
+app.post('/unlike-post', async(req, res) => {
+    const { postId, userEmail } = req.body;
+    console.log(req.body);
+
+    const forumPost = await ForumPost.findOne({_id: postId});
+
+    if(!forumPost){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Post does not exist');
+        return;
+    }
+
+    if(!forumPost.likedUsers.includes(userEmail)){
+        console.log('User has not liked post yet');
+        res.send();
+        return;
+    }
+
+    removeLikedUser(forumPost, userEmail);
+    console.log(`${userEmail} has unliked the post`);
+
+    const result = await forumPost.save();
+
+    res.send(result);
+});
+
+// Dislike post
+app.post('/dislike-post', async(req, res) => {
+    const { postId, userEmail } = req.body;
+    console.log(req.body);
+
+    const forumPost = await ForumPost.findOne({_id: postId});
+
+    if(!forumPost){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Post does not exist');
+        return;
+    }
+
+    if(forumPost.dislikedUsers.includes(userEmail)){
+        console.log('User has already disliked post');
+        res.send();
+        return;
+    }
+
+    forumPost.dislikedUsers.push(userEmail);
+    console.log(`${userEmail} has disliked the post`);
+
+    removeLikedUser(forumPost, userEmail);
+
+    const result = await forumPost.save();
+
+    res.send(result);
+});
+
+// Undislike post
+app.post('/undislike-post', async(req, res) => {
+    const { postId, userEmail } = req.body;
+    console.log(req.body);
+
+    const forumPost = await ForumPost.findOne({_id: postId});
+
+    if(!forumPost){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Post does not exist');
+        return;
+    }
+
+    if(!forumPost.dislikedUsers.includes(userEmail)){
+        console.log('User has not disliked post yet');
+        res.send();
+        return;
+    }
+
+    removeDislikedUser(forumPost, userEmail);
+    console.log(`${userEmail} has undisliked the post`);
+
+    const result = await forumPost.save();
+
+    res.send(result);
 });
 
 // Get all forum posts
