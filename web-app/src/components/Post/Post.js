@@ -19,8 +19,19 @@ class Post extends React.Component{
         }
 
         this.thumbsUpImgSrc = 'https://img.icons8.com/material-rounded/24/777777/thumb-up.png';
+        this.thumbsUpLikedImgSrc = 'https://img.icons8.com/material-rounded/24/0b5ed7/thumb-up.png';
+        this.thumbsUpDislikedImgSrc = 'https://img.icons8.com/material-rounded/24/cc3a3a/thumb-up.png';
+
         this.likeCount = this.props.likedUsers.length - (this.state.isLiked ? 1 : 0);
-        this.commentCount = this.props.comments.length;
+        this.commentCount = 
+            this.props.comments.length
+            + 
+            this.props.comments
+                .map(comment => comment.replies)
+                .reduce(
+                    (prevVal, replies) => prevVal + replies.length,
+                    0
+                );
 
         this.updateIsLiked = this.updateIsLiked.bind(this);
         this.updateIsDisliked = this.updateIsDisliked.bind(this);
@@ -52,7 +63,9 @@ class Post extends React.Component{
                     <div className={styles.body}>{this.props.body}</div>
                 </div>
 
-                {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
+                <Link to={`/forum/post/${this.props.postId}`}>
+                    {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
+                </Link>
                 
                 <div className={styles.actions}>
                     <LikePostWrapper
@@ -64,13 +77,13 @@ class Post extends React.Component{
                             variant='primary'
                             type='submit'
                             className={
-                                `${styles.action_button} ${styles.like_button} ${this.state.isLiked && styles.like_button_liked}
-                            `}
+                                `${styles.action_button} ${styles.like_button}`
+                            }
                             >
                             <img 
-                                src={this.thumbsUpImgSrc}
+                                src={this.state.isLiked ? this.thumbsUpLikedImgSrc : this.thumbsUpImgSrc}
                                 className={styles.action_icon}/>
-                            <span>{(this.likeCount + (this.state.isLiked ? 1 : 0)) || 'Like'}</span>
+                            <span className={styles.like_count}>{(this.likeCount + (this.state.isLiked ? 1 : 0)) || 'Like'}</span>
                         </Button>
                     </LikePostWrapper>
                     <DislikePostWrapper
@@ -82,10 +95,10 @@ class Post extends React.Component{
                             variant='primary'
                             type='submit'
                             className={
-                                `${styles.action_button} ${styles.dislike_button} ${this.state.isDisliked && styles.dislike_button_disliked}`
+                                `${styles.action_button} ${styles.dislike_button}`
                             }>
                             <img 
-                                src={this.thumbsUpImgSrc}
+                                src={this.state.isDisliked ? this.thumbsUpDislikedImgSrc : this.thumbsUpImgSrc}
                                 className={styles.dislike_icon}/>
                         </Button>
                     </DislikePostWrapper>

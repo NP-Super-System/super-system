@@ -2,6 +2,11 @@
     padding: 0.25em 1em 0.5em 1em;
     margin-top: 1em;
     margin-bottom: 1em;
+
+    border-left-width: 2px; 
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
 }
 
 .user_content{

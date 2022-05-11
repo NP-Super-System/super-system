@@ -1,6 +1,10 @@
 .form{
     padding: 1em;
     text-align: left;
+    align-self: center;
+
+    width: 100%;
+    max-width: 800px;
 }
 
 .preview{

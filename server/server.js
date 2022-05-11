@@ -312,14 +312,26 @@ app.post('/undislike-post', async(req, res) => {
 
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
-    ForumPost.find()
-        .then(result => {
-            res.send(result);
+    // ForumPost.find({})
+    //     .then(result => {
+    //         res.send(result);
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         res.redirect(`${appUrl}/home`);
+    //     });
+    ForumPost.find({})
+        .populate({
+            path: 'comments',
         })
-        .catch(err => {
-            console.log(err);
-            res.redirect(`${appUrl}/home`);
-        });
+        .exec( (err, result) => {
+            if(err){
+                console.log(err);
+                res.redirect(`${appUrl}/forum`);
+                return;
+            }
+            res.send(result);
+        } );
 });
 
 // Get specific forum post

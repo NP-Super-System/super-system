@@ -37,14 +37,47 @@
     padding: 0.25em 0.75em;
     margin-bottom: 0.5em;
 }
-
 .image{
     cursor: pointer;
     margin-bottom: 1em;
 }
 
+.actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 0;
+}
+.action_button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-right: 0.5em;
+    background-color: white;
+    color: black;
+    border: none;
+    transition: 0.1s;
+}
+.action_button:hover{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
+.action_icon{
+    margin-right: 0.5em;
+}
+
+.dislike_icon{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
 .comment_form{
-    padding: 1em 0;
+    padding: 1em 0 0.5em 0;
 }
 .comment_form_text{
     margin-bottom: 0.5em;
@@ -56,6 +89,10 @@
     justify-content: center;
 
     float: right;
+}
+
+.comment_count{
+    padding-bottom: 1em;
 }
 
 .comments{

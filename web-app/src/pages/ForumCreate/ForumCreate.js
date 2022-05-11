@@ -22,33 +22,6 @@ const ForumCreate = props=>{
         setSelectedImage(file); 
     }
 
-    // const onSubmit = async e=>{
-        
-    //     e.preventDefault();
-        
-    //     const serverUrl = 'http://localhost:5000/add-forum-post';
-
-    //     const formData = new FormData();
-    //     formData.append('title', title);
-    //     formData.append('body', body);
-    //     formData.append('file', selectedImage);
-        
-    //     const config = {
-    //         headers: {
-    //             'content-type': 'multipart/form-data',
-    //         }
-    //     }
-
-    //     axios.post(serverUrl, formData, config)
-    //         .then(res => {
-    //             console.log('redirect back to forum page');
-    //             console.log(res);
-    //             setRedirectToForum(true);
-    //             navigate('/forum');
-    //         })
-    //         .catch(err => console.log(err));
-    // }
-
     useEffect(()=>{
         if (!selectedImage) return;
 

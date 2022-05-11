@@ -45,6 +45,7 @@
 .image{
     width: 100%;
     align-self: center;
+    cursor: pointer;
 }
 
 .actions{
@@ -72,6 +73,10 @@
     background-color: rgb(216, 216, 216);
     color: black;
 }
+.action_button:focus{
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
 .action_icon{
     margin-right: 0.5em;
 }
@@ -80,33 +85,12 @@
     background-color: rgb(216, 216, 216);
     color: black;
 }
-.like_button_liked{
-    background-color: #0b5ed7;
-    color: white;
-}
-.like_button_liked:hover{
-    background-color: #1d4f99;
-    color: white;
-}
-.like_button_liked:focus{
-    background-color: #1d4f99;
-    color: white;
+.like_count{
+    font-weight: 500;
 }
 
 .dislike_button{
     margin-right: 1.5em !important;
-}
-.dislike_button:focus{
-    background-color: rgb(216, 216, 216);
-}
-.dislike_button_disliked{
-    background-color: rgb(204, 58, 58);
-}
-.dislike_button_disliked:hover{
-    background-color: rgb(129, 50, 50);
-}
-.dislike_button_disliked:focus{
-    background-color: rgb(129, 50, 50);
 }
 .dislike_icon{
     -webkit-transform: rotate(180deg);

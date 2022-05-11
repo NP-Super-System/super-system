@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Col } from 'react-bootstrap';
 import { useScreenType } from '../../modules/useScreenType';
+import { IoAddSharp } from 'react-icons/io5';
 
 import styles from './Forum.module.css';
 
@@ -33,7 +34,11 @@ const Forum = props=>{
             <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.header_add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
                 <Link to='/forum/create'>
-                    <Button variant='primary'>Create Post</Button>
+                    <Button 
+                        variant='primary'
+                        className={styles.create_button}>
+                        <IoAddSharp className={styles.create_icon}/>
+                    </Button>
                 </Link>
             </header>
             <div className={styles.wrapper}>

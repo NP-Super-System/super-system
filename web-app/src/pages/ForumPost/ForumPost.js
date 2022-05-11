@@ -1,20 +1,45 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Card, Image, Col, Row, Form, Button } from 'react-bootstrap';
+import { Card, Image, Form, Button } from 'react-bootstrap';
+import { BsArrow90DegRight, BsLayers } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../modules/getPostAge';
 
 import styles from './ForumPost.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import LikePostWrapper from '../../components/LikePostWrapper/LikePostWrapper';
+import DislikePostWrapper from '../../components/DislikePostWrapper/DislikePostWrapper';
 import PostComment from '../../components/PostComment/PostComment';
 
 const ForumPost = props => {
 
+    const { user } = props;
     const { postId } = useParams();
 
     const [postData, setPostData] = useState({});
     const [imageSrc, setImageSrc] = useState('');
+
+    const [isLiked, setIsLiked] = useState(false);
+    const [isDisliked, setIsDisliked] = useState(false);
+
+    const updateIsLiked = liked => {
+        setIsLiked(liked);
+        setIsDisliked(false);
+    }
+    const updateIsDisliked = disliked => {
+        setIsDisliked(disliked);
+        setIsLiked(false);
+    }
+
+    const thumbsUpImgSrc = 'https://img.icons8.com/material-rounded/24/777777/thumb-up.png';
+    const thumbsUpLikedImgSrc = 'https://img.icons8.com/material-rounded/24/0b5ed7/thumb-up.png';
+    const thumbsUpDislikedImgSrc = 'https://img.icons8.com/material-rounded/24/cc3a3a/thumb-up.png';
+
+    const [likeCount, setLikeCount] = useState(0);
+    const [commentCount, setCommentCount] = useState(0);
+
+    const [showCommentSubmit, setShowCommentSubmit] = useState(false);
 
     useEffect(()=>{
         // Get specific forum post from server
@@ -25,6 +50,22 @@ const ForumPost = props => {
                         console.log(data);
                         setPostData(data);
                         setImageSrc(`http://localhost:5000/get-image/${data.imgKey || ''}`);
+                        const liked = data.likedUsers.includes(user.email);
+                        setIsLiked(liked);
+                        setIsDisliked(data.dislikedUsers.includes(user.email));
+                        setLikeCount(
+                            data.likedUsers.length - (liked ? 1 : 0),
+                        );
+                        setCommentCount(
+                            data.comments.length
+                            + 
+                            data.comments
+                                .map(comment => comment.replies)
+                                .reduce(
+                                    (prevVal, replies) => prevVal + replies.length,
+                                    0
+                                )
+                        );
                     })
                     .catch(err => console.log(err))
             )
@@ -54,26 +95,72 @@ const ForumPost = props => {
                         onClick={() => { window.open(imageSrc, 'post-image') }}
                         referrerPolicy='no-referrer'
                         />
+                    <div className={styles.actions}>
+                        <LikePostWrapper
+                            liked={isLiked}
+                            postId={postId}
+                            userEmail={user.email}
+                            updateIsLiked={updateIsLiked}>
+                            <Button
+                                variant='primary'
+                                type='submit'
+                                className={styles.action_button}>
+                                <img 
+                                    src={isLiked ? thumbsUpLikedImgSrc : thumbsUpImgSrc}
+                                    className={styles.action_icon}/>
+                                <span className={styles.like_count}>{(likeCount + (isLiked ? 1 : 0)) || 'Like'}</span>
+                            </Button>
+                        </LikePostWrapper>
+                        <DislikePostWrapper
+                            liked={isLiked}
+                            postId={postId}
+                            userEmail={user.email}
+                            updateIsDisliked={updateIsDisliked}>
+                            <Button
+                                variant='primary'
+                                type='submit'
+                                className={styles.action_button}>
+                                <img 
+                                    src={isDisliked ? thumbsUpDislikedImgSrc : thumbsUpImgSrc}
+                                    className={styles.dislike_icon}/>
+                            </Button>
+                        </DislikePostWrapper>
+                        <Button variant='primary' className={styles.action_button}>
+                            <BsArrow90DegRight className={styles.action_icon}/>
+                            <span>Share</span>
+                        </Button>
+                        <Button variant='primary' className={styles.action_button}>
+                            <BsLayers className={styles.action_icon}/>
+                            <span>Save</span>
+                        </Button>
+                    </div>
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>
                             <Form.Control 
                                 name='commentText'
                                 as='textarea'
                                 rows={2}
-                                placeholder='Comment' 
+                                placeholder='Comment'
+                                autoFocus
+                                required
+                                onChange={e => setShowCommentSubmit(e.target.value != '')}
                                 className={styles.comment_form_text}/>
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
                         <input type='hidden' name='userName' value={props.user.name} />
                         <input type='hidden' name='userPicture' value={props.user.picture} />
-                        <Button 
-                            variant='primary' 
-                            type='submit'
-                            className={styles.comment_form_submit}>
-                            <IoIosSend style={{marginRight: '0.5em'}}/>
-                            <span>Comment</span>
-                        </Button>
+                        {
+                            showCommentSubmit &&
+                            <Button 
+                                variant='primary' 
+                                type='submit'
+                                className={styles.comment_form_submit}>
+                                <IoIosSend style={{marginRight: '0.5em'}}/>
+                                <span>Comment</span>
+                            </Button>
+                        }
                     </form>
+                    <span className={styles.comment_count}>{commentCount} comments</span>
                     <div className={styles.comments}>
                         {
                             postData.comments ?
