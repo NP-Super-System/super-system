@@ -180,19 +180,47 @@ app.post('/add-reply-to-comment', async (req, res) => {
     res.redirect(`${appUrl}/forum/post/${postId}`);
 });
 
-const removeLikedUser = (forumPost, userEmail) => {
-    if(!forumPost.likedUsers.includes(userEmail)) return;
+// like / dislike functions
 
-    let index = forumPost.likedUsers.indexOf(userEmail);
-    forumPost.likedUsers.splice(index, 1);
+const addLikedUser = (res, element, userEmail) => {
+    if(element.likedUsers.includes(userEmail)) {
+        console.log(`User already liked ${element.constructor.name}`);
+        return;
+    }
+    element.likedUsers.push(userEmail);
 }
 
-const removeDislikedUser = (forumPost, userEmail) => {
-    if(!forumPost.dislikedUsers.includes(userEmail)) return;
-
-    let index = forumPost.dislikedUsers.indexOf(userEmail);
-    forumPost.dislikedUsers.splice(index, 1);
+const addDislikedUser = (res, element, userEmail) => {
+    if(element.dislikedUsers.includes(userEmail)) {
+        console.log(`User already disliked ${element.constructor.name}`);
+        return
+    }
+    element.dislikedUsers.push(userEmail);
 }
+
+const removeLikedUser = (res, element, userEmail) => {
+    if(!element.likedUsers.includes(userEmail)) {
+        console.log(`User has not liked ${element.constructor.name}`);
+        return;
+    }
+
+    let index = element.likedUsers.indexOf(userEmail);
+    element.likedUsers.splice(index, 1);
+}
+
+const removeDislikedUser = (res, element, userEmail) => {
+    if(!element.dislikedUsers.includes(userEmail)) {
+        console.log(`User has not disliked ${element.constructor.name}`);
+        return;
+    }
+
+    let index = element.dislikedUsers.indexOf(userEmail);
+    element.dislikedUsers.splice(index, 1);
+}
+
+//-----------
+//---POSTS---
+//-----------
 
 // Like post
 app.post('/like-post', async(req, res) => {
@@ -207,19 +235,10 @@ app.post('/like-post', async(req, res) => {
         return;
     }
 
-    if(forumPost.likedUsers.includes(userEmail)){
-        console.log('User has already liked post');
-        res.send();
-        return;
-    }
-
-    forumPost.likedUsers.push(userEmail);
-    console.log(`${userEmail} has liked the post!`);
-
-    removeDislikedUser(forumPost, userEmail);
+    addLikedUser(res, forumPost, userEmail);
+    removeDislikedUser(res, forumPost, userEmail);
 
     const result = await forumPost.save();
-
     res.send(result);
 });
 
@@ -236,17 +255,9 @@ app.post('/unlike-post', async(req, res) => {
         return;
     }
 
-    if(!forumPost.likedUsers.includes(userEmail)){
-        console.log('User has not liked post yet');
-        res.send();
-        return;
-    }
-
-    removeLikedUser(forumPost, userEmail);
-    console.log(`${userEmail} has unliked the post`);
+    removeLikedUser(res, forumPost, userEmail);
 
     const result = await forumPost.save();
-
     res.send(result);
 });
 
@@ -263,19 +274,10 @@ app.post('/dislike-post', async(req, res) => {
         return;
     }
 
-    if(forumPost.dislikedUsers.includes(userEmail)){
-        console.log('User has already disliked post');
-        res.send();
-        return;
-    }
-
-    forumPost.dislikedUsers.push(userEmail);
-    console.log(`${userEmail} has disliked the post`);
-
-    removeLikedUser(forumPost, userEmail);
+    addDislikedUser(res, forumPost, userEmail);
+    removeLikedUser(res, forumPost, userEmail);
 
     const result = await forumPost.save();
-
     res.send(result);
 });
 
@@ -292,17 +294,103 @@ app.post('/undislike-post', async(req, res) => {
         return;
     }
 
-    if(!forumPost.dislikedUsers.includes(userEmail)){
-        console.log('User has not disliked post yet');
-        res.send();
+    removeDislikedUser(res, forumPost, userEmail);
+
+    const result = await forumPost.save();
+    res.send(result);
+});
+
+//------------------------
+//---COMMENTS / REPLIES---
+//------------------------
+
+// Like comment / reply
+app.post('/like-comment', async(req, res) => {
+    const { type, commentId, userEmail } = req.body;
+    console.log(req.body);
+
+    let comment = 
+        type == 'comment' 
+        ? await PostComment.findOne({_id: commentId})
+        : await PostReply.findOne({_id: commentId});
+    
+    if(!comment){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Comment does not exist');
         return;
     }
 
-    removeDislikedUser(forumPost, userEmail);
-    console.log(`${userEmail} has undisliked the post`);
+    addLikedUser(res, comment, userEmail);
+    removeDislikedUser(res, comment, userEmail);
 
-    const result = await forumPost.save();
+    const result = await comment.save();
+    res.send(result);
+});
 
+// Unlike comment / reply
+app.post('/unlike-comment', async(req, res) => {
+    const { type, commentId, userEmail } = req.body;
+    console.log(req.body);
+
+    let comment = 
+        type == 'comment' 
+        ? await PostComment.findOne({_id: commentId})
+        : await PostReply.findOne({_id: commentId});
+    
+    if(!comment){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Comment does not exist');
+        return;
+    }
+
+    removeLikedUser(res, comment, userEmail);
+
+    const result = await comment.save();
+    res.send(result);
+});
+
+// Dislike comment / reply
+app.post('/dislike-comment', async(req, res) => {
+    const { type, commentId, userEmail } = req.body;
+    console.log(req.body);
+
+    let comment = 
+        type == 'comment' 
+        ? await PostComment.findOne({_id: commentId})
+        : await PostReply.findOne({_id: commentId});
+    
+    if(!comment){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Comment does not exist');
+        return;
+    }
+
+    addDislikedUser(res, comment, userEmail);
+    removeLikedUser(res, comment, userEmail);
+
+    const result = await comment.save();
+    res.send(result);
+});
+
+// Undislike comment / reply
+app.post('/undislike-comment', async(req, res) => {
+    const { type, commentId, userEmail } = req.body;
+    console.log(req.body);
+
+    let comment = 
+        type == 'comment' 
+        ? await PostComment.findOne({_id: commentId})
+        : await PostReply.findOne({_id: commentId});
+    
+    if(!comment){
+        res.redirect(`${appUrl}/forum`);
+        console.log('Comment does not exist');
+        return;
+    }
+
+    removeDislikedUser(res, comment, userEmail);
+
+    const result = await comment.save();
     res.send(result);
 });
 

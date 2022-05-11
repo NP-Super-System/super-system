@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
-const DislikePostWrapper = props => {
+const DislikeCommentWrapper = props => {
 
-    // 'children' should only contain a submit button
-    const { disliked, postId, userEmail, updateIsDisliked, children } = props;
+    // children should only include submit button
+    const { disliked, commentId, userEmail, updateIsDisliked, type, children } = props;
 
-    const [ isDisliked, setIsDisliked ] = useState(false);
+    const [isDisliked, setIsDisliked] = useState(false);
 
-    useEffect(() => {
+    useEffect( () => {
         setIsDisliked(disliked);
     }, [disliked]);
 
-    const dislikePostUrl = 'http://localhost:5000/dislike-post';
-    const undislikePostUrl = 'http://localhost:5000/undislike-post';
+    const dislikeCommentUrl = 'http://localhost:5000/dislike-comment';
+    const undislikeCommentUrl = 'http://localhost:5000/undislike-comment';
 
     const onSubmitDislike = e => {
         e.preventDefault();
@@ -23,14 +23,14 @@ const DislikePostWrapper = props => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
+            body: JSON.stringify({ type, commentId, userEmail }),
         }
 
-        console.log(`Dislike post ${postId}`);
+        console.log(`Dislike comment ${commentId}`);
 
-        fetch(dislikePostUrl, options)
+        fetch(dislikeCommentUrl, options)
             .then(res => {
-                console.log('Disliked post');
+                console.log('Disliked comment');
                 setIsDisliked(true);
                 updateIsDisliked(true);
             })
@@ -46,14 +46,14 @@ const DislikePostWrapper = props => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
+            body: JSON.stringify({ type, commentId, userEmail }),
         }
 
-        console.log(`Undislike post ${postId}`);
+        console.log(`Undislike comment ${commentId}`);
 
-        fetch(undislikePostUrl, options)
+        fetch(undislikeCommentUrl, options)
             .then(res => {
-                console.log('Undisliked post');
+                console.log('Undisliked comment');
                 setIsDisliked(false);
                 updateIsDisliked(false);
             })
@@ -62,16 +62,17 @@ const DislikePostWrapper = props => {
 
     return (
         <form 
-            action={isDisliked ? undislikePostUrl : dislikePostUrl} 
+            action={isDisliked ? undislikeCommentUrl : dislikeCommentUrl} 
             method='POST' 
             onSubmit={isDisliked ? onSubmitUndislike : onSubmitDislike}>
 
-            <input type='hidden' name='postId' value={postId} />
+            <input type='hidden' name='commentId' value={commentId} />
             <input type='hidden' name='userEmail' value={userEmail} />
+            <input type='hidden' name='type' value={type} />
             {children}
 
         </form>
     );
 }
 
-export default DislikePostWrapper;
+export default DislikeCommentWrapper;

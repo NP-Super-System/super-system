@@ -147,8 +147,8 @@ const ForumPost = props => {
                                 className={styles.comment_form_text}/>
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
-                        <input type='hidden' name='userName' value={props.user.name} />
-                        <input type='hidden' name='userPicture' value={props.user.picture} />
+                        <input type='hidden' name='userName' value={user.name} />
+                        <input type='hidden' name='userPicture' value={user.picture} />
                         {
                             showCommentSubmit &&
                             <Button 
@@ -172,6 +172,7 @@ const ForumPost = props => {
                                     postData.comments.map( (item, i) => 
                                         <PostComment 
                                             key={`${i}`}
+                                            user={user}
                                             postId={postId}
                                             {...item}/>
                                     )

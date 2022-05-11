@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
-const LikePostWrapper = props => {
+const LikeCommentWrapper = props => {
 
-    // 'children' should only contain a submit button
-    const { liked, postId, userEmail, updateIsLiked, children } = props;
+    // children should only include submit button
+    const { liked, commentId, userEmail, updateIsLiked, type, children } = props;
 
-    const [ isLiked, setIsLiked ] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
 
-    useEffect(() => {
+    useEffect( () => {
         setIsLiked(liked);
     }, [liked]);
 
-    const likePostUrl = 'http://localhost:5000/like-post';
-    const unlikePostUrl = 'http://localhost:5000/unlike-post';
+    const likeCommentUrl = 'http://localhost:5000/like-comment';
+    const unlikeCommentUrl = 'http://localhost:5000/unlike-comment';
 
     const onSubmitLike = e => {
         e.preventDefault();
@@ -23,14 +23,14 @@ const LikePostWrapper = props => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
+            body: JSON.stringify({ type, commentId, userEmail }),
         }
 
-        console.log(`Like post ${postId}`);
+        console.log(`Like comment ${commentId}`);
 
-        fetch(likePostUrl, options)
+        fetch(likeCommentUrl, options)
             .then(res => {
-                console.log('Liked post! :)');
+                console.log('Liked comment!');
                 setIsLiked(true);
                 updateIsLiked(true);
             })
@@ -46,14 +46,14 @@ const LikePostWrapper = props => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
+            body: JSON.stringify({ type, commentId, userEmail }),
         }
 
-        console.log(`Unlike post ${postId}`);
+        console.log(`Unlike comment ${commentId}`);
 
-        fetch(unlikePostUrl, options)
+        fetch(unlikeCommentUrl, options)
             .then(res => {
-                console.log('Unliked post :(');
+                console.log('Unliked comment');
                 setIsLiked(false);
                 updateIsLiked(false);
             })
@@ -62,16 +62,17 @@ const LikePostWrapper = props => {
 
     return (
         <form 
-            action={isLiked ? unlikePostUrl : likePostUrl} 
+            action={isLiked ? unlikeCommentUrl : likeCommentUrl} 
             method='POST' 
             onSubmit={isLiked ? onSubmitUnlike : onSubmitLike}>
 
-            <input type='hidden' name='postId' value={postId} />
+            <input type='hidden' name='commentId' value={commentId} />
             <input type='hidden' name='userEmail' value={userEmail} />
+            <input type='hidden' name='type' value={type} />
             {children}
 
         </form>
     );
 }
 
-export default LikePostWrapper;
+export default LikeCommentWrapper;

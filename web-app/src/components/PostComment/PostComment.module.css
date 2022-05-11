@@ -34,9 +34,11 @@
     flex-direction: center;
     align-items: center;
 
+    margin-right: 0.5em;
     background-color: white;
     color: black;
     border: none;
+    transition: 0.1s;
 }
 .comment_action_button:hover{
     background-color: rgb(216, 216, 216);
@@ -48,6 +50,13 @@
 }
 .comment_action_icon{
     margin-right: 0.5em;
+}
+.dislike_icon{
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .reply_form{
