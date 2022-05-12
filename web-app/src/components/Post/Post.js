@@ -6,6 +6,7 @@ import { getPostAge } from '../../modules/getPostAge';
 
 import styles from './Post.module.css';
 
+import GlobalContext from '../../context/GlobalContext';
 import LikePostWrapper from '../LikePostWrapper/LikePostWrapper';
 import DislikePostWrapper from '../DislikePostWrapper/DislikePostWrapper';
 
@@ -13,9 +14,11 @@ class Post extends React.Component{
     constructor(props){
         super(props);
 
+        this.user = this.context.user;
+
         this.state = {
-            isLiked: this.props.likedUsers.includes(this.props.user.email),
-            isDisliked: this.props.dislikedUsers.includes(this.props.user.email),
+            isLiked: this.props.likedUsers.includes(this.user.email),
+            isDisliked: this.props.dislikedUsers.includes(this.user.email),
         }
 
         this.thumbsUpImgSrc = 'https://img.icons8.com/material-rounded/24/777777/thumb-up.png';
@@ -71,7 +74,7 @@ class Post extends React.Component{
                     <LikePostWrapper
                         liked={this.state.isLiked}
                         postId={this.props.postId}
-                        userEmail={this.props.user.email}
+                        userEmail={this.user.email}
                         updateIsLiked={this.updateIsLiked}>
                         <Button
                             variant='primary'
@@ -89,7 +92,7 @@ class Post extends React.Component{
                     <DislikePostWrapper
                         disliked={this.state.isDisliked}
                         postId={this.props.postId}
-                        userEmail={this.props.user.email}
+                        userEmail={this.user.email}
                         updateIsDisliked={this.updateIsDisliked}>
                         <Button 
                             variant='primary'
@@ -122,5 +125,6 @@ class Post extends React.Component{
         )
     }
 }
+Post.contextType = GlobalContext;
 
 export default Post;

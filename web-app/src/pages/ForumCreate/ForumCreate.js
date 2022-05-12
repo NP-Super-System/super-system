@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import axios from 'axios';
 import {Navigate, useNavigate} from 'react-router-dom';
@@ -6,8 +6,11 @@ import {Navigate, useNavigate} from 'react-router-dom';
 import styles from './ForumCreate.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 
 const ForumCreate = props=>{
+
+    const { user } = useContext(GlobalContext);
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -48,8 +51,8 @@ const ForumCreate = props=>{
                     <Form.Label>Text</Form.Label>
                     <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/>
                 </Form.Group>
-                <input type='hidden' name='userName' value={props.user.name} />
-                <input type='hidden' name='userPicture' value={props.user.picture || `media/default-profile-pic.jpeg`} />
+                <input type='hidden' name='userName' value={user.name} />
+                <input type='hidden' name='userPicture' value={user.picture || `media/default-profile-pic.jpeg`} />
                 <Button variant='primary' type='submit'>Post</Button>
             </form>
         </PageContainer>

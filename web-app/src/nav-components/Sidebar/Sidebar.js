@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 
 import styles from './Sidebar.module.css';
 
 import { NavData } from '../NavData';
+import GlobalContext from '../../context/GlobalContext';
 
 const Sidebar = props=>{
 
-    const { user } = props;
+    const { user } = useContext(GlobalContext);
 
     const [collapsed, setCollapsed] = useState(true);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -41,7 +42,7 @@ const Sidebar = props=>{
                     />
                 </div>
                 <div className={styles.profile_name}>
-                    {user.given_name} {user.family_name}
+                    <span>{user.name || 'Loading name...'}</span>
                 </div>
             </Link>
             <div className={styles.menu}>

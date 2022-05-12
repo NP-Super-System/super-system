@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getPostAge } from '../../modules/getPostAge';
 import { Card, Image, Button, Form } from 'react-bootstrap';
 import { BsReply } from 'react-icons/bs';
 
 import styles from './PostComment.module.css';
 
+import GlobalContext from '../../context/GlobalContext';
 import PostReply from '../PostReply/PostReply';
 import LikeCommentWrapper from '../LikeCommentWrapper/LikeCommentWrapper';
 import DislikeCommentWrapper from '../DislikeCommentWrapper/DislikeCommentWrapper';
 
 const PostComment = props => {
     
-    const { user, postId, _id: commentId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
+    const { user } = useContext(GlobalContext);
+    const { postId, _id: commentId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
 
     const [openReply, setOpenReply] = useState(false);
 
@@ -132,7 +134,6 @@ const PostComment = props => {
                     replies.map( (item, i) => 
                         <PostReply 
                             key={`${i}`}
-                            user={user}
                             postId={postId}
                             {...item}/>
                     )

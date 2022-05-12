@@ -1,5 +1,5 @@
 // Packages
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from 'react-bootstrap';
@@ -27,14 +27,19 @@ import Sidebar from './nav-components/Sidebar/Sidebar';
 import Navbar from './nav-components/Navbar/Navbar';
 
 import './App.css';
+import GlobalContext from './context/GlobalContext';
 
 function App() {
+  const { user: userCtx, setUser: setUserCtx } = useContext(GlobalContext);
+
   const { user, isAuthenticated, isLoading } = useAuth0();
   const screenType = useScreenType();
 
   useEffect(()=>{
     // Reload when isAuthenticated value changes
     console.log(user);
+
+    setUserCtx(user);
   }, [isAuthenticated]);
 
   return (
@@ -46,7 +51,7 @@ function App() {
 
         :
 
-        isAuthenticated ?
+        isAuthenticated && userCtx ?
 
         <BrowserRouter>
           {

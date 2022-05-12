@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getPostAge } from '../../modules/getPostAge';
 import { Card, Image, Button, Form } from 'react-bootstrap';
-import { BsReply } from 'react-icons/bs';
 
 import styles from './PostReply.module.css';
 
+import GlobalContext from '../../context/GlobalContext';
 import LikeCommentWrapper from '../LikeCommentWrapper/LikeCommentWrapper';
 import DislikeCommentWrapper from '../DislikeCommentWrapper/DislikeCommentWrapper';
 
 const PostReply = props => {
-    const { user, postId, _id: replyId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
+
+    const { user } = useContext(GlobalContext);
+    const { postId, _id: replyId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
 
     const [isLiked, setIsLiked] = useState(likedUsers.includes(user.email));
     const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.email));

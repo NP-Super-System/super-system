@@ -3,9 +3,15 @@ import GlobalContext from './GlobalContext';
 import dayjs from 'dayjs';
 
 export default function ContextWrapper(props){
+    const [user, setUser] = useState({});
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     return (
-        <GlobalContext.Provider value={{monthIndex, setMonthIndex}}>
+        <GlobalContext.Provider value={{
+            user,
+            setUser,
+            monthIndex, 
+            setMonthIndex,
+            }}>
             {props.children}
         </GlobalContext.Provider>
     );

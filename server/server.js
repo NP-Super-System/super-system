@@ -161,7 +161,7 @@ app.post('/add-reply-to-comment', async (req, res) => {
 
     if(!postComment){
         res.redirect(`${appUrl}/forum`);
-        return;
+        return;s
     }
 
     const replyData = {

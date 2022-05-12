@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Form, Button } from 'react-bootstrap';
 import { BsArrow90DegRight, BsLayers } from 'react-icons/bs';
@@ -8,13 +8,14 @@ import { getPostAge } from '../../modules/getPostAge';
 import styles from './ForumPost.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 import LikePostWrapper from '../../components/LikePostWrapper/LikePostWrapper';
 import DislikePostWrapper from '../../components/DislikePostWrapper/DislikePostWrapper';
 import PostComment from '../../components/PostComment/PostComment';
 
 const ForumPost = props => {
 
-    const { user } = props;
+    const { user } = useContext(GlobalContext);
     const { postId } = useParams();
 
     const [postData, setPostData] = useState({});
@@ -172,7 +173,6 @@ const ForumPost = props => {
                                     postData.comments.map( (item, i) => 
                                         <PostComment 
                                             key={`${i}`}
-                                            user={user}
                                             postId={postId}
                                             {...item}/>
                                     )

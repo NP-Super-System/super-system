@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {Navbar as NavbarBS, Nav, Container, Image} from 'react-bootstrap';
 import { LinkContainer } from "react-router-bootstrap";
@@ -7,8 +7,11 @@ import styles from './Navbar.module.css';
 import './NavbarBootstrap.css';
 
 import { NavData } from '../NavData';
+import GlobalContext from '../../context/GlobalContext';
 
 const Navbar = props => {
+
+    const { user } = useContext(GlobalContext);
 
     const [activeIndex, setActiveIndex] = useState(0);
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Col } from 'react-bootstrap';
 import { useScreenType } from '../../modules/useScreenType';
@@ -7,11 +7,13 @@ import { IoAddSharp } from 'react-icons/io5';
 import styles from './Forum.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 import Post from '../../components/Post/Post';
 import { Card } from 'react-bootstrap';
 
 const Forum = props=>{
 
+    const { user } = useContext(GlobalContext);
     const screenType = useScreenType();
     const [posts, setPosts] = useState([]);
 
@@ -48,7 +50,6 @@ const Forum = props=>{
                             <Post key={`${i}`}
                                 postId={post._id.toString()}
                                 {...post}
-                                user={props.user}
                             />
                         )
                     }
