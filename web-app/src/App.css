@@ -14,15 +14,6 @@ html, body{
   width: 100%;
 }
 
-/* .container{
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 !important;
-  padding: 0 0 0 200px;
-  width: 100%;
-} */
-
 .loader {
   position: fixed;
   top: 50%;

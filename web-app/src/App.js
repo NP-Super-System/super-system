@@ -21,6 +21,7 @@ import ChallengeList from './pages/ChallengeList/ChallengeList';
 import Challenge from './pages/Challenge/Challenge';
 import ChallengeCreate from './pages/ChallengeCreate/ChallengeCreate';
 import Event from './pages/Event/Event';
+import Game from './pages/Game/Game';
 
 // Components
 import Sidebar from './nav-components/Sidebar/Sidebar';
@@ -77,6 +78,7 @@ function App() {
             <Route path='/challenges/:challengeId' element={<Challenge />} />
             <Route path='/create-challenge/' element={<ChallengeCreate />} />
             <Route path='/event' element={<Event />} />
+            <Route path='/game' element={<Game />} />
             <Route 
               path='*'
               element={<Navigate to='/home' replace/>}

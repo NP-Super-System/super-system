@@ -7,14 +7,11 @@ import PageContainer from '../../layout/PageContainer';
 
 const Course = props=>{
 
-    const {courseCode} = useParams();
+    const { courseCode } = useParams();
 
     useEffect(()=>{
         
-        return ()=>{
-
-        }
-    });
+    }, []);
 
     return (
         <PageContainer>

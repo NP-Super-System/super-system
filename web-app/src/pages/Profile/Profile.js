@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Col, Row, Card, Image } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import styles from './Profile.module.css';
 
@@ -13,22 +14,41 @@ const Profile = props=>{
 
     return (
         <PageContainer>
-            <Row className={styles.header}>
-                <Image
-                    src={user.picture}
-                    className={styles.header_user_picture}
-                    />
-                <span className={styles.header_user_name}>{user.name}</span>
-            </Row>
-            <Row>
-                <Col className={styles.user_info}>
-                    <span>{user.name}</span>
-                    <span>{user.email}</span>
-                </Col>
-            </Row>
-            <Row>
-                <LogoutButton />
-            </Row>
+            <div className={styles.wrapper}>
+                <header className={styles.header}>
+                    <Image
+                        src={user.picture}
+                        className={styles.user_picture}
+                        />
+                    <span className={styles.user_name}>
+                        Welcome back, {user.name}
+                    </span>
+                </header>
+                <Card className={`${styles.card} ${styles.user_info}`}>
+                    <Card.Title>
+                        <span>Personal Details</span>
+                    </Card.Title>
+                    <div className={styles.info}>
+                        <span className={styles.label}>Name:</span>
+                        <span className={styles.value}>{user.name}</span>
+                    </div>
+                    <div className={styles.info}>
+                        <span className={styles.label}>Email:</span> 
+                        <span className={styles.value}>{user.email}</span>
+                    </div>
+                </Card>
+                <Card className={`${styles.card} ${styles.game}`}>
+                    <Link to='/game' style={{textDecoration: 'none', color: 'black'}}>
+                        <Card.Title>Game</Card.Title>
+                    </Link>
+                </Card>
+                <Card className={`${styles.card} ${styles.settings}`}>
+                    <Card.Title>
+                        <span>Settings</span>
+                    </Card.Title>
+                    <LogoutButton />
+                </Card>
+            </div>
         </PageContainer>
     );
 }

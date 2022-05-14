@@ -1,3 +1,53 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+    align-self: center;
+}
+
 .header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.5em;
+    margin-bottom: 1em;
+}
+.header .user_picture{
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
     
+}
+.header .user_name{
+    font-size: 1.5em;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+
+    padding: 1em;
+    margin-bottom: 1em;
+    width: 100%;
+    max-width: 760px;
+
+}
+.user_info .info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    margin-bottom: 1em;
+}
+.user_info .info .label{
+    font-weight: bold;
+    margin-right: 1em;
+}
+.user_info .info .value{
+    float: right;
 }

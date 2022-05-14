@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+
+.container{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 800px;
+    height: 100vh;
+}
+
+.card{
+    padding: 1em;
+}
+
+.title{
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}

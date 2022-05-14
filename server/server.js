@@ -446,6 +446,9 @@ app.get('/get-forum-post/:postId', (req, res)=>{
 // Get image from s3
 app.get('/get-image/:key', (req, res) => {
     const { key } = req.params;
-    const readStream = getFileStream(key);
-    readStream.pipe(res);
+    try{
+        const readStream = getFileStream(key);
+        readStream.pipe(res);
+    }
+    catch(err){console.log(err)}
 });
