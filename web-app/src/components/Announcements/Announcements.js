@@ -18,11 +18,6 @@ class MyCourses extends React.Component{
                 <Card.Title>Announcements</Card.Title>       
                 {
                     AnnouncementsData.map((item, index) => 
-                        // <p key={`${index}`}>
-                        //     <b>{item.title}</b> 
-                        //     <br /> 
-                        //     {item.desc}
-                        // </p>
                         <Link key={`${index}`} to={`/home/announcement/${item.to}`} className={styles.announcement}>
                             <h5 className={styles.announcement_title}>{item.title}</h5>
                             <span className={styles.announcement_datetime}>{item.datetime}</span>

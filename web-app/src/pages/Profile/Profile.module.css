@@ -19,10 +19,10 @@
     width: 60px;
     height: 60px;
     border-radius: 30px;
-    
 }
 .header .user_name{
     font-size: 1.5em;
+    padding: 0.5em;
 }
 
 .card{

@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
@@ -11,17 +10,23 @@ require('dotenv').config();
 
 // Import MongoDB Schemas
 const mongoose = require('mongoose');
-const PostReply = require('./models/PostReply');
-const PostComment = require('./models/PostComment');
-const ForumPost  = require('./models/ForumPost');
+
+// User
+const User = require('./models/user/User');
+
+// TodoList
+const TodoItem = require('./models/todolist/TodoItem');
+
+// Forum
+const PostReply = require('./models/forum/PostReply');
+const PostComment = require('./models/forum/PostComment');
+const ForumPost  = require('./models/forum/ForumPost');
 
 //Import AWS S3 upload function
 const { uploadFile, getFileStream } = require('./s3');
 
 //Import Middleware for image upload
 const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,39 +54,112 @@ mongoose.connect(dbUri, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(res => console.log('Connected to database'))
     .catch(err => console.log(err));
 
-// Init gfs
-let conn = mongoose.connection;
-let gfs;
-conn.once('open', ()=>{
-    // Init stream
-    gfs = Grid(conn.db, mongoose.mongo);
-});
-
-// Storage engine (for files in general - subject to change)
-const storage = new GridFsStorage({
-    url: dbUri,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) return reject(err);
-
-                const filename = buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'upload',
-                };
-                resolve(fileInfo);
-            });
-        });
-    }
-});
-const upload = multer({storage});
-
 const uploadLocal = multer({dest: 'uploads/'});
 
-// ----------------------------------------------------
-// ------------------- POST REQUESTS -------------------
-// ----------------------------------------------------
+// Get user
+app.get('/get-user/:userEmail', (req, res) => {
+    const { userEmail } = req.params;
+
+    User.findOne({userEmail: userEmail})
+        .then(user => {
+            if(!user){
+                res.send({_id: null});
+                return;
+            }
+            res.send(user);
+        })
+        .catch(err => console.log(err));
+});
+
+// Get user
+app.get('/get-user-id/:userEmail', (req, res) => {
+    const { userEmail } = req.params;
+
+    User.findOne({userEmail: userEmail})
+        .then(user => {
+            if(!user){
+                res.send({_id: null});
+                return;
+            }
+            res.send({_id: user._id});
+        })
+        .catch(err => console.log(err));
+});
+
+// Add user
+app.post('/add-user', (req, res) => {
+    
+    const user = new User(req.body);
+
+    user.save()
+        .then(result => {
+            console.log(`Created new user: ${req.body.userName}`);
+            res.send({_id: result._id});
+        })
+        .catch(err => console.log(err));
+    
+});
+
+// Get user's todo list
+app.get('/get-todo-list/:userId', async(req, res) => {
+    const { userId } = req.params;
+
+    User.findOne({_id: userId})
+        .then(user => {
+            if(!user){
+                res.send({_id: null});
+                return;
+            }
+            res.send(user.todolist);
+        })
+        .catch(err => console.log(err));
+});
+
+// Add todo item
+app.post('/add-todo-item', async (req, res) => {
+    const { userId, body } = req.body;
+    const user = await User.findOne({_id: userId});
+    const newTodoItem = new TodoItem({
+        body,
+        checked: false,
+    });
+    user.todolist.push(newTodoItem);
+    user.save()
+        .then(result => {
+            console.log('Added new todo item');
+            res.send();
+        })
+        .catch(err => console.log(err));
+});
+
+// Update todo item
+app.post('/update-todo-item', async (req, res) => {
+    const { userId, itemId, checked } = req.body;
+    console.log(userId);
+    const user = await User.findOne({_id: userId});
+    const [todoitem] = user.todolist.filter(item => item._id == itemId);
+    todoitem.checked = checked;
+    user.save()
+        .then(result => {
+            console.log('Updated todo item');
+            res.send();
+        })
+        .catch(err => console.log(err));
+});
+
+// Delete todo item
+app.post('/delete-todo-item', async (req, res) => {
+    const { userId, itemId } = req.body;
+    const user = await User.findOne({_id: userId});
+    const itemIndex = user.todolist.map(item => item._id.toString()).indexOf(itemId);
+    user.todolist.splice(itemIndex, 1);
+    user.save()
+        .then(result => {
+            console.log('Deleted todo item');
+            res.send();
+        })
+        .catch(err => console.log(err));
+});
 
 // Add forum post
 app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
@@ -377,7 +455,7 @@ app.post('/undislike-comment', async(req, res) => {
     const { type, commentId, userEmail } = req.body;
     console.log(req.body);
 
-    let comment = 
+    const comment = 
         type == 'comment' 
         ? await PostComment.findOne({_id: commentId})
         : await PostReply.findOne({_id: commentId});
@@ -400,14 +478,6 @@ app.post('/undislike-comment', async(req, res) => {
 
 // Get all forum posts
 app.get('/get-all-forum-posts', (req, res)=>{
-    // ForumPost.find({})
-    //     .then(result => {
-    //         res.send(result);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         res.redirect(`${appUrl}/home`);
-    //     });
     ForumPost.find({})
         .populate({
             path: 'comments',

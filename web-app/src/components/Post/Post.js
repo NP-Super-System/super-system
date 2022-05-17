@@ -14,7 +14,6 @@ class Post extends React.Component{
     constructor(props, context){
         super(props, context);
 
-        console.log(this.context);
         this.user = this.context.user;
 
         this.state = {
@@ -62,15 +61,19 @@ class Post extends React.Component{
                     <span className={styles.post_age}>{getPostAge(this.props.createdAt)}</span>
                 </div>
 
-                <div className={styles.text_content}>
-                    <h5 className={styles.title}>{this.props.title}</h5>
-                    <div className={styles.body}>{this.props.body}</div>
-                </div>
+                <Link 
+                    to={`/forum/post/${this.props.postId}`} 
+                    style={{textDecoration: 'none', color: 'black'}}>
 
-                <Link to={`/forum/post/${this.props.postId}`}>
+                    <div className={styles.text_content}>
+                        <h5 className={styles.title}>{this.props.title}</h5>
+                        <div className={styles.body}>{this.props.body}</div>
+                    </div>
+
                     {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
-                </Link>
                 
+                </Link>
+
                 <div className={styles.actions}>
                     <LikePostWrapper
                         liked={this.state.isLiked}

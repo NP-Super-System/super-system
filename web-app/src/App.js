@@ -31,16 +31,90 @@ import './App.css';
 import GlobalContext from './context/GlobalContext';
 
 function App() {
+  const screenType = useScreenType();
   const { user: userCtx, setUser: setUserCtx } = useContext(GlobalContext);
 
+  // Auth0
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const screenType = useScreenType();
+
+  const addUser = userInfo => {
+    const { name, email, picture } = userInfo;
+
+    const newUser = {
+      userName: name,
+      userEmail: email,
+      userPicture: picture,
+    }
+    console.log(newUser);
+
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(newUser),
+    }
+
+    const addUserUrl = 'http://localhost:5000/add-user';
+
+    fetch(addUserUrl, options)
+      .then(res => {
+        console.log('Added new user');
+        res.json()
+          .then(data => 
+            setUserCtx({
+              ...user,
+              id: data._id,
+            })
+          )
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+  }
+
+  const getUserId = async userEmail => {
+    const getUserUrl = `http://localhost:5000/get-user/${userEmail}`;
+
+    const res = await fetch(getUserUrl);
+    const userData = await res.json();
+    return userData._id;
+  }
 
   useEffect(()=>{
     // Reload when isAuthenticated value changes
-    console.log(user);
+    (
+      async () => {
+        console.log(user);
+        if(user){
+          const currentUserId = await getUserId(user.email);
+          if(currentUserId){
+            console.log('User already exists');
+            setUserCtx({
+              ...user,
+              id: currentUserId,
+            });
+          }
+          else{
+            addUser(user);
+          }
+        }
+      }
+    )();
 
-    setUserCtx(user);
+    // fetch(`http://localhost:5000/get-user-id/${user.email}`)
+    //   .then(
+    //     res => res.json()
+    //       .then(data => {
+    //         if(data._id){
+    //           console.log('User already exists');
+    //           return;
+    //         };
+    //         addUser(user);
+    //       })
+    //       .catch(err => console.log(err))
+    //   )
+    //   .catch(err => console.log(err));
   }, [isAuthenticated]);
 
   return (
@@ -58,11 +132,11 @@ function App() {
           {
             screenType == 'show-sidebar' ?
 
-            <Sidebar user={user}/>
+            <Sidebar />
 
             :
 
-            <Navbar user={user}/>
+            <Navbar />
           }
           <Routes>
             <Route path='/profile' element={<Profile />} />

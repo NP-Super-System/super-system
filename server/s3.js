@@ -2,17 +2,16 @@ const fs = require('fs');
 const S3 = require('aws-sdk/clients/s3');
 require('dotenv').config();
 
-const bucketName = process.env.AWS_BUCKET_NAME;
+const bucketName = process.env.AWS_IMAGE_BUCKET_NAME;
 const s3 = new S3({
-    region: process.env.AWS_BUCKET_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_IMAGE_BUCKET_REGION,
+    accessKeyId: process.env.AWS_IMAGE_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_IMAGE_SECRET_ACCESS_KEY,
 });
 
 // upload file to s3
 
 function uploadFile(file){
-    console.log(file);
     const fileStream = fs.createReadStream(file.path);
 
     const uploadParams = {

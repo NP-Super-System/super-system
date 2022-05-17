@@ -1,7 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
-import axios from 'axios';
-import {Navigate, useNavigate} from 'react-router-dom';
 
 import styles from './ForumCreate.module.css';
 
@@ -43,17 +41,21 @@ const ForumCreate = props=>{
                     <Form.Control name='title' type='input' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className={`mb-3`}>
+                    <Form.Label>Text</Form.Label>
+                    <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/>
+                </Form.Group>
+                <Form.Group className={`mb-3`}>
                     <Form.Label>Image</Form.Label>
                     <Form.Control name='file' type='file' accept='image/png, image/jpeg' size='sm' onChange={onImageChange}/>
                     {selectedImage && <Image src={preview} className={styles.preview}/>}
                 </Form.Group>
-                <Form.Group className={`mb-3`}>
-                    <Form.Label>Text</Form.Label>
-                    <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/>
-                </Form.Group>
                 <input type='hidden' name='userName' value={user.name} />
                 <input type='hidden' name='userPicture' value={user.picture || `media/default-profile-pic.jpeg`} />
-                <Button variant='primary' type='submit'>Post</Button>
+                <Button 
+                    variant='primary' 
+                    type='submit'>
+                    Post
+                </Button>
             </form>
         </PageContainer>
     );

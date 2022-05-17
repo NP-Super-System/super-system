@@ -1,4 +1,5 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 
 import styles from './Dashboard.module.css';
 
@@ -6,7 +7,7 @@ import PageContainer from '../../layout/PageContainer';
 import MyCourses from '../../components/MyCourses/MyCourses';
 import Announcements from '../../components/Announcements/Announcements'
 import Deadline from '../../components/Deadlines/Deadlines'
-import { Container, Row, Col } from 'react-bootstrap';
+import TodoList from '../../components/TodoList/TodoList';
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -16,8 +17,11 @@ class Dashboard extends React.Component{
         return (
             <PageContainer>
                 <Row>
-                    <Col><MyCourses /></Col>
                     <Col>
+                        <MyCourses />
+                    </Col>
+                    <Col>
+                        <TodoList />
                         <Announcements />
                         <Deadline />
                     </Col>

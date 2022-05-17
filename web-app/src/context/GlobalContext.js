@@ -1,7 +1,7 @@
 import React from 'react';
 
 const GlobalContext = React.createContext({
-    user: {},
+    user: null,
     setUser: index => {},
     monthIndex: 0,
     setMonthIndex: index => {},
