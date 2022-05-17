@@ -49,6 +49,7 @@ const ChallengeList = props => {
                                     <Col className={styles.challenge_details}>
                                         <h5>{item.challenge}</h5>
                                         <span>By: {item.by}</span>
+                                        <span>Question Type: {item.type}</span>
                                         <span>Rating: {rating(item.rating)}</span>
                                     </Col>
                                     <Col>

@@ -1,14 +1,26 @@
+.challenge {
+    position: absolute;
+    left: 50vh;
+    top: 50vh;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: lightyellow;
+    padding: 10px;
+    width: 70%;
+    min-height: 50vh;
+}
+
+.answersection {
+    padding: 10px;
+}
+
 .button {
+    margin-bottom: 10px;
+}  
+
+label {
     margin: auto;
-    margin-top: 10px;
-    width: 50%;
-    color: #ffffff;
-    background-color: #252d4a;
-    border-radius: 15px;
-    display: flex;
-    padding: 5px;
-    justify-content: center;
-    align-items: center;
-    border: 5px solid #234668;
-    cursor: pointer;
+    width: 20%;
 }
