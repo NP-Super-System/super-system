@@ -100,66 +100,8 @@ app.post('/add-user', (req, res) => {
     
 });
 
-// Get user's todo list
-app.get('/get-todo-list/:userId', async(req, res) => {
-    const { userId } = req.params;
-
-    User.findOne({_id: userId})
-        .then(user => {
-            if(!user){
-                res.send({_id: null});
-                return;
-            }
-            res.send(user.todolist);
-        })
-        .catch(err => console.log(err));
-});
-
-// Add todo item
-app.post('/add-todo-item', async (req, res) => {
-    const { userId, body } = req.body;
-    const user = await User.findOne({_id: userId});
-    const newTodoItem = new TodoItem({
-        body,
-        checked: false,
-    });
-    user.todolist.push(newTodoItem);
-    user.save()
-        .then(result => {
-            console.log('Added new todo item');
-            res.send();
-        })
-        .catch(err => console.log(err));
-});
-
-// Update todo item
-app.post('/update-todo-item', async (req, res) => {
-    const { userId, itemId, checked } = req.body;
-    console.log(userId);
-    const user = await User.findOne({_id: userId});
-    const [todoitem] = user.todolist.filter(item => item._id == itemId);
-    todoitem.checked = checked;
-    user.save()
-        .then(result => {
-            console.log('Updated todo item');
-            res.send();
-        })
-        .catch(err => console.log(err));
-});
-
-// Delete todo item
-app.post('/delete-todo-item', async (req, res) => {
-    const { userId, itemId } = req.body;
-    const user = await User.findOne({_id: userId});
-    const itemIndex = user.todolist.map(item => item._id.toString()).indexOf(itemId);
-    user.todolist.splice(itemIndex, 1);
-    user.save()
-        .then(result => {
-            console.log('Deleted todo item');
-            res.send();
-        })
-        .catch(err => console.log(err));
-});
+// TodoItem CRUD
+const { createTodoItem, readTodoItem, updateTodoItem, deleteTodoItem } = require('./crud/todoitem')(app);
 
 // Add forum post
 app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
