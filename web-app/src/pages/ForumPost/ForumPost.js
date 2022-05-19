@@ -4,6 +4,7 @@ import { Card, Image, Form, Button } from 'react-bootstrap';
 import { BsArrow90DegRight, BsLayers } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../modules/getPostAge';
+import parse from 'html-react-parser';
 
 import styles from './ForumPost.module.css';
 
@@ -48,7 +49,6 @@ const ForumPost = props => {
             .then(
                 res => res.json()
                     .then(data => {
-                        console.log(data);
                         setPostData(data);
                         setImageSrc(`http://localhost:5000/get-image/${data.imgKey || ''}`);
                         const liked = data.likedUsers.includes(user.email);
@@ -89,7 +89,7 @@ const ForumPost = props => {
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
-                    <div className={styles.body}>{postData.body}</div>
+                    <div className={styles.body}>{postData.body && parse(postData.body)}</div>
                     <Image 
                         src={imageSrc} 
                         className={styles.image}

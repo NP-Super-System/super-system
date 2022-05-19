@@ -5,6 +5,7 @@ import styles from './ForumCreate.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
+import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 
 const ForumCreate = props=>{
 
@@ -42,7 +43,8 @@ const ForumCreate = props=>{
                 </Form.Group>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Text</Form.Label>
-                    <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/>
+                    {/* <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/> */}
+                    <RichTextEditor />
                 </Form.Group>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Image</Form.Label>

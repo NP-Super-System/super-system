@@ -93,7 +93,6 @@ const TodoList = props => {
     }
     
     useEffect(() => {
-        console.log(user);
         getTodoItems(user.id);
     }, []);
 

@@ -26,7 +26,7 @@ const operations = app => {
             imgKey = uploadFileRes.key || '';
     
             //Remove file from server
-            fs.unlinkSync(`./uploads/${imgKey}`);
+            fs.unlinkSync(`../uploads/${imgKey}`);
         }
         catch(err){
             console.log('Image does not exist or upload to s3 failed');

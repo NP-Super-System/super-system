@@ -36,7 +36,7 @@ const PostComment = props => {
     const [likeCount, setLikeCount] = useState(likedUsers.length - (isLiked ? 1 : 0));
 
     useEffect(() => {
-        console.log(props);
+        
     }, []);
 
     return (
