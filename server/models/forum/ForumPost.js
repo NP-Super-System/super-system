@@ -1,22 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const User = require('../user/User');
 const PostComment = require('./PostComment');
 
 // Schema for forum posts
 
 const forumPostSchema = new Schema({
 
-    userName: {
-        type: String,
-        required: true,
-    },
-    userPicture: String,
-
-    title: {
-        type: String,
-        required: true,
-    },
+    user: { type: Schema.Types.ObjectId, ref: User, required: true},
+    title: { type: String, required: true, },
     body: String,
     imgKey: String,
 

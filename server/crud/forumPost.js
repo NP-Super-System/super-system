@@ -3,12 +3,19 @@ const uploadLocal = multer({dest: '../uploads/'});
 const { uploadFile, getFileStream } = require('../s3');
 const ForumPost = require('../models/forum/ForumPost');
 const PostComment = require('../models/forum/PostComment');
+const User = require('../models/user/User');
 
 const appUrl = 'http://localhost:3000';
 
 // CRUD operations
 
 const operations = app => {
+
+    // Get user
+    const getUser = async userId => {
+        const user = await User.findOne({_id: userId});
+        return user;
+    }
 
     // Create - add forum post
     const uploadImage = async req => {
@@ -31,10 +38,10 @@ const operations = app => {
         return imgKey;
     }
 
-    const createForumPost = async (res, userName, userPicture, title, body, imgKey) => {
+    const createForumPost = async (res, userId, title, body, imgKey) => {
+        const user = await getUser(userId);
         const post = {
-            userName, 
-            userPicture,
+            user,
     
             title, 
             body, 
@@ -59,19 +66,16 @@ const operations = app => {
 
     app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
         const imgKey = await uploadImage(req);
-
-        const {userName, userPicture, title, body} = req.body;
-    
-        await createForumPost(res, userName, userPicture, title, body, imgKey);
+        const {userId, title, body} = req.body;
+        await createForumPost(res, userId, title, body, imgKey);
     });
 
     // Read - get forum posts
 
     const readForumPost = async (res, query={}) => {
         ForumPost.find(query)
-            .populate({
-                path: 'comments',
-            })
+            .populate('user')
+            .populate('comments')
             .exec( (err, result) => {
                 if(err){
                     console.log(err);
@@ -88,10 +92,15 @@ const operations = app => {
 
     const readSingleForumPost = async (res, query={}) => {
         ForumPost.findOne(query)
+            .populate('user')
             .populate({
                 path: 'comments',
                 populate: {
-                    path: 'replies',
+                    path: 'user replies',
+                    populate: {
+                        path: 'user',
+                        strictPopulate: false,
+                    },
                 }
             })
             .exec( (err, result) => {
@@ -106,42 +115,11 @@ const operations = app => {
 
     app.get('/get-forum-post/:postId', async (req, res) => {
         const { postId } = req.params;
-        const query = {
-            _id: postId,
-        }
+        const query = { _id: postId, }
         await readSingleForumPost(res, query);
     });
 
     // Update - update forum post
-    const addComment = async (res, postId, userName, userPicture, commentText) => {
-        const forumPost = await ForumPost.findOne({_id: postId});
-
-        if(!forumPost){
-            res.redirect(`${appUrl}/forum`);
-            return;
-        }
-
-        const commentData = {
-            userName,
-            userPicture,
-            text: commentText,
-            likedUsers: [],
-            dislikedUsers: [],
-            replies: [],
-        }
-        const comment = new PostComment(commentData);
-        await comment.save();
-
-        forumPost.comments.push(comment);
-        await forumPost.save();
-
-        res.redirect(`${appUrl}/forum/post/${postId}`);
-    }
-
-    app.post('/add-comment', async (req, res) => {
-        const { postId, userName, userPicture, commentText } = req.body;
-        await addComment(res, postId, userName, userPicture, commentText);
-    });
 
     // like / dislike functions
 

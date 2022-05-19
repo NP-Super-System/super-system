@@ -40,7 +40,7 @@ class Post extends React.Component{
         this.updateIsDisliked = this.updateIsDisliked.bind(this);
     }
     componentDidMount(){
-        console.log(this.props.imgKey);
+        console.log(this.props);
     }
     updateIsLiked(isLiked){
         this.setState({ isLiked, isDisliked: false });
@@ -54,10 +54,10 @@ class Post extends React.Component{
 
                 <div className={styles.user_content}>
                     <Image
-                        src={this.props.userPicture}
+                        src={this.props.user.userPicture}
                         className={styles.user_picture}
                         referrerPolicy="no-referrer"/>
-                    <span className={styles.user_name}>{this.props.userName}</span>
+                    <span className={styles.user_name}>{this.props.user.userName}</span>
                     <span className={styles.post_age}>{getPostAge(this.props.createdAt)}</span>
                 </div>
 

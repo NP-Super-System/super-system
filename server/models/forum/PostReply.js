@@ -1,22 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const User = require('../user/User');
+
 // Sub-schema for post replies
 
 const postReplySchema = new Schema({
 
-    userName: {
-        type: String,
-        required: true,
-    },
-    userPicture: String,
+    user: {type: Schema.Types.ObjectId, ref: User, required: true},
 
     text: String,
 
     likedUsers: [String],
     dislikedUsers: [String],
     
-}, { timestamps: true });
+}, { timestamps: true, });
 
 // Create model for forum post replies
 

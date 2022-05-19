@@ -49,8 +49,9 @@ const ForumCreate = props=>{
                     <Form.Control name='file' type='file' accept='image/png, image/jpeg' size='sm' onChange={onImageChange}/>
                     {selectedImage && <Image src={preview} className={styles.preview}/>}
                 </Form.Group>
-                <input type='hidden' name='userName' value={user.name} />
-                <input type='hidden' name='userPicture' value={user.picture || `media/default-profile-pic.jpeg`} />
+                {/* <input type='hidden' name='userName' value={user.name} />
+                <input type='hidden' name='userPicture' value={user.picture || `media/default-profile-pic.jpeg`} /> */}
+                <input type='hidden' name='userId' value={user.id} />
                 <Button 
                     variant='primary' 
                     type='submit'>

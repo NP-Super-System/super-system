@@ -13,7 +13,7 @@ import DislikeCommentWrapper from '../DislikeCommentWrapper/DislikeCommentWrappe
 const PostComment = props => {
     
     const { user } = useContext(GlobalContext);
-    const { postId, _id: commentId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
+    const { postId, _id: commentId, user: commentUser, text, likedUsers, dislikedUsers, replies, createdAt } = props;
 
     const [openReply, setOpenReply] = useState(false);
 
@@ -36,17 +36,17 @@ const PostComment = props => {
     const [likeCount, setLikeCount] = useState(likedUsers.length - (isLiked ? 1 : 0));
 
     useEffect(() => {
-        
+        console.log(props);
     }, []);
 
     return (
         <Card className={styles.comment}>
             <div className={styles.comment_user_content}>
                 <Image 
-                    src={userPicture}
+                    src={commentUser.userPicture}
                     className={styles.comment_user_picture}
                     referrerPolicy="no-referrer"/>
-                <span className={styles.comment_user_name}>{userName}</span>
+                <span className={styles.comment_user_name}>{commentUser.userName}</span>
                 <span className={styles.comment_age}>{getPostAge(createdAt)}</span>
             </div>
             <span className={styles.comment_text}>{text}</span>
@@ -97,12 +97,11 @@ const PostComment = props => {
             {
                 openReply ?
 
-                <form action='http://localhost:5000/add-reply-to-comment' method='POST' className={styles.reply_form}>
+                <form action='http://localhost:5000/add-reply' method='POST' className={styles.reply_form}>
 
                     <input type='hidden' name='postId' value={postId} />
                     <input type='hidden' name='commentId' value={commentId} />
-                    <input type='hidden' name='userName' value={userName} />
-                    <input type='hidden' name='userPicture' value={userPicture} />
+                    <input type='hidden' name='userId' value={user.id} />
 
                     <Form.Group className={styles.reply_form_text}>
                         <Form.Control 

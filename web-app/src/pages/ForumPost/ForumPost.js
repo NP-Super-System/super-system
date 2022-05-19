@@ -81,11 +81,11 @@ const ForumPost = props => {
                 <div className={styles.wrapper}>
                     <div className={styles.op_content}>
                         <Image
-                            src={postData.userPicture}
+                            src={postData.user && postData.user.userPicture}
                             className={styles.op_picture}
                             referrerPolicy="no-referrer"
                             />
-                        <span className={styles.op_name}>{postData.userName}</span>
+                        <span className={styles.op_name}>{postData.user && postData.user.userName}</span>
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
@@ -148,8 +148,9 @@ const ForumPost = props => {
                                 className={styles.comment_form_text}/>
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
-                        <input type='hidden' name='userName' value={user.name} />
-                        <input type='hidden' name='userPicture' value={user.picture} />
+                        {/* <input type='hidden' name='userName' value={user.name} />
+                        <input type='hidden' name='userPicture' value={user.picture} /> */}
+                        <input type='hidden' name='userId' value={user.id} />
                         {
                             showCommentSubmit &&
                             <Button 

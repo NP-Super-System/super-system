@@ -11,7 +11,7 @@ import DislikeCommentWrapper from '../DislikeCommentWrapper/DislikeCommentWrappe
 const PostReply = props => {
 
     const { user } = useContext(GlobalContext);
-    const { postId, _id: replyId, userName, userPicture, text, likedUsers, dislikedUsers, replies, createdAt } = props;
+    const { postId, _id: replyId, user: replyUser, text, likedUsers, dislikedUsers, replies, createdAt } = props;
 
     const [isLiked, setIsLiked] = useState(likedUsers.includes(user.email));
     const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.email));
@@ -39,10 +39,10 @@ const PostReply = props => {
         <Card className={styles.wrapper}>
             <div className={styles.user_content}>
                 <Image 
-                    src={userPicture}
+                    src={replyUser.userPicture}
                     className={styles.user_picture}
                     referrerPolicy="no-referrer"/>
-                <span className={styles.user_name}>{userName}</span>
+                <span className={styles.user_name}>{replyUser.userName}</span>
                 <span className={styles.reply_age}>{getPostAge(createdAt)}</span>
             </div>
             <span className={styles.text}>{text}</span>

@@ -1,14 +1,81 @@
+const ForumPost = require('../models/forum/ForumPost');
 const PostComment = require('../models/forum/PostComment');
 const PostReply = require('../models/forum/PostReply');
+const User = require('../models/user/User');
 
 const appUrl = 'http://localhost:3000';
 
 const operations = app => {
+    // Get user
+    const getUser = async userId => {
+        const user = await User.findOne({_id: userId});
+        return user;
+    }
+
     // Create - add comment / reply
 
     // Read - read comment / reply
 
     // Update - update comment / reply
+
+    const addComment = async (res, postId, userId, commentText) => {
+        const forumPost = await ForumPost.findOne({_id: postId});
+
+        if(!forumPost){
+            res.redirect(`${appUrl}/forum`);
+            return;
+        }
+
+        const user = await getUser(userId);
+        const commentData = {
+            user,
+            text: commentText,
+            likedUsers: [],
+            dislikedUsers: [],
+            replies: [],
+        }
+        const comment = new PostComment(commentData);
+        await comment.save();
+
+        forumPost.comments.push(comment);
+        await forumPost.save();
+
+        res.redirect(`${appUrl}/forum/post/${postId}`);
+    }
+
+    app.post('/add-comment', async (req, res) => {
+        const { postId, userId, commentText } = req.body;
+        await addComment(res, postId, userId, commentText);
+    });
+
+    const addReply = async (res, postId, commentId, userId, replyText) => {
+        const postComment = await PostComment.findOne({_id: commentId});
+
+        if(!postComment){
+            res.redirect(`${appUrl}/forum`);
+            return;
+        }
+
+        const user = await getUser(userId);
+        const replyData = {
+            user,
+            text: replyText,
+            likedUsers: [],
+            dislikedUsers: [],
+        }
+        const reply = new PostReply(replyData);
+        await reply.save();
+
+        postComment.replies.push(reply);
+        await postComment.save();
+
+        res.redirect(`${appUrl}/forum/post/${postId}`);
+    }
+
+    app.post('/add-reply', async (req, res) => {
+        const { postId, commentId, userId, replyText } = req.body;
+        await addReply(res, postId, commentId, userId, replyText);
+    });
 
     const addLikedUser = (element, userEmail) => {
         if(element.likedUsers.includes(userEmail)) {
@@ -21,7 +88,7 @@ const operations = app => {
     const addDislikedUser = (element, userEmail) => {
         if(element.dislikedUsers.includes(userEmail)) {
             console.log(`User already disliked ${element.constructor.name}`);
-            return
+            return;
         }
         element.dislikedUsers.push(userEmail);
     }
@@ -62,8 +129,8 @@ const operations = app => {
             return;
         }
     
-        addLikedUser(res, comment, userEmail);
-        removeDislikedUser(res, comment, userEmail);
+        addLikedUser(comment, userEmail);
+        removeDislikedUser(comment, userEmail);
     
         const result = await comment.save();
         res.send(result);
@@ -85,7 +152,7 @@ const operations = app => {
             return;
         }
     
-        removeLikedUser(res, comment, userEmail);
+        removeLikedUser(comment, userEmail);
     
         const result = await comment.save();
         res.send(result);
@@ -107,8 +174,8 @@ const operations = app => {
             return;
         }
     
-        addDislikedUser(res, comment, userEmail);
-        removeLikedUser(res, comment, userEmail);
+        addDislikedUser(comment, userEmail);
+        removeLikedUser(comment, userEmail);
     
         const result = await comment.save();
         res.send(result);
@@ -130,7 +197,7 @@ const operations = app => {
             return;
         }
     
-        removeDislikedUser(res, comment, userEmail);
+        removeDislikedUser(comment, userEmail);
     
         const result = await comment.save();
         res.send(result);
