@@ -80,9 +80,6 @@ const operations = app => {
         const { userId, itemId } = req.body;
         await deleteTodoItem(res, userId, itemId);
     });
-
-
-    return { createTodoItem, readTodoItem, updateTodoItem, deleteTodoItem }
 }
 
 module.exports = operations;

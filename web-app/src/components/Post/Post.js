@@ -70,7 +70,7 @@ class Post extends React.Component{
                         <div className={styles.body}>{this.props.body}</div>
                     </div>
 
-                    {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image}/>}
+                    {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
                 
                 </Link>
 
