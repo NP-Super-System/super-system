@@ -12,6 +12,8 @@ import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Course';
 import Announcement from './pages/Announcement/Announcement';
+import AnnouncementCreate from './pages/AnnouncementCreate/AnnouncementCreate';
+import AnnouncementUpdate from './pages/AnnouncementUpdate/AnnouncementUpdate';
 import Calendar from './pages/Calendar/Calendar';
 import Deadline from './pages/Deadline/Deadline';
 import Forum from './pages/Forum/Forum';
@@ -141,7 +143,9 @@ function App() {
           <Routes>
             <Route path='/profile' element={<Profile />} />
             <Route path='/home' element={<Dashboard />} />        
-            <Route path='/home/announcement/:announcementNum' element={<Announcement />} />    
+            <Route path='/home/announcement/:announcementNum' element={<Announcement />} />
+            <Route path='/home/announcement/create' element={<AnnouncementCreate />} /> 
+            <Route path='/home/announcement/update' element={<AnnouncementUpdate />} />     
             <Route path='/home/course/:courseCode' element={<Course />} />
             <Route path='/home/deadline/:deadlineId' element={<Deadline />} />      
             <Route path='/calendar' element={<Calendar />} />

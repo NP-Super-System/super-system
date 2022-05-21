@@ -36,6 +36,8 @@ require('./mongodb');
 require('./crud/user')(app);
 // TodoItem
 require('./crud/todoitem')(app);
+// Announcement
+require('./crud/announcement')(app);
 // Forum Post
 require('./crud/forumPost')(app);
 // Forum Post Comment / Reply

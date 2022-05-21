@@ -5,11 +5,8 @@
 }
 
 .announcement{
-    display: flex;
     flex-direction: column;
 
-    text-decoration: none;
-    color: black;
     border: 1px solid rgb(215, 215, 215);
     border-radius: 5px;
 
@@ -17,6 +14,11 @@
     padding: 1em;
 
     text-align: left;
+}
+
+.announcementText {
+    text-decoration: none;
+    color: black;
 }
 
 .announcement_title{
@@ -31,4 +33,54 @@
 
 .announcement_desc{
 
+}
+
+.create_button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1em;
+    margin-left: 30px;
+}
+.announcement .user_content {
+    font-size: 65%;
+    color: gray;
+}
+
+.create_icon{
+}
+
+.buttons {
+    text-align: center;
+}
+
+.announcement .edit_btn{
+    background-color: white;
+    border: none;
+    margin-right: 5px;
+}
+.announcement .edit_btn:hover{
+    background-color: greenyellow;
+}
+.announcement .edit_btn .icon{
+    color: greenyellow;
+    font-size: 1.25em;
+}
+.announcement .edit_btn:hover .icon{
+    color: white;
+}
+
+.announcement .delete_btn{
+    background-color: white;
+    border: none;
+}
+.announcement .delete_btn:hover{
+    background-color: red;
+}
+.announcement .delete_btn .icon{
+    color: red;
+    font-size: 1.25em;
+}
+.announcement .delete_btn:hover .icon{
+    color: white;
 }
