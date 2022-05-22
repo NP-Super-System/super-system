@@ -29,26 +29,6 @@ class MyCourses extends React.Component{
         return (
             <Card className={styles.bigCard}>     
                 <Card.Title>My Courses</Card.Title>
-
-                {/* VERSION 1 - PICTURE ON TOP (SIMILAR TO POLITEMALL) */}
-                {/* <div className={styles.cardList}>
-                    {CourseData.map((item, index) =>
-                        <Link key={`${index}`} to={`/home/${item.code}`} className={styles.link}>
-                            <Card className={styles.smallCard}>
-                                <Card.Img variant="top" src={item.pic} />
-                                <Card.Body>
-                                    <Card.Title>{item.name}</Card.Title>
-                                    <Card.Text>
-                                        {item.desc}
-                                    </Card.Text>
-                                    <ProgressBar now={item.progress} label={`${item.progress}%`} />
-                                </Card.Body>
-                            </Card>  
-                        </Link>
-                    )}  
-                </div> */}
-                
-                {/* VERSION 2 - PICTURE ON THE LEFT */}
                 <div className={styles.wrapper}>
                     {
                         CourseData.map( (item, i)=>{
@@ -65,8 +45,7 @@ class MyCourses extends React.Component{
                             </Link>
                         } )
                     }
-                </div>
-                            
+                </div>   
             </Card>
         )
     }

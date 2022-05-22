@@ -77,7 +77,7 @@ const Announcements = props => {
                     <div key={`${index}`} className={styles.announcement}>
                         <Link to={`/home/announcement/${item.to}`} className={styles.announcementText}>
                             <div className={styles.user_content}>
-                                <span className={styles.user_name}>Created By: {item.user.user_name}</span>
+                                <span className={styles.user_name}>Created By: {item.user.userName}</span>
                                 <br />
                                 <span className={styles.post_age}>Created: {getPostAge(item.createdAt)}</span>
                                 <br />

@@ -16,6 +16,10 @@
     text-align: left;
 }
 
+.announcement .user_content{
+    margin-bottom: 1em;
+}
+
 .announcementText {
     text-decoration: none;
     color: black;

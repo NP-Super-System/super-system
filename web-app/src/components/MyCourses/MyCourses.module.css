@@ -1,31 +1,12 @@
-/* VERSION 1 (picture on top) */
-
 .bigCard {
     padding: 1em;
+    margin-bottom: 1em;
 }
-
-.cardList{
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.link {
-    text-decoration: none;
-    color: black;
-    width: 100%;
-}
-
-.smallCard {
-    flex: 1;
-    width: 100%;
-    padding: 1em;
-}
-
-/* VERSION 2 (picture on the left) */
 
 .wrapper{
     display: flex;
     flex-direction: column;
+    margin-bottom: 1em;
 }
 
 .course_link{

@@ -31,15 +31,16 @@ const operations = app => {
     // Read - get announcements
     const readAnnouncements = async (res) => {
         Announcement
-        .find({})
-        .populate('user')
-        .exec((err, result) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            res.send(result);
-        })
+            .find({})
+            .populate('user')
+            .exec((err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(result);
+                res.send(result);
+            });
     }
 
     app.get('/get-announcements', async (req, res) => {
@@ -50,7 +51,7 @@ const operations = app => {
     const updateAnnouncement = async (res, userId, title, body, itemId) => {;
         Announcement.updateOne({user: userId, title: title, body: body})
             .then(result => {
-                console.log('Updated todo item');
+                console.log('Updated announcement');
                 res.send();
             })
             .catch(err => console.log(err));
