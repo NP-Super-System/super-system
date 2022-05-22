@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Section = require('./Section');
-const Announcement = require('./Announcement');
+const SectionSchema = require('./Section').schema;
+const AnnouncementSchema = require('../announcement/Announcement').schema;
 
 // Schema for courses
 
@@ -16,8 +16,8 @@ const courseSchema = new Schema({
         type: String,
         required: true,
     },
-    sections: [Section],
-    announcements: [Announcement],
+    sections: [SectionSchema],
+    announcements: [AnnouncementSchema],
 
 }, { timestamps: true });
 

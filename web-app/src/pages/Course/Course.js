@@ -8,14 +8,28 @@ import PageContainer from '../../layout/PageContainer';
 const Course = props=>{
 
     const { courseCode } = useParams();
+    const [courseData, setCourseData] = useState(null);
 
     useEffect(()=>{
-        
+        fetch(`http://localhost:5000/course/read/${courseCode}`)
+            .then(res => res.json()
+                .then(data => {
+                    console.log(data);
+                    setCourseData(data);
+                })
+                .catch(err => console.log(err)))
+            .catch(err => console.log(err));
     }, []);
 
     return (
         <PageContainer>
-            Course code: {courseCode || 'No course id provided'}
+            {
+                courseData &&
+
+                <>
+                    {JSON.stringify(courseData)}
+                </>
+            }
         </PageContainer>
     );
 }
