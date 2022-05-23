@@ -22,7 +22,7 @@ const operations = app => {
             .catch(err => console.log(err));
     }
 
-    app.post('/create-announcement', async (req, res) => {
+    app.post('/announcement/create', async (req, res) => {
         const { userId, title, body } = req.body;
         await createAnnouncement(res, userId, title, body);
     });
@@ -43,13 +43,13 @@ const operations = app => {
             });
     }
 
-    app.get('/get-announcements', async (req, res) => {
+    app.get('/announcement/read', async (req, res) => {
         await readAnnouncements(res);
     });
 
     // Update - update todoitem
     const updateAnnouncement = async (res, userId, title, body, itemId) => {;
-        Announcement.updateOne({user: userId, title: title, body: body})
+        Announcement.updateOne({userUpdate: userId, title: title, body: body})
             .then(result => {
                 console.log('Updated announcement');
                 res.send();
@@ -59,7 +59,7 @@ const operations = app => {
 
     }
 
-    app.post('/update-announcement', async (req, res) => {
+    app.post('/announcement/update', async (req, res) => {
         const { userId, title, body, itemId } = req.body;
         await updateAnnouncement(res, userId, title, body, itemId);
     });
@@ -75,7 +75,7 @@ const operations = app => {
         .catch(err => console.log(err));
     }
 
-    app.post('/delete-announcement', async (req, res) => {
+    app.post('/announcement/delete', async (req, res) => {
         const { userId, itemId } = req.body;
         await deleteAnnouncement(res, userId, itemId);
     })

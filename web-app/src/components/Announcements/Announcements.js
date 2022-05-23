@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { AnnouncementsData } from './AnnouncementsData';
 import { IoAddSharp } from 'react-icons/io5';
 import { Button } from 'react-bootstrap';
+import Swal from 'sweetalert2'
+
 
 const Announcements = props => {    
     const [announcements, setAnnouncements] = useState([]);
@@ -17,9 +19,11 @@ const Announcements = props => {
         getAnnouncements(userId);
     }, []);
 
+    const Swal = require('sweetalert2')
+
     const getAnnouncements = userId => {
         // Get all announcements from server
-        fetch('http://localhost:5000/get-announcements')
+        fetch('http://localhost:5000/announcement/read')
             .then(
                 res => res.json()
                     .then(data => {
@@ -44,7 +48,7 @@ const Announcements = props => {
 
         console.log(`Deleting todo item...`);
 
-        const deleteItemUrl = 'http://localhost:5000/delete-announcement';
+        const deleteItemUrl = 'http://localhost:5000/announcement/delete';
 
         fetch(deleteItemUrl, options)
             .then(res => {
@@ -54,10 +58,33 @@ const Announcements = props => {
             .catch(err => console.log(err));
     }
 
-    const displayUpdatedAt = (create, update) => {
-        if (create !== update) {
-            return <span className={styles.post_age}>Updated: {getPostAge(update)}</span>
+    const deleteBtn = (userId, itemId) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Deleted!',
+                'Your announcement has been deleted.',
+                'success'
+              )
+              deleteAnnouncement(userId, itemId)
+            }
+          })
+    }
+
+    const displayMessage = (user, create, update) => {
+        if (create === update) {
+            return <span className={styles.user_name}>Created By: {user} {getPostAge(create)}</span>
         }
+        return <span className={styles.user_name}>Updated By: {user} {getPostAge(update)}</span>
+        
     }
 
     return (
@@ -77,11 +104,7 @@ const Announcements = props => {
                     <div key={`${index}`} className={styles.announcement}>
                         <Link to={`/home/announcement/${item.to}`} className={styles.announcementText}>
                             <div className={styles.user_content}>
-                                <span className={styles.user_name}>Created By: {item.user.userName}</span>
-                                <br />
-                                <span className={styles.post_age}>Created: {getPostAge(item.createdAt)}</span>
-                                <br />
-                                {displayUpdatedAt(item.createdAt, item.updatedAt)}
+                                {displayMessage(item.user.userName, item.createdAt, item.updatedAt)}
                             </div>
                             <h5 className={styles.announcement_title}>{item.title}</h5>
                             <span className={styles.announcement_desc}>{item.body}</span>
@@ -97,7 +120,7 @@ const Announcements = props => {
                             </Link>
                             <Button
                                 variant='primary'
-                                onClick={e => deleteAnnouncement(item.user.userId, item._id)}
+                                onClick={e => deleteBtn(item.user.userId, item._id)}
                                 className={styles.delete_btn}>
                                 <BsFillTrash2Fill 
                                     className={styles.icon}/>

@@ -19,7 +19,7 @@ const AnnouncementCreate = props => {
 
     return (
         <PageContainer>
-            <form action='http://localhost:5000/create-announcement' method='POST' className={styles.form}>
+            <form action='http://localhost:5000/announcement/create' method='POST' className={styles.form}>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Title</Form.Label>
                     <Form.Control name='title' type='input' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} required/>
