@@ -9,7 +9,17 @@ const operations = app => {
             const readStream = getFileStream(key, 'image');
             readStream.pipe(res);
         }
-        catch(err){console.log(err)}
+        catch(err){console.log(err);}
+    });
+
+    // Get file from s3
+    app.get('/s3/file/:key', (req, res) => {
+        const { key } = req.params;
+        try{
+            const readStream = getFileStream(key, 'file');
+            readStream.pipe(res);
+        }
+        catch(err){console.log(err);}
     });
 }
 
