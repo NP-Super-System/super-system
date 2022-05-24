@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
+import { Col, Row, Card } from 'react-bootstrap';
 
 import styles from './Course.module.css';
 
@@ -23,13 +24,36 @@ const Course = props=>{
 
     return (
         <PageContainer>
-            {
-                courseData &&
+        {
+            courseData &&
 
-                <>
-                    {JSON.stringify(courseData)}
-                </>
-            }
+            <Row>
+                <Col>
+                    <Card className={styles.sections}>
+                        <Card.Title className={styles.title}>{courseData.name}</Card.Title>
+                        {
+                            courseData.sections.map( (item, i) => 
+                                <Card key={`${i}`} className={styles.section}>
+                                    <Card.Title className={styles.title}>{item.title}</Card.Title>
+                                </Card>
+                            )
+                        }
+                    </Card>
+                </Col>
+                <Col>
+                    <Card>
+                        <Card.Title>Announcements</Card.Title>
+                        {
+                            courseData.announcements.map( (item, i) => 
+                                <Card key={`${i}`}>
+                                    
+                                </Card>
+                            )
+                        }
+                    </Card>
+                </Col>
+            </Row>
+        }
         </PageContainer>
     );
 }

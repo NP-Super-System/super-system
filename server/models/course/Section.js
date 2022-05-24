@@ -9,6 +9,8 @@ const sectionSchema = new Schema({
         type: String,
         required: true,
     },
+
+    files: [String],
     
     challengeId: String,
 

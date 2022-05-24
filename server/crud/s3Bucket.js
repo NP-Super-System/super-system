@@ -6,7 +6,7 @@ const operations = app => {
     app.get('/get-image/:key', (req, res) => {
         const { key } = req.params;
         try{
-            const readStream = getFileStream(key);
+            const readStream = getFileStream(key, 'image');
             readStream.pipe(res);
         }
         catch(err){console.log(err)}

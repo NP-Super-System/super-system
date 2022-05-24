@@ -21,7 +21,7 @@ const operations = app => {
     const uploadImage = async req => {
         let imgKey = '';
         try{
-            const uploadFileRes = await uploadFile(req.file);
+            const uploadFileRes = await uploadFile(req.file, 'image');
             console.log(uploadFileRes);
             imgKey = uploadFileRes.key || '';
     

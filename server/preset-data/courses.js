@@ -14,12 +14,15 @@ const courseList = [
         sections: [
             new Section({
                 title: 'Week 1',
+                files: [],
             }),
             new Section({
                 title: 'Week 2',
+                files: [],
             }),
             new Section({
                 title: 'Week 3',
+                files: [],
             }),
         ],
         annoucements: [
@@ -34,12 +37,15 @@ const courseList = [
         sections: [
             new Section({
                 title: 'Week 1',
+                files: [],
             }),
             new Section({
                 title: 'Week 2',
+                files: [],
             }),
             new Section({
                 title: 'Week 3',
+                files: [],
             }),
         ],
         annoucements: [
@@ -54,12 +60,15 @@ const courseList = [
         sections: [
             new Section({
                 title: 'Week 1',
+                files: [],
             }),
             new Section({
                 title: 'Week 2',
+                files: [],
             }),
             new Section({
                 title: 'Week 3',
+                files: [],
             }),
         ],
         annoucements: [
@@ -74,12 +83,15 @@ const courseList = [
         sections: [
             new Section({
                 title: 'Week 1',
+                files: [],
             }),
             new Section({
                 title: 'Week 2',
+                files: [],
             }),
             new Section({
                 title: 'Week 3',
+                files: [],
             }),
         ],
         annoucements: [
@@ -94,12 +106,15 @@ const courseList = [
         sections: [
             new Section({
                 title: 'Week 1',
+                files: [],
             }),
             new Section({
                 title: 'Week 2',
+                files: [],
             }),
             new Section({
                 title: 'Week 3',
+                files: [],
             }),
         ],
         annoucements: [
