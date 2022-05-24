@@ -93,7 +93,7 @@ const Announcements = props => {
         setCollapsedState(false);
     }
 
-    const collaspe = () => {
+    const collapse = () => {
         setCollapsedState(true);
     }
 
@@ -112,12 +112,12 @@ const Announcements = props => {
                     <Button 
                         variant='outline-secondary'
                         className={styles.collaspible_button}
-                        onClick={isCollapsed ? () => expand() : () => collaspe()}>
+                        onClick={isCollapsed ? () => expand() : () => collapse()}>
                         {isCollapsed ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
                     </Button>
                 </Card.Title> 
                 {
-                isCollapsed && 
+                isCollapsed || 
                 announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) => 
                     <div key={`${index}`} className={styles.announcement}>
                         <Link to={`/home/announcement/${item._id}`} className={styles.announcementText}>
