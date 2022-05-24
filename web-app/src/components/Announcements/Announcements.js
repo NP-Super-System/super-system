@@ -1,27 +1,28 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { getPostAge } from '../../modules/getPostAge';
-import { BsFillTrash2Fill, BsPencilFill } from 'react-icons/bs';
+import { BsFillTrash2Fill, BsPencilFill, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
 
 import styles from './Announcements.module.css';
-import { Card, Image } from "react-bootstrap";
+import { Card, Collapse, Image } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import { AnnouncementsData } from './AnnouncementsData';
-import { IoAddSharp } from 'react-icons/io5';
+import { IoAddSharp, IoExpand } from 'react-icons/io5';
 import { Button } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 
 
 const Announcements = props => {    
+    const Swal = require('sweetalert2')
     const [announcements, setAnnouncements] = useState([]);
+    const [isCollapsed, setCollapsedState] = useState(false);
+
 
     useEffect((userId)=>{
         getAnnouncements(userId);
     }, []);
 
-    const Swal = require('sweetalert2')
-
-    const getAnnouncements = userId => {
+    const getAnnouncements = () => {
         // Get all announcements from server
         fetch('http://localhost:5000/announcement/read')
             .then(
@@ -29,6 +30,7 @@ const Announcements = props => {
                     .then(data => {
                         // Set announcements
                         console.log(data);
+                        data.reverse()
                         setAnnouncements(data);
                     })
                     .catch(err => console.log(err))
@@ -87,22 +89,38 @@ const Announcements = props => {
         
     }
 
+    const expand = () => {
+        setCollapsedState(false);
+    }
+
+    const collapse = () => {
+        setCollapsedState(true);
+    }
+
     return (
-        <Card className={styles.wrapper}>     
-            <Card.Title>
-                Announcements
-                <Link to='/home/announcement/create'>
+        <div>
+            <Card className={styles.wrapper}>     
+                <Card.Title>
+                    Announcements
+                    <Link to='/home/announcement/create'>
+                        <Button 
+                            variant='primary'
+                            className={styles.create_button}>
+                            <IoAddSharp className={styles.create_icon}/>
+                        </Button>
+                    </Link>
                     <Button 
-                        variant='primary'
-                        className={styles.create_button}>
-                        <IoAddSharp className={styles.create_icon}/>
+                        variant='outline-secondary'
+                        className={styles.collaspible_button}
+                        onClick={isCollapsed ? () => expand() : () => collapse()}>
+                        {isCollapsed ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
                     </Button>
-                </Link>
-            </Card.Title>       
-            {
-                announcements.map((item, index) => 
+                </Card.Title> 
+                {
+                isCollapsed || 
+                announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) => 
                     <div key={`${index}`} className={styles.announcement}>
-                        <Link to={`/home/announcement/${item.to}`} className={styles.announcementText}>
+                        <Link to={`/home/announcement/${item._id}`} className={styles.announcementText}>
                             <div className={styles.user_content}>
                                 {displayMessage(item.user.userName, item.createdAt, item.updatedAt)}
                             </div>
@@ -110,7 +128,7 @@ const Announcements = props => {
                             <span className={styles.announcement_desc}>{item.body}</span>
                         </Link>
                         <div className={styles.buttons}>
-                            <Link to='/home/announcement/update'>
+                            <Link to={`/home/announcement/update/${item._id}`}>
                                 <Button
                                     variant='primary'
                                     className={styles.edit_btn}>
@@ -128,8 +146,80 @@ const Announcements = props => {
                         </div>
                     </div>
                 )
-            }        
-        </Card>
+            }
+            </Card>
+            
+        {/* {
+        isCollapsed ?
+            <Card className={styles.wrapper}>     
+                <Card.Title>
+                    Announcements
+                    <Link to='/home/announcement/create'>
+                        <Button 
+                            variant='primary'
+                            className={styles.create_button}>
+                            <IoAddSharp className={styles.create_icon}/>
+                        </Button>
+                    </Link>
+                    <Button 
+                        variant='outline-secondary'
+                        className={styles.collaspible_button}
+                        onClick={() => expand()}>
+                        <BsFillCaretDownFill />
+                    </Button>
+                </Card.Title> 
+            </Card>
+            :
+            <Card className={styles.wrapper}>     
+                <Card.Title>
+                    Announcements
+                    <Link to='/home/announcement/create'>
+                        <Button 
+                            variant='primary'
+                            className={styles.create_button}>
+                            <IoAddSharp className={styles.create_icon}/>
+                        </Button>
+                    </Link>
+                    <Button 
+                        variant='outline-secondary'
+                        className={styles.collaspible_button}
+                        onClick={() => collaspe()}>
+                        <BsFillCaretUpFill />
+                    </Button>
+                </Card.Title>       
+                {
+                    announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) => 
+                        <div key={`${index}`} className={styles.announcement}>
+                            <Link to={`/home/announcement/${item._id}`} className={styles.announcementText}>
+                                <div className={styles.user_content}>
+                                    {displayMessage(item.user.userName, item.createdAt, item.updatedAt)}
+                                </div>
+                                <h5 className={styles.announcement_title}>{item.title}</h5>
+                                <span className={styles.announcement_desc}>{item.body}</span>
+                            </Link>
+                            <div className={styles.buttons}>
+                                <Link to={`/home/announcement/update/${item._id}`}>
+                                    <Button
+                                        variant='primary'
+                                        className={styles.edit_btn}>
+                                        <BsPencilFill 
+                                            className={styles.icon}/>
+                                    </Button>
+                                </Link>
+                                <Button
+                                    variant='primary'
+                                    onClick={e => deleteBtn(item.user.userId, item._id)}
+                                    className={styles.delete_btn}>
+                                    <BsFillTrash2Fill 
+                                        className={styles.icon}/>
+                                </Button>
+                            </div>
+                        </div>
+                    )
+                }        
+            </Card>
+        } */}
+        </div>
     )
     
 }

@@ -145,7 +145,7 @@ function App() {
             <Route path='/home' element={<Dashboard />} />        
             <Route path='/home/announcement/:announcementNum' element={<Announcement />} />
             <Route path='/home/announcement/create' element={<AnnouncementCreate />} /> 
-            <Route path='/home/announcement/update' element={<AnnouncementUpdate />} />     
+            <Route path='/home/announcement/update/:announcementNum' element={<AnnouncementUpdate />} />     
             <Route path='/home/course/:courseCode' element={<Course />} />
             <Route path='/home/deadline/:deadlineId' element={<Deadline />} />      
             <Route path='/calendar' element={<Calendar />} />

@@ -46,6 +46,14 @@
     padding: 0.1em;
     margin-left: 30px;
 }
+
+.collaspible_button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1em;
+    margin-left: 30px;
+}
 .announcement .user_content {
     font-size: 65%;
     color: gray;
