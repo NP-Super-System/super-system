@@ -80,7 +80,7 @@ const CourseSection = props => {
                                 {...defaultStyles[item.name.split('.')[1]]}
                                 />
                         </div>
-                        {item.name}
+                        <span className={styles.name}>{item.name}</span>
                     </Button>
                 )
             }

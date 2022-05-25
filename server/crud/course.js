@@ -1,5 +1,6 @@
+const fs = require('fs');
 const multer = require('multer');
-const uploadLocal = multer({dest: './uploads/'});
+const uploadLocal = multer({dest: __dirname + '/../uploads/'});
 const { uploadFile } = require('../s3');
 const Course = require('../models/course/Course');
 const Section = require('../models/course/Section');
@@ -56,6 +57,9 @@ const operations = app => {
         try{
             const uploadFileRes = await uploadFile(req.file, 'file');
             fileKey = uploadFileRes.key || '';
+
+            console.log(fileKey);
+            fs.unlinkSync(__dirname + `/../uploads/${fileKey}`);
         }
         catch(err){
             console.log(err);

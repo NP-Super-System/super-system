@@ -3,6 +3,14 @@ const Schema = mongoose.Schema;
 
 const FileSchema = require('./File').schema;
 
+// Schema for file
+const fileSchema = new Schema({
+    
+    name: {type: String, required: true},
+    key: {type: String, required: true}
+
+});
+
 // Schema for course sections
 const sectionSchema = new Schema({
 
