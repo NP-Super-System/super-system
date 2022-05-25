@@ -87,7 +87,6 @@ function App() {
     // Reload when isAuthenticated value changes
     (
       async () => {
-        console.log(user);
         if(user){
           const currentUserId = await getUserId(user.email);
           if(currentUserId){
@@ -154,7 +153,7 @@ function App() {
             <Route path='/forum/post/:postId' element={<ForumPost />} />
             <Route path='/challenges' element={<ChallengeList />} />
             <Route path='/challenges/:challengeId' element={<Challenge />} />
-            <Route path='/create-challenge/' element={<ChallengeCreate />} />
+            <Route path='/challenges/create' element={<ChallengeCreate />} />
             <Route path='/event' element={<Event />} />
             <Route path='/game' element={<Game />} />
             <Route 

@@ -46,3 +46,7 @@ require('./crud/comment')(app);
 require('./crud/s3Bucket')(app);
 // Course
 require('./crud/course')(app);
+// Challenge
+require('./crud/challenge')(app);
+
+// require('./preset-data/courses');

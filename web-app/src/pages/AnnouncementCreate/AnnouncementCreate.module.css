@@ -12,3 +12,10 @@
     width: 100%;
     max-width: 600px;
 }
+
+.backBtn {
+    display: flex;
+    justify-content: left;
+    padding: 0.5em;
+    margin-bottom: 20px;
+}

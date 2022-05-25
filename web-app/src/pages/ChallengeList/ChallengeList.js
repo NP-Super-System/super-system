@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useScreenType } from '../../modules/useScreenType';
+import { IoAddSharp } from 'react-icons/io5';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
@@ -36,8 +37,12 @@ const ChallengeList = props => {
         <PageContainer>
 			<header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter}/>
-                <Link to='/create-challenge'>
-                    <Button variant='primary'>Create Challenge</Button>
+                <Link to='/challenges/create'>
+                    <Button 
+                        variant='primary'
+                        className={styles.create_button}>
+                        <IoAddSharp className={styles.create_icon}/>
+                    </Button>
                 </Link>
             </header>       
             <div className={styles.wrapper}>

@@ -113,7 +113,7 @@ const Announcements = props => {
                         variant='outline-secondary'
                         className={styles.collaspible_button}
                         onClick={isCollapsed ? () => expand() : () => collapse()}>
-                        {isCollapsed ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
+                        {isCollapsed ? <BsFillCaretDownFill /> : <BsFillCaretUpFill />}
                     </Button>
                 </Card.Title> 
                 {
