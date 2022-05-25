@@ -1,5 +1,6 @@
+const fs = require('fs');
 const multer = require('multer');
-const uploadLocal = multer({dest: '../uploads/'});
+const uploadLocal = multer({dest: __dirname + '/../uploads/'});
 const { uploadFile, getFileStream } = require('../s3');
 const ForumPost = require('../models/forum/ForumPost');
 const PostComment = require('../models/forum/PostComment');
@@ -26,7 +27,7 @@ const operations = app => {
             imgKey = uploadFileRes.key || '';
     
             //Remove file from server
-            fs.unlinkSync(`../uploads/${imgKey}`);
+            fs.unlinkSync(__dirname + `/../uploads/${imgKey}`);
         }
         catch(err){
             console.log('Image does not exist or upload to s3 failed');

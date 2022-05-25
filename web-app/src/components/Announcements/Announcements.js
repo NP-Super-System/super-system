@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { AnnouncementsData } from './AnnouncementsData';
 import { IoAddSharp, IoExpand } from 'react-icons/io5';
 import { Button } from 'react-bootstrap';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 
 const Announcements = props => {    

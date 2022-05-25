@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const FileSchema = require('./File').schema;
+
 // Schema for file
 const fileSchema = new Schema({
     
@@ -17,7 +19,7 @@ const sectionSchema = new Schema({
         required: true,
     },
 
-    files: [fileSchema],
+    files: [FileSchema],
     
     challengeId: String,
 
