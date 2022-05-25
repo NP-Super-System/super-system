@@ -3,6 +3,35 @@
     margin-bottom: 0.5em;
 }
 
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 .title{
+    margin-right: 1em;
+}
+.add_file_form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
 
+.files{
+    display: grid;
+    grid-template-columns: 0.95fr 0.95fr;
+    justify-content: space-between;
+}
+.file{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5em;
+}
+.file .icon{
+    width: 25px;
+    margin-right: 1em;
 }
