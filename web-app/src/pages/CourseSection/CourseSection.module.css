@@ -1,0 +1,46 @@
+.file_section{
+    
+}
+
+.file_section .add_file_form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.file_list{
+    display: flex;
+    padding: 0.5em;
+}
+.file_list > .file{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: fit-content;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+.file_list > .file .download{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.5em;
+    margin-right: 1em;
+}
+.file_list > .file .icon{
+    width: 25px;
+    height: 25px;
+
+    margin-right: 1em;
+}
+.file_list > .file .name{
+    
+}
+
+.url_section{
+
+}

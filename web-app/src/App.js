@@ -11,6 +11,7 @@ import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Course';
+import CourseSection from './pages/CourseSection/CourseSection';
 import Announcement from './pages/Announcement/Announcement';
 import AnnouncementCreate from './pages/AnnouncementCreate/AnnouncementCreate';
 import AnnouncementUpdate from './pages/AnnouncementUpdate/AnnouncementUpdate';
@@ -146,6 +147,7 @@ function App() {
             <Route path='/home/announcement/create' element={<AnnouncementCreate />} /> 
             <Route path='/home/announcement/update/:announcementNum' element={<AnnouncementUpdate />} />     
             <Route path='/home/course/:courseCode' element={<Course />} />
+            <Route path='/home/course/:courseCode/:sectionId' element={<CourseSection />} />
             <Route path='/home/deadline/:deadlineId' element={<Deadline />} />      
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/forum' element={<Forum />} />

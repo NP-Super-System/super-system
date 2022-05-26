@@ -37,8 +37,6 @@ function uploadFile(file, bucketType){
     return bucket.instance.upload(uploadParams).promise();
 }
 
-exports.uploadFile = uploadFile;
-
 // download file from s3
 
 function getFileStream(fileKey, bucketType){
@@ -52,4 +50,20 @@ function getFileStream(fileKey, bucketType){
     return bucket.instance.getObject(downloadParams).createReadStream();
 }
 
-exports.getFileStream = getFileStream;
+// delete file from s3 bucket
+
+function deleteFile(fileKey, bucketType){
+    const bucket = s3Buckets[bucketType];
+
+    const deleteParams = {
+        Bucket: bucket.name,
+        Key: fileKey,
+    }
+
+    bucket.instance.deleteObject(deleteParams, (err, data) => {
+        if (err) console.log(err)
+        else console.log(data);
+    });
+}
+
+module.exports = { uploadFile, getFileStream, deleteFile };

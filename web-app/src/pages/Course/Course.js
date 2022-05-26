@@ -5,7 +5,7 @@ import { Col, Row, Card } from 'react-bootstrap';
 import styles from './Course.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import CourseSection from '../../components/CourseSection/CourseSection';
+import Section from '../../components/Section/Section';
 
 const Course = props=>{
 
@@ -34,7 +34,7 @@ const Course = props=>{
                         <Card.Title className={styles.title}>{courseData.name}</Card.Title>
                         {
                             courseData.sections.map( (item, i) => 
-                                <CourseSection key={`${i}`} {...item} courseId={courseData._id} courseCode={courseCode}/>
+                                <Section key={`${i}`} {...item} courseId={courseData._id} courseCode={courseCode}/>
                             )
                         }
                     </Card>
