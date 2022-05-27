@@ -18,6 +18,10 @@ const operations = app => {
         const user = await User.findOne({userEmail});
         return user;
     }
+    const getUserById = async userId => {
+        const user = await User.findOne({_id: userId});
+        return user;
+    }
 
     app.get('/get-user/:userEmail', async (req, res) => {
         const { userEmail } = req.params;
@@ -27,8 +31,6 @@ const operations = app => {
         }
         catch(err){console.log(err);}
     });
-
-    // Get user
     app.get('/get-user-id/:userEmail', async (req, res) => {
         try{
             const { userEmail } = req.params;
@@ -37,6 +39,18 @@ const operations = app => {
         }
         catch(err){console.log(err);}
     });
+    app.get('/user/read/', async (req, res) => {
+        const { userEmail, userId } = req.query;
+        try{
+            const user = 
+                userEmail 
+                ? await getUser(userEmail) :
+                userId
+                ? await getUserById(userId) : null;
+            user ? res.send(user) : res.send({});
+        }
+        catch(err){console.log(err);}
+    })
 
     // Update - update user
 

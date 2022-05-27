@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 const LikeCommentWrapper = props => {
 
     // children should only include submit button
-    const { liked, commentId, userEmail, updateIsLiked, type, children } = props;
+    const { liked, commentId, userId, updateIsLiked, type, children } = props;
 
     const [isLiked, setIsLiked] = useState(false);
 
@@ -11,20 +11,20 @@ const LikeCommentWrapper = props => {
         setIsLiked(liked);
     }, [liked]);
 
-    const likeCommentUrl = 'http://localhost:5000/like-comment';
-    const unlikeCommentUrl = 'http://localhost:5000/unlike-comment';
+    const likeCommentUrl = 'http://localhost:5000/forum-post/update/comment/like';
+    const unlikeCommentUrl = 'http://localhost:5000/forum-post/update/comment/unlike';
+
+    const options = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({ type, commentId, userId }),
+    }
 
     const onSubmitLike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ type, commentId, userEmail }),
-        }
 
         console.log(`Like comment ${commentId}`);
 
@@ -39,15 +39,6 @@ const LikeCommentWrapper = props => {
 
     const onSubmitUnlike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ type, commentId, userEmail }),
-        }
 
         console.log(`Unlike comment ${commentId}`);
 
@@ -66,9 +57,6 @@ const LikeCommentWrapper = props => {
             method='POST' 
             onSubmit={isLiked ? onSubmitUnlike : onSubmitLike}>
 
-            <input type='hidden' name='commentId' value={commentId} />
-            <input type='hidden' name='userEmail' value={userEmail} />
-            <input type='hidden' name='type' value={type} />
             {children}
 
         </form>

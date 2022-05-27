@@ -9,6 +9,7 @@ import { useScreenType } from './modules/useScreenType';
 import Login from './pages/Login/Login';
 
 import Profile from './pages/Profile/Profile';
+import UserProfile from './pages/UserProfile/UserProfile';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Course';
 import CourseSection from './pages/CourseSection/CourseSection';
@@ -103,20 +104,6 @@ function App() {
         }
       }
     )();
-
-    // fetch(`http://localhost:5000/get-user-id/${user.email}`)
-    //   .then(
-    //     res => res.json()
-    //       .then(data => {
-    //         if(data._id){
-    //           console.log('User already exists');
-    //           return;
-    //         };
-    //         addUser(user);
-    //       })
-    //       .catch(err => console.log(err))
-    //   )
-    //   .catch(err => console.log(err));
   }, [isAuthenticated]);
 
   return (
@@ -141,7 +128,8 @@ function App() {
             <Navbar />
           }
           <Routes>
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile/' element={<Profile />} />
+            <Route path='/profile/:userId' element={<UserProfile />} />
             <Route path='/home' element={<Dashboard />} />        
             <Route path='/home/announcement/:announcementNum' element={<Announcement />} />
             <Route path='/home/announcement/create' element={<AnnouncementCreate />} /> 

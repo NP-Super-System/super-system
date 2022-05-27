@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const DislikePostWrapper = props => {
 
     // 'children' should only contain a submit button
-    const { disliked, postId, userEmail, updateIsDisliked, children } = props;
+    const { disliked, postId, userId, updateIsDisliked, children } = props;
 
     const [ isDisliked, setIsDisliked ] = useState(false);
 
@@ -11,20 +11,20 @@ const DislikePostWrapper = props => {
         setIsDisliked(disliked);
     }, [disliked]);
 
-    const dislikePostUrl = 'http://localhost:5000/dislike-post';
-    const undislikePostUrl = 'http://localhost:5000/undislike-post';
+    const dislikePostUrl = 'http://localhost:5000/forum-post/update/dislike';
+    const undislikePostUrl = 'http://localhost:5000/forum-post/update/undislike';
+
+    const options = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({ postId, userId }),
+    }
 
     const onSubmitDislike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
-        }
 
         console.log(`Dislike post ${postId}`);
 
@@ -39,15 +39,6 @@ const DislikePostWrapper = props => {
 
     const onSubmitUndislike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
-        }
 
         console.log(`Undislike post ${postId}`);
 
@@ -66,8 +57,6 @@ const DislikePostWrapper = props => {
             method='POST' 
             onSubmit={isDisliked ? onSubmitUndislike : onSubmitDislike}>
 
-            <input type='hidden' name='postId' value={postId} />
-            <input type='hidden' name='userEmail' value={userEmail} />
             {children}
 
         </form>

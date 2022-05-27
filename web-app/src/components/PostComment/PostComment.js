@@ -17,8 +17,8 @@ const PostComment = props => {
 
     const [openReply, setOpenReply] = useState(false);
 
-    const [isLiked, setIsLiked] = useState(likedUsers.includes(user.email));
-    const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.email));
+    const [isLiked, setIsLiked] = useState(likedUsers.includes(user.id));
+    const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.id));
 
     const updateIsLiked = liked => {
         setIsLiked(liked);
@@ -54,7 +54,7 @@ const PostComment = props => {
                 <LikeCommentWrapper
                     liked={isLiked}
                     commentId={commentId}
-                    userEmail={user.email}
+                    userId={user.id}
                     updateIsLiked={updateIsLiked}
                     type='comment'>
                     <Button
@@ -70,7 +70,7 @@ const PostComment = props => {
                 <DislikeCommentWrapper
                     disliked={isDisliked}
                     commentId={commentId}
-                    userEmail={user.email}
+                    userId={user.id}
                     updateIsDisliked={updateIsDisliked}
                     type='comment'>
                     <Button

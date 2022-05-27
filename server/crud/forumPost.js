@@ -1,10 +1,11 @@
 const fs = require('fs');
 const multer = require('multer');
 const uploadLocal = multer({dest: __dirname + '/../uploads/'});
-const { uploadFile, getFileStream } = require('../s3');
+const { uploadFile, getFileStream, deleteFile } = require('../s3');
 const ForumPost = require('../models/forum/ForumPost');
 const PostComment = require('../models/forum/PostComment');
 const User = require('../models/user/User');
+const Course = require('../models/course/Course');
 
 const appUrl = 'http://localhost:3000';
 
@@ -124,39 +125,39 @@ const operations = app => {
 
     // like / dislike functions
 
-    const addLikedUser = (element, userEmail) => {
-        if(element.likedUsers.includes(userEmail)) {
+    const addLikedUser = (element, userId) => {
+        if(element.likedUsers.includes(userId)) {
             console.log(`User already liked ${element.constructor.name}`);
             return;
         }
-        element.likedUsers.push(userEmail);
+        element.likedUsers.push(userId);
     }
 
-    const addDislikedUser = (element, userEmail) => {
-        if(element.dislikedUsers.includes(userEmail)) {
+    const addDislikedUser = (element, userId) => {
+        if(element.dislikedUsers.includes(userId)) {
             console.log(`User already disliked ${element.constructor.name}`);
             return
         }
-        element.dislikedUsers.push(userEmail);
+        element.dislikedUsers.push(userId);
     }
 
-    const removeLikedUser = (element, userEmail) => {
-        if(!element.likedUsers.includes(userEmail)) {
+    const removeLikedUser = (element, userId) => {
+        if(!element.likedUsers.includes(userId)) {
             console.log(`User has not liked ${element.constructor.name}`);
             return;
         }
 
-        let index = element.likedUsers.indexOf(userEmail);
+        let index = element.likedUsers.indexOf(userId);
         element.likedUsers.splice(index, 1);
     }
 
-    const removeDislikedUser = (element, userEmail) => {
-        if(!element.dislikedUsers.includes(userEmail)) {
+    const removeDislikedUser = (element, userId) => {
+        if(!element.dislikedUsers.includes(userId)) {
             console.log(`User has not disliked ${element.constructor.name}`);
             return;
         }
 
-        let index = element.dislikedUsers.indexOf(userEmail);
+        let index = element.dislikedUsers.indexOf(userId);
         element.dislikedUsers.splice(index, 1);
     }
 
@@ -173,46 +174,46 @@ const operations = app => {
     }
 
     // Like post
-    app.post('/like-post', async (req, res) => {
-        const { postId, userEmail } = req.body;
+    app.post('/forum-post/update/like', async (req, res) => {
+        const { postId, userId } = req.body;
 
         const forumPost = await getForumPost(res, postId);
-        addLikedUser(forumPost, userEmail);
-        removeDislikedUser(forumPost, userEmail);
+        addLikedUser(forumPost, userId);
+        removeDislikedUser(forumPost, userId);
 
         const result = await forumPost.save();
         res.send(result);
     });
 
     // Unlike post
-    app.post('/unlike-post', async (req, res) => {
-        const { postId, userEmail } = req.body;
+    app.post('/forum-post/update/unlike', async (req, res) => {
+        const { postId, userId } = req.body;
 
         const forumPost = await getForumPost(res, postId);
-        removeLikedUser(forumPost, userEmail);
+        removeLikedUser(forumPost, userId);
 
         const result = await forumPost.save();
         res.send(result);
     });
 
     // Dislike post
-    app.post('/dislike-post', async (req, res) => {
-        const { postId, userEmail } = req.body;
+    app.post('/forum-post/update/dislike', async (req, res) => {
+        const { postId, userId } = req.body;
 
         const forumPost = await getForumPost(res, postId);
-        addDislikedUser(forumPost, userEmail);
-        removeLikedUser(forumPost, userEmail);
+        addDislikedUser(forumPost, userId);
+        removeLikedUser(forumPost, userId);
 
         const result = await forumPost.save();
         res.send(result);
     });
 
     // Undislike post
-    app.post('/undislike-post', async (req, res) => {
-        const { postId, userEmail } = req.body;
+    app.post('/forum-post/update/undislike', async (req, res) => {
+        const { postId, userId } = req.body;
 
         const forumPost = await getForumPost(res, postId);
-        removeDislikedUser(forumPost, userEmail);
+        removeDislikedUser(forumPost, userId);
 
         const result = await forumPost.save();
         res.send(result);
@@ -220,6 +221,36 @@ const operations = app => {
 
     // Delete - delete forum post
 
+    const deleteImageFromS3 = async (postId) => {
+        try{
+            const forumPost = await ForumPost.findOne({_id: postId});
+            const { imgKey } = forumPost;
+            imgKey && await deleteFile(imgKey, 'image');
+            console.log(`Deleted post img: ${imgKey}`);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    const deletePost = async (postId) => {
+        try{
+            const result = await ForumPost.deleteOne({_id: postId});
+            console.log(result);
+            console.log(`Deleted post: ${postId}`);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    app.post('/forum-post/delete/', async (req, res) => {
+        const { postId } = req.body;
+        await deleteImageFromS3(postId);
+        await deletePost(postId);
+
+        res.redirect(`${appUrl}/forum`);
+    });
 }
 
 module.exports = operations;

@@ -77,45 +77,45 @@ const operations = app => {
         await addReply(res, postId, commentId, userId, replyText);
     });
 
-    const addLikedUser = (element, userEmail) => {
-        if(element.likedUsers.includes(userEmail)) {
+    const addLikedUser = (element, userId) => {
+        if(element.likedUsers.includes(userId)) {
             console.log(`User already liked ${element.constructor.name}`);
             return;
         }
-        element.likedUsers.push(userEmail);
+        element.likedUsers.push(userId);
     }
 
-    const addDislikedUser = (element, userEmail) => {
-        if(element.dislikedUsers.includes(userEmail)) {
+    const addDislikedUser = (element, userId) => {
+        if(element.dislikedUsers.includes(userId)) {
             console.log(`User already disliked ${element.constructor.name}`);
             return;
         }
-        element.dislikedUsers.push(userEmail);
+        element.dislikedUsers.push(userId);
     }
 
-    const removeLikedUser = (element, userEmail) => {
-        if(!element.likedUsers.includes(userEmail)) {
+    const removeLikedUser = (element, userId) => {
+        if(!element.likedUsers.includes(userId)) {
             console.log(`User has not liked ${element.constructor.name}`);
             return;
         }
 
-        let index = element.likedUsers.indexOf(userEmail);
+        let index = element.likedUsers.indexOf(userId);
         element.likedUsers.splice(index, 1);
     }
 
-    const removeDislikedUser = (element, userEmail) => {
-        if(!element.dislikedUsers.includes(userEmail)) {
+    const removeDislikedUser = (element, userId) => {
+        if(!element.dislikedUsers.includes(userId)) {
             console.log(`User has not disliked ${element.constructor.name}`);
             return;
         }
 
-        let index = element.dislikedUsers.indexOf(userEmail);
+        let index = element.dislikedUsers.indexOf(userId);
         element.dislikedUsers.splice(index, 1);
     }
     
     // Like
-    app.post('/like-comment', async (req, res) => {
-        const { type, commentId, userEmail } = req.body;
+    app.post('/forum-post/update/comment/like', async (req, res) => {
+        const { type, commentId, userId } = req.body;
         console.log(req.body);
     
         let comment = 
@@ -129,16 +129,16 @@ const operations = app => {
             return;
         }
     
-        addLikedUser(comment, userEmail);
-        removeDislikedUser(comment, userEmail);
+        addLikedUser(comment, userId);
+        removeDislikedUser(comment, userId);
     
         const result = await comment.save();
         res.send(result);
     });
     
     // Unlike
-    app.post('/unlike-comment', async (req, res) => {
-        const { type, commentId, userEmail } = req.body;
+    app.post('/forum-post/update/comment/unlike', async (req, res) => {
+        const { type, commentId, userId } = req.body;
         console.log(req.body);
     
         let comment = 
@@ -152,15 +152,15 @@ const operations = app => {
             return;
         }
     
-        removeLikedUser(comment, userEmail);
+        removeLikedUser(comment, userId);
     
         const result = await comment.save();
         res.send(result);
     });
     
     // Dislike
-    app.post('/dislike-comment', async (req, res) => {
-        const { type, commentId, userEmail } = req.body;
+    app.post('/forum-post/update/comment/dislike', async (req, res) => {
+        const { type, commentId, userId } = req.body;
         console.log(req.body);
     
         let comment = 
@@ -174,16 +174,16 @@ const operations = app => {
             return;
         }
     
-        addDislikedUser(comment, userEmail);
-        removeLikedUser(comment, userEmail);
+        addDislikedUser(comment, userId);
+        removeLikedUser(comment, userId);
     
         const result = await comment.save();
         res.send(result);
     });
     
     // Undislike
-    app.post('/undislike-comment', async (req, res) => {
-        const { type, commentId, userEmail } = req.body;
+    app.post('/forum-post/update/comment/undislike', async (req, res) => {
+        const { type, commentId, userId } = req.body;
         console.log(req.body);
     
         const comment = 
@@ -197,7 +197,7 @@ const operations = app => {
             return;
         }
     
-        removeDislikedUser(comment, userEmail);
+        removeDislikedUser(comment, userId);
     
         const result = await comment.save();
         res.send(result);

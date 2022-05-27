@@ -12,12 +12,17 @@
 
 }
 
-.user_content{
+.header{
     display: flex;
     flex-direction: row;
     align-items: center;
 
     padding: 0.5em 1em 0.15em 1em;
+}
+.user_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .user_picture{
     width: 32px;

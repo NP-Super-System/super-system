@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Form, Button } from 'react-bootstrap';
-import { BsArrow90DegRight, BsLayers } from 'react-icons/bs';
+import { BsArrow90DegRight, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../modules/getPostAge';
 import parse from 'html-react-parser';
@@ -50,10 +50,10 @@ const ForumPost = props => {
                 res => res.json()
                     .then(data => {
                         setPostData(data);
-                        setImageSrc(`http://localhost:5000/get-image/${data.imgKey || ''}`);
-                        const liked = data.likedUsers.includes(user.email);
+                        setImageSrc(data.imgKey.length > 0 ? `http://localhost:5000/get-image/${data.imgKey}` : '');
+                        const liked = data.likedUsers.includes(user.id);
                         setIsLiked(liked);
-                        setIsDisliked(data.dislikedUsers.includes(user.email));
+                        setIsDisliked(data.dislikedUsers.includes(user.id));
                         setLikeCount(
                             data.likedUsers.length - (liked ? 1 : 0),
                         );
@@ -90,17 +90,19 @@ const ForumPost = props => {
                     </div>
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
                     <div className={styles.body}>{postData.body && parse(postData.body)}</div>
-                    <Image 
-                        src={imageSrc} 
-                        className={styles.image}
-                        onClick={() => { window.open(imageSrc, 'post-image') }}
-                        referrerPolicy='no-referrer'
-                        />
+                    {   
+                        imageSrc &&
+                        <Image 
+                            src={imageSrc} 
+                            className={styles.image}
+                            onClick={() => { window.open(imageSrc, 'post-image') }}
+                            />
+                    }
                     <div className={styles.actions}>
                         <LikePostWrapper
                             liked={isLiked}
                             postId={postId}
-                            userEmail={user.email}
+                            userId={user.id}
                             updateIsLiked={updateIsLiked}>
                             <Button
                                 variant='primary'
@@ -115,7 +117,7 @@ const ForumPost = props => {
                         <DislikePostWrapper
                             liked={isLiked}
                             postId={postId}
-                            userEmail={user.email}
+                            userId={user.id}
                             updateIsDisliked={updateIsDisliked}>
                             <Button
                                 variant='primary'
@@ -133,7 +135,19 @@ const ForumPost = props => {
                         <Button variant='primary' className={styles.action_button}>
                             <BsLayers className={styles.action_icon}/>
                             <span>Save</span>
-                        </Button>
+                        </Button> 
+                        <form
+                            action='http://localhost:5000/forum-post/delete/'
+                            method='POST'>
+                            <input type='hidden' name='postId' value={postId} />
+                            <Button 
+                                variant='primary' 
+                                type='submit'
+                                className={styles.action_button}>
+                                <BsFillTrash2Fill className={styles.action_icon}/>
+                                <span>Delete</span>
+                            </Button>
+                        </form>
                     </div>
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>
@@ -148,8 +162,6 @@ const ForumPost = props => {
                                 className={styles.comment_form_text}/>
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
-                        {/* <input type='hidden' name='userName' value={user.name} />
-                        <input type='hidden' name='userPicture' value={user.picture} /> */}
                         <input type='hidden' name='userId' value={user.id} />
                         {
                             showCommentSubmit &&
