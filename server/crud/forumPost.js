@@ -6,6 +6,7 @@ const ForumPost = require('../models/forum/ForumPost');
 const PostComment = require('../models/forum/PostComment');
 const User = require('../models/user/User');
 const Course = require('../models/course/Course');
+const PostReply = require('../models/forum/PostReply');
 
 const appUrl = 'http://localhost:3000';
 
@@ -40,7 +41,7 @@ const operations = app => {
         return imgKey;
     }
 
-    const createForumPost = async (res, userId, title, body, imgKey) => {
+    const createForumPost = async (res, userId, title, body, imgKey, tags) => {
         const user = await getUser(userId);
         const post = {
             user,
@@ -51,6 +52,8 @@ const operations = app => {
     
             likedUsers: [],
             dislikedUsers: [],
+
+            tags,
     
             comments: [],
         };
@@ -68,8 +71,8 @@ const operations = app => {
 
     app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
         const imgKey = await uploadImage(req);
-        const {userId, title, body} = req.body;
-        await createForumPost(res, userId, title, body, imgKey);
+        const {userId, title, body, tags} = req.body;
+        await createForumPost(res, userId, title, body, imgKey, tags);
     });
 
     // Read - get forum posts
@@ -233,6 +236,48 @@ const operations = app => {
         }
     }
 
+    const deleteReplies = async (postId) => {
+        try{
+            const forumPost = await ForumPost.findOne({_id: postId});
+            try{
+                for (var commentId of forumPost.comments){
+                    try{
+                        const comment = await PostComment.findOne({_id: commentId});
+                        console.log(comment.replies);
+                        const result = await PostReply.deleteMany({
+                            _id: {
+                                $in: comment.replies,
+                            }
+                        });
+                        console.log(result);
+                        console.log(`Deleted replies for post: ${postId}`);
+                    }
+                    catch(err){console.log(err);}
+                }
+            }
+            catch(err){console.log(err);}
+        }
+        catch(err){console.log(err);}
+    }
+
+    const deleteComments = async (postId) => {
+        try{
+            const forumPost = await ForumPost.findOne({_id: postId});
+            try{
+                console.log(forumPost.comments);
+                const result = await PostComment.deleteMany({
+                    _id: {
+                        $in: forumPost.comments,
+                    }
+                });
+                console.log(result);
+                console.log(`Deleted comments for post: ${postId}`);
+            }
+            catch(err){console.log(err);}
+        }
+        catch(err){console.log(err);}
+    }
+
     const deletePost = async (postId) => {
         try{
             const result = await ForumPost.deleteOne({_id: postId});
@@ -247,6 +292,8 @@ const operations = app => {
     app.post('/forum-post/delete/', async (req, res) => {
         const { postId } = req.body;
         await deleteImageFromS3(postId);
+        await deleteReplies(postId);
+        await deleteComments(postId);
         await deletePost(postId);
 
         res.redirect(`${appUrl}/forum`);

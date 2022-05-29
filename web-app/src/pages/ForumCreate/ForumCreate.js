@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
+import { BsX } from 'react-icons/bs';
 
 import styles from './ForumCreate.module.css';
 
@@ -12,7 +13,13 @@ const ForumCreate = props=>{
     const { user } = useContext(GlobalContext);
 
     const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const [currTag, setCurrTag] = useState('');
+    const [tags, setTags] = useState([]);
+
+    const handleDeleteTag = tagToDelete => {
+        setTags(tags.filter(tag => tag !== tagToDelete));
+    }
+
     const [selectedImage, setSelectedImage] = useState(undefined);
     const [preview, setPreview] = useState(undefined);
 
@@ -39,21 +46,80 @@ const ForumCreate = props=>{
             <form action='http://localhost:5000/add-forum-post' method='POST' encType='multipart/form-data' className={styles.form}>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Title</Form.Label>
-                    <Form.Control name='title' type='input' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} required/>
+                    <Form.Control 
+                        name='title' 
+                        type='input' 
+                        placeholder='Title' 
+                        value={title} 
+                        onChange={e => setTitle(e.target.value)} 
+                        required/>
                 </Form.Group>
+
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Text</Form.Label>
-                    {/* <Form.Control name='body' as='textarea' rows={3} placeholder='Text' value={body} onChange={e => setBody(e.target.value)}/> */}
                     <RichTextEditor />
                 </Form.Group>
+
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Image</Form.Label>
-                    <Form.Control name='file' type='file' accept='image/png, image/jpeg' size='sm' onChange={onImageChange}/>
+                    <Form.Control 
+                        name='file' 
+                        type='file' 
+                        accept='image/png, image/jpeg' 
+                        size='sm' 
+                        onChange={onImageChange}/>
                     {selectedImage && <Image src={preview} className={styles.preview}/>}
                 </Form.Group>
-                {/* <input type='hidden' name='userName' value={user.name} />
-                <input type='hidden' name='userPicture' value={user.picture || `media/default-profile-pic.jpeg`} /> */}
+
+                <Form.Group className={'mb-3'}>
+                    <Form.Label>Tags</Form.Label>
+                    <div className={styles.tags}>
+                    {
+                        tags.map( (tag, i) =>
+                            <React.Fragment key={`${i}`}>
+                                <div className={styles.tag}>
+                                    <span className={styles.name}>{tag}</span>
+                                    <div 
+                                        className={styles.icon}
+                                        onClick={e => handleDeleteTag(tag)}>
+                                        <BsX />
+                                    </div>
+                                </div>
+                                <input 
+                                    type='hidden'
+                                    name={`tags[]`}
+                                    value={tag}
+                                    />
+                            </React.Fragment>
+                        )
+                    }
+                    </div>
+                    <Form.Control 
+                        className={styles.tag_input}
+                        type='input' 
+                        placeholder='Type a tag and press "Enter"'
+                        value={currTag}
+                        onKeyDown={
+                            e => {
+                                if(!['Enter', 'Tab', ','].includes(e.key)) return;
+
+                                e.preventDefault();
+                                const value = currTag.trim();
+
+                                if(!value) return;
+
+                                setTags([
+                                    ...tags,
+                                    value,
+                                ]);
+                                setCurrTag('');
+                            }
+                        }
+                        onChange={e => setCurrTag(e.target.value)}/>
+                </Form.Group>
+
                 <input type='hidden' name='userId' value={user.id} />
+
                 <Button 
                     variant='primary' 
                     type='submit'>

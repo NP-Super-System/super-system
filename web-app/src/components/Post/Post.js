@@ -71,6 +71,16 @@ class Post extends React.Component{
                     <span className={styles.post_age}>{getPostAge(this.props.createdAt)}</span>
                 </div>
 
+                <div className={styles.tags}>
+                    {
+                        this.props.tags.map( (tag, i) =>
+                            <div key={`${i}`} className={styles.tag}>
+                                <span>{tag}</span>
+                            </div>
+                        )
+                    }
+                </div>
+
                 <Link 
                     to={`/forum/post/${this.props.postId}`} 
                     style={{textDecoration: 'none', color: 'black'}}>
@@ -80,7 +90,7 @@ class Post extends React.Component{
                         <div className={styles.body}>{parse(this.props.body)}</div>
                     </div>
 
-                    {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
+                    {this.props.imgKey && <Image src={`http://localhost:5000/s3/image/?key=${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
                 
                 </Link>
 

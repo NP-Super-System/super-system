@@ -50,7 +50,8 @@ const ForumPost = props => {
                 res => res.json()
                     .then(data => {
                         setPostData(data);
-                        setImageSrc(data.imgKey.length > 0 ? `http://localhost:5000/get-image/${data.imgKey}` : '');
+                        console.log(data);
+                        setImageSrc(data.imgKey.length > 0 ? `http://localhost:5000/s3/image/?key=${data.imgKey}` : '');
                         const liked = data.likedUsers.includes(user.id);
                         setIsLiked(liked);
                         setIsDisliked(data.dislikedUsers.includes(user.id));
@@ -88,6 +89,19 @@ const ForumPost = props => {
                         <span className={styles.op_name}>{postData.user && postData.user.userName}</span>
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
+
+                    <div className={styles.tags}>
+                    {
+                        postData.tags &&
+
+                        postData.tags.map( (tag, i) =>
+                            <div key={`${i}`} className={styles.tag}>
+                                <span>{tag}</span>
+                            </div>
+                        )
+                    }
+                    </div>
+
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
                     <div className={styles.body}>{postData.body && parse(postData.body)}</div>
                     {   
@@ -98,6 +112,7 @@ const ForumPost = props => {
                             onClick={() => { window.open(imageSrc, 'post-image') }}
                             />
                     }
+
                     <div className={styles.actions}>
                         <LikePostWrapper
                             liked={isLiked}
@@ -163,43 +178,44 @@ const ForumPost = props => {
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
                         <input type='hidden' name='userId' value={user.id} />
-                        {
-                            showCommentSubmit &&
-                            <Button 
-                                variant='primary' 
-                                type='submit'
-                                className={styles.comment_form_submit}>
-                                <IoIosSend style={{marginRight: '0.5em'}}/>
-                                <span>Comment</span>
-                            </Button>
-                        }
+                    {
+                        showCommentSubmit &&
+
+                        <Button 
+                            variant='primary' 
+                            type='submit'
+                            className={styles.comment_form_submit}>
+                            <IoIosSend style={{marginRight: '0.5em'}}/>
+                            <span>Comment</span>
+                        </Button>
+                    }
                     </form>
                     <span className={styles.comment_count}>{commentCount} comments</span>
                     <div className={styles.comments}>
-                        {
-                            postData.comments ?
+                    {
+                        postData.comments ?
 
-                            <>
-                                {
-                                    postData.comments.length > 0 ?
+                        <>
+                            {
+                                postData.comments.length > 0 ?
 
-                                    postData.comments.map( (item, i) => 
-                                        <PostComment 
-                                            key={`${i}`}
-                                            postId={postId}
-                                            {...item}/>
-                                    )
+                                postData.comments.map( (item, i) => 
+                                    <PostComment 
+                                        key={`${i}`}
+                                        postId={postId}
+                                        {...item}/>
+                                )
 
-                                    :
+                                :
 
-                                    <div className={styles.no_comments}>Be the first person to comment on this post!</div>
-                                }
-                            </>
+                                <div className={styles.no_comments}>Be the first person to comment on this post!</div>
+                            }
+                        </>
 
-                            :
+                        :
 
-                            <div>Loading comments...</div>
-                        }
+                        <div>Loading comments...</div>
+                    }
                     </div>
                 </div>
 

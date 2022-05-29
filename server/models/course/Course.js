@@ -8,14 +8,10 @@ const AnnouncementSchema = require('../announcement/Announcement').schema;
 
 const courseSchema = new Schema({
 
-    code: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
+    code: { type: String, required: true, },
+    name: { type: String, required: true, },
+    imgKey: { type: String, required: true },
+
     sections: [SectionSchema],
     announcements: [AnnouncementSchema],
 

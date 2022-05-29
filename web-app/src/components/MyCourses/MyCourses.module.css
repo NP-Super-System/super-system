@@ -22,11 +22,14 @@
 }
 
 .course_img{
-    width: 30%;
+    width: 100%;
+    max-width: 200px;
+
+    max-height: 120px;
+    object-fit: cover;
+
     margin-right: 1em;
     border-radius: 5px;
-    /* border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px; */
 }
 
 .course_content{

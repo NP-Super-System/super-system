@@ -82,6 +82,7 @@ function App() {
 					else{
 						addUser(user);
 					}
+					console.log(user);
 				}
 			}
 		)();
