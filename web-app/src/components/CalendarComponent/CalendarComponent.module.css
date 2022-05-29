@@ -1,3 +1,9 @@
+.days{
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    margin-bottom: 0.25em;
+}
+
 .months{
     flex: 1;
     display: grid;

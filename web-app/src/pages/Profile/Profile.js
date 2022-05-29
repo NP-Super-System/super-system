@@ -40,7 +40,7 @@ const Profile = props=>{
                 </Card>
                 <Card className={`${styles.card} ${styles.game}`}>
                     <Link to='/game' style={{textDecoration: 'none', color: 'black'}}>
-                        <Card.Title>Game</Card.Title>
+                        <Card.Title>My Pet</Card.Title>
                     </Link>
                 </Card>
                 <Card className={`${styles.card} ${styles.settings}`}>

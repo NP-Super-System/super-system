@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Card, Form, Col, Row } from 'react-bootstrap';
 import { saveAs } from 'file-saver';
 import { FileIcon, defaultStyles } from 'react-file-icon';
+import { BsFillTrash2Fill } from 'react-icons/bs';
 
 import styles from './CourseSection.module.css';
 
@@ -44,91 +45,125 @@ const CourseSection = props => {
             sectionData &&
 
             <>
-                <h1>{sectionData.title}</h1>
-                <div className={styles.file_section}>
-                    <h2>Files</h2>
-                    <form 
-                        action='http://localhost:5000/course/update/section'
-                        method='POST'
-                        encType='multipart/form-data'
-                        className={styles.add_file_form}>
-                        <input 
-                            type='hidden' 
-                            name='courseCode' 
-                            value={courseCode}
-                            />
-                        <input 
-                            type='hidden' 
-                            name='sectionId' 
-                            value={sectionId}
-                            />
-                        <Form.Group>
-                            <Form.Control 
-                                type='file'
-                                name='file'
-                                onChange={onFileChange}
-                                required
-                                />
-                        </Form.Group>
-                        <Button
-                            variant='primary'
-                            type='submit'
-                            >
-                            Add file
-                        </Button>
-                    </form>
-                    <Card className={styles.file_list}>
-                    {
-                        sectionData.files.map( (file, i) => {
-                            const fileExt = file.name.split('.')[1];
-
-                            return <div key={`${i}`} className={styles.file}>
+                <header className={styles.section_header}>
+                    <h2>{sectionData.title}</h2>
+                </header>
+                <div className={styles.top_row}>
+                    <Card className={styles.file_section}>
+                        <div className={styles.header}>
+                            <h3>Files</h3>
+                            <form 
+                                action='http://localhost:5000/course/update/section'
+                                method='POST'
+                                encType='multipart/form-data'
+                                className={styles.add_file_form}>
+                                <input 
+                                    type='hidden' 
+                                    name='courseCode' 
+                                    value={courseCode}
+                                    />
+                                <input 
+                                    type='hidden'
+                                    name='sectionId' 
+                                    value={sectionId}
+                                    />
+                                <Form.Group>
+                                    <Form.Control 
+                                        type='file'
+                                        name='file'
+                                        onChange={onFileChange}
+                                        required
+                                        />
+                                </Form.Group>
                                 <Button
                                     variant='primary'
-                                    className={styles.download}
-                                    onClick={() => saveFile(file.name, file.key)}>
-                                    <div className={styles.icon}>
-                                        <FileIcon
-                                            extension={fileExt}
-                                            {...defaultStyles[fileExt]}/>
-                                    </div>
-                                    <span className={styles.name}>{file.name}</span>
+                                    type='submit'
+                                    >
+                                    Add file
                                 </Button>
-                                <form
-                                    action='http://localhost:5000/course/delete/section/file'
-                                    method='POST'>
-                                    <input 
-                                        type='hidden' 
-                                        name='courseCode' 
-                                        value={courseCode}
-                                        />
-                                    <input 
-                                        type='hidden' 
-                                        name='sectionId' 
-                                        value={sectionId}
-                                        />
-                                    <input 
-                                        type='hidden' 
-                                        name='fileKey' 
-                                        value={file.key}
-                                        />
+                            </form>
+                        </div>
+                        <div className={styles.file_list}>
+                        {
+                            sectionData.files.map( (file, i) => {
+                                const fileExt = file.name.split('.')[1];
+
+                                return <div key={`${i}`} className={styles.file}>
                                     <Button
-                                        variant='danger'
-                                        type='submit'>
-                                        Delete
+                                        variant='primary'
+                                        className={styles.download}
+                                        onClick={() => saveFile(file.name, file.key)}>
+                                        <div className={styles.icon}>
+                                            <FileIcon
+                                                extension={fileExt}
+                                                {...defaultStyles[fileExt]}/>
+                                        </div>
+                                        <span className={styles.name}>{file.name}</span>
                                     </Button>
-                                </form>
-                            </div>
-                        })
-                    }
+                                    <form
+                                        action='http://localhost:5000/course/delete/section/file'
+                                        method='POST'>
+                                        <input 
+                                            type='hidden' 
+                                            name='courseCode' 
+                                            value={courseCode}
+                                            />
+                                        <input 
+                                            type='hidden' 
+                                            name='sectionId' 
+                                            value={sectionId}
+                                            />
+                                        <input 
+                                            type='hidden' 
+                                            name='fileKey' 
+                                            value={file.key}
+                                            />
+                                        <Button
+                                            variant='danger'
+                                            type='submit'>
+                                            <BsFillTrash2Fill />
+                                        </Button>
+                                    </form>
+                                </div>
+                            })
+                        }
+                        </div>
+                    </Card>
+                    <Card className={styles.url_section}>
+                        <div className={styles.header}>
+                            <h3>URLs</h3>
+                            <span>Add Url</span>
+                        </div>
+                        <div className={styles.url_list}>
+
+                        </div>
                     </Card>
                 </div>
-                <div className={styles.url_section}>
-                    <h2>URLs</h2>
-                    <Card>
-                        URls
-                    </Card>
-                </div>
+                <Card className={styles.challenge_section}>
+                {
+                    sectionData.challengeId ?
+
+                    <>
+                        <div className={styles.header}>
+                            <h3>Section Challenge</h3>
+                        </div>
+                        <div className={styles.challenge}>
+                            <Button
+                                variant='primary'>
+                                <span>Attempt Challenge</span>
+                            </Button>
+                        </div>
+                    </>
+
+                    :
+
+                    <span style={{
+                        fontStyle: 'italic',
+                    }}>
+                        This section does not have a challenge
+                    </span>
+                }
+                </Card>
             </>
         }
         </PageContainer>
