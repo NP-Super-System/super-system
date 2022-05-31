@@ -6,7 +6,7 @@
 
 html, body{
   height: 100%;
-  background-color: var(--body-bg-colour);
+  background-color: var(--body-bg-colour) !important;
 }
 
 .App {

@@ -13,8 +13,8 @@ const PostReply = props => {
     const { user } = useContext(GlobalContext);
     const { postId, _id: replyId, user: replyUser, text, likedUsers, dislikedUsers, replies, createdAt } = props;
 
-    const [isLiked, setIsLiked] = useState(likedUsers.includes(user.email));
-    const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.email));
+    const [isLiked, setIsLiked] = useState(likedUsers.includes(user.id));
+    const [isDisliked, setIsDisliked] = useState(dislikedUsers.includes(user.id));
 
     const updateIsLiked = liked => {
         setIsLiked(liked);
@@ -50,7 +50,7 @@ const PostReply = props => {
                 <LikeCommentWrapper
                     liked={isLiked}
                     commentId={replyId}
-                    userEmail={user.email}
+                    userId={user.id}
                     updateIsLiked={updateIsLiked}
                     type='reply'>
                     <Button
@@ -66,7 +66,7 @@ const PostReply = props => {
                 <DislikeCommentWrapper
                     disliked={isDisliked}
                     commentId={replyId}
-                    userEmail={user.email}
+                    userId={user.id}
                     updateIsDisliked={updateIsDisliked}
                     type='reply'>
                     <Button

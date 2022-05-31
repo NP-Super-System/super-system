@@ -1,0 +1,8 @@
+.wrapper{
+    padding: 1em 0.5em;
+    margin-bottom: 1em;
+}
+
+.wrapper:hover{
+    color: #0070CC;
+}

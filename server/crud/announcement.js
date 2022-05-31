@@ -38,7 +38,7 @@ const operations = app => {
                     console.log(err);
                     return;
                 }
-                console.log(result);
+                // console.log(result);
                 res.send(result);
             });
     }
@@ -47,9 +47,30 @@ const operations = app => {
         await readAnnouncements(res);
     });
 
+    const readSingleAnnouncement = async (res, itemId) => {
+        Announcement
+        .findOne({_id: itemId})
+        .exec( (err, result) => {
+            if(err){
+                console.log(err);
+                res.redirect('http://localhost:3000/home');
+                return;
+            }
+            res.send(result);
+        } );
+    }
+
+    app.get('/announcement/read/:announcementNum', async (req, res) => {
+        const itemId = req.params.announcementNum;
+        const query = {_id: itemId, }
+        await readSingleAnnouncement(res, itemId);
+    })
+
     // Update - update todoitem
-    const updateAnnouncement = async (res, userId, title, body, itemId) => {;
-        Announcement.updateOne({userUpdate: userId, title: title, body: body})
+    const updateAnnouncement = async (res, userId, title, body, itemId) => {
+        Announcement
+        .findOne({_id: itemId})
+        .updateOne({userUpdate: userId, title: title, body: body})
             .then(result => {
                 console.log('Updated announcement');
                 res.send();
@@ -59,8 +80,9 @@ const operations = app => {
 
     }
 
-    app.post('/announcement/update', async (req, res) => {
-        const { userId, title, body, itemId } = req.body;
+    app.post('/announcement/update/:announcementNum', async (req, res) => {
+        const { userId, title, body } = req.body;
+        const itemId = req.params.announcementNum;
         await updateAnnouncement(res, userId, title, body, itemId);
     });
 

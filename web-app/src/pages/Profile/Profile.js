@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Card, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styles from './Profile.module.css';
 
@@ -11,7 +11,8 @@ import GlobalContext from '../../context/GlobalContext';
 const Profile = props=>{
 
     const { user } = useContext(GlobalContext);
-
+    const { userId } = useParams();
+    
     return (
         <PageContainer>
             <div className={styles.wrapper}>
@@ -39,7 +40,7 @@ const Profile = props=>{
                 </Card>
                 <Card className={`${styles.card} ${styles.game}`}>
                     <Link to='/game' style={{textDecoration: 'none', color: 'black'}}>
-                        <Card.Title>Game</Card.Title>
+                        <Card.Title>My Pet</Card.Title>
                     </Link>
                 </Card>
                 <Card className={`${styles.card} ${styles.settings}`}>

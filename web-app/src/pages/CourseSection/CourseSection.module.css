@@ -1,0 +1,112 @@
+.section_header{
+    padding: 1em;
+}
+
+.top_row{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 0.5em;
+}
+
+.file_section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    flex-grow: 1;
+
+    margin-right: 0.5em;
+}
+
+.file_section .header{
+    padding: 1em;
+    margin-right: 1em;
+    
+    margin-bottom: 0.5em;
+}
+
+.file_section .header .add_file_form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.file_section .file_list{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: center;
+
+    max-width: 650px;
+
+    padding: 0.5em;
+}
+.file_section .file_list > .file{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: fit-content;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+.file_section .file_list > .file .download{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.5em;
+    margin-right: 1em;
+
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: none;
+    border-bottom: 1px solid rgb(171, 179, 185);
+}
+.file_section .file_list > .file .download:hover{
+    color: #0070CC;
+}
+.file_section .file_list > .file .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 25px;
+    height: 25px;
+
+    margin-right: 1em;
+}
+.file_section .file_list > .file .name{
+    
+}
+
+.url_section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    flex-grow: 1;
+}
+.url_section .header{
+    padding: 1em;
+    margin-right: 1em;
+
+    margin-bottom: 0.5em;
+}
+.url_section .url_list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 0.5em;
+}
+
+.challenge_section{
+    padding: 0.5em 1em;
+}
+.challenge_section .header{
+    margin-bottom: 0.5em;
+}

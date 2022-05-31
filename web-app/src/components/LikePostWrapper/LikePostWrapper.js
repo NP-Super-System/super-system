@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const LikePostWrapper = props => {
 
     // 'children' should only contain a submit button
-    const { liked, postId, userEmail, updateIsLiked, children } = props;
+    const { liked, postId, userId, updateIsLiked, children } = props;
 
     const [ isLiked, setIsLiked ] = useState(false);
 
@@ -11,20 +11,20 @@ const LikePostWrapper = props => {
         setIsLiked(liked);
     }, [liked]);
 
-    const likePostUrl = 'http://localhost:5000/like-post';
-    const unlikePostUrl = 'http://localhost:5000/unlike-post';
+    const likePostUrl = 'http://localhost:5000/forum-post/update/like';
+    const unlikePostUrl = 'http://localhost:5000/forum-post/update/unlike';
+
+    const options = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({ postId, userId }),
+    }
 
     const onSubmitLike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
-        }
 
         console.log(`Like post ${postId}`);
 
@@ -39,15 +39,6 @@ const LikePostWrapper = props => {
 
     const onSubmitUnlike = e => {
         e.preventDefault();
-
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ postId, userEmail }),
-        }
 
         console.log(`Unlike post ${postId}`);
 
@@ -66,8 +57,6 @@ const LikePostWrapper = props => {
             method='POST' 
             onSubmit={isLiked ? onSubmitUnlike : onSubmitLike}>
 
-            <input type='hidden' name='postId' value={postId} />
-            <input type='hidden' name='userEmail' value={userEmail} />
             {children}
 
         </form>

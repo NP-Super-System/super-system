@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Form, Button } from 'react-bootstrap';
-import { BsArrow90DegRight, BsLayers } from 'react-icons/bs';
+import { BsArrow90DegRight, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../modules/getPostAge';
 import parse from 'html-react-parser';
@@ -50,10 +50,11 @@ const ForumPost = props => {
                 res => res.json()
                     .then(data => {
                         setPostData(data);
-                        setImageSrc(`http://localhost:5000/get-image/${data.imgKey || ''}`);
-                        const liked = data.likedUsers.includes(user.email);
+                        console.log(data);
+                        setImageSrc(data.imgKey.length > 0 ? `http://localhost:5000/s3/image/?key=${data.imgKey}` : '');
+                        const liked = data.likedUsers.includes(user.id);
                         setIsLiked(liked);
-                        setIsDisliked(data.dislikedUsers.includes(user.email));
+                        setIsDisliked(data.dislikedUsers.includes(user.id));
                         setLikeCount(
                             data.likedUsers.length - (liked ? 1 : 0),
                         );
@@ -88,19 +89,35 @@ const ForumPost = props => {
                         <span className={styles.op_name}>{postData.user && postData.user.userName}</span>
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
+
+                    <div className={styles.tags}>
+                    {
+                        postData.tags &&
+
+                        postData.tags.map( (tag, i) =>
+                            <div key={`${i}`} className={styles.tag}>
+                                <span>{tag}</span>
+                            </div>
+                        )
+                    }
+                    </div>
+
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
                     <div className={styles.body}>{postData.body && parse(postData.body)}</div>
-                    <Image 
-                        src={imageSrc} 
-                        className={styles.image}
-                        onClick={() => { window.open(imageSrc, 'post-image') }}
-                        referrerPolicy='no-referrer'
-                        />
+                    {   
+                        imageSrc &&
+                        <Image 
+                            src={imageSrc} 
+                            className={styles.image}
+                            onClick={() => { window.open(imageSrc, 'post-image') }}
+                            />
+                    }
+
                     <div className={styles.actions}>
                         <LikePostWrapper
                             liked={isLiked}
                             postId={postId}
-                            userEmail={user.email}
+                            userId={user.id}
                             updateIsLiked={updateIsLiked}>
                             <Button
                                 variant='primary'
@@ -115,7 +132,7 @@ const ForumPost = props => {
                         <DislikePostWrapper
                             liked={isLiked}
                             postId={postId}
-                            userEmail={user.email}
+                            userId={user.id}
                             updateIsDisliked={updateIsDisliked}>
                             <Button
                                 variant='primary'
@@ -133,7 +150,19 @@ const ForumPost = props => {
                         <Button variant='primary' className={styles.action_button}>
                             <BsLayers className={styles.action_icon}/>
                             <span>Save</span>
-                        </Button>
+                        </Button> 
+                        <form
+                            action='http://localhost:5000/forum-post/delete/'
+                            method='POST'>
+                            <input type='hidden' name='postId' value={postId} />
+                            <Button 
+                                variant='primary' 
+                                type='submit'
+                                className={styles.action_button}>
+                                <BsFillTrash2Fill className={styles.action_icon}/>
+                                <span>Delete</span>
+                            </Button>
+                        </form>
                     </div>
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>
@@ -148,46 +177,45 @@ const ForumPost = props => {
                                 className={styles.comment_form_text}/>
                         </Form.Group>
                         <input type='hidden' name='postId' value={postId} />
-                        {/* <input type='hidden' name='userName' value={user.name} />
-                        <input type='hidden' name='userPicture' value={user.picture} /> */}
                         <input type='hidden' name='userId' value={user.id} />
-                        {
-                            showCommentSubmit &&
-                            <Button 
-                                variant='primary' 
-                                type='submit'
-                                className={styles.comment_form_submit}>
-                                <IoIosSend style={{marginRight: '0.5em'}}/>
-                                <span>Comment</span>
-                            </Button>
-                        }
+                    {
+                        showCommentSubmit &&
+
+                        <Button 
+                            variant='primary' 
+                            type='submit'
+                            className={styles.comment_form_submit}>
+                            <IoIosSend style={{marginRight: '0.5em'}}/>
+                            <span>Comment</span>
+                        </Button>
+                    }
                     </form>
                     <span className={styles.comment_count}>{commentCount} comments</span>
                     <div className={styles.comments}>
-                        {
-                            postData.comments ?
+                    {
+                        postData.comments ?
 
-                            <>
-                                {
-                                    postData.comments.length > 0 ?
+                        <>
+                            {
+                                postData.comments.length > 0 ?
 
-                                    postData.comments.map( (item, i) => 
-                                        <PostComment 
-                                            key={`${i}`}
-                                            postId={postId}
-                                            {...item}/>
-                                    )
+                                postData.comments.map( (item, i) => 
+                                    <PostComment 
+                                        key={`${i}`}
+                                        postId={postId}
+                                        {...item}/>
+                                )
 
-                                    :
+                                :
 
-                                    <div className={styles.no_comments}>Be the first person to comment on this post!</div>
-                                }
-                            </>
+                                <div className={styles.no_comments}>Be the first person to comment on this post!</div>
+                            }
+                        </>
 
-                            :
+                        :
 
-                            <div>Loading comments...</div>
-                        }
+                        <div>Loading comments...</div>
+                    }
                     </div>
                 </div>
 

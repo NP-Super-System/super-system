@@ -16,20 +16,31 @@ const CalendarComponent = props=>{
     }, [monthIndex]);
 
     return (
-        <div className={styles.months}>
+        <>
+            <div className={styles.days}>
+            {
+                ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map( (day, i) =>
+                    <div key={`${i}`}>
+                        <span>{day}</span>
+                    </div>
+                )
+            }
+            </div>
+            <div className={styles.months}>
             {
                 currentMonth.map( (row, i)=>
-                    <React.Fragment key={i}>
+                    <React.Fragment key={`${i}`}>
                         {
                             row.map( (day, j)=>{
                                 const isToday = day.format('DD/MM/YYYY') == dayjs().format('DD/MM/YYYY');
-                                return <Day key={j} day={day} monthIndex={monthIndex} isToday={isToday}/>
+                                return <Day key={`${j}`} day={day} monthIndex={monthIndex} isToday={isToday}/>
                             } )
                         }
                     </React.Fragment>
                 )
             }
-        </div>
+            </div>
+        </>
     );
 }
 

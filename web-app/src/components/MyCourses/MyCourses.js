@@ -1,54 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styles from './MyCourses.module.css';
 import { Card, ProgressBar } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
-import { CourseData } from './MyCoursesData';
 
+const MyCourses = props => {
 
-class MyCourses extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            
+    const [courses, setCourses] = useState([]);
+
+    useEffect( () =>{
+        fetch('http://localhost:5000/course/read')
+            .then(
+                res => res.json()
+                    .then(data => {
+                        const filteredData = data.map(course => {
+                            return {
+                                id: course._id,
+                                name: course.name,
+                                code: course.code,
+                                imgKey: course.imgKey,
+                            }
+                        });
+                        console.log(filteredData);
+                        setCourses(filteredData);
+                    })
+                    .catch(err => console.log(err))
+            )
+            .catch(err => console.log(err))
+    }, []);
+
+    const variant = progress => {
+        if (progress > 66) {
+            return ''
         }
+        if (progress > 33) {
+            return 'warning'
+        }
+        return 'danger'
     }
 
-    render() {
-        function variant(progress) {
-            if (progress > 66) {
-                return ''
+    return (
+        <Card className={styles.bigCard}>     
+            <Card.Title>My Courses</Card.Title>
+            <div className={styles.wrapper}>
+            {
+                courses.map( (course, i)=>
+                    <Link key={`${i}`} to={`/home/course/${course.code}`} className={styles.course_link}>
+                        <img className={styles.course_img} src={`http://localhost:5000/s3/image/?key=${course.imgKey}`} alt="Course"/>
+                        <div className={styles.course_content}>
+                            <Card.Title>{course.name}</Card.Title>
+                            <Card.Text>{course.code}</Card.Text>
+                            <ProgressBar variant={variant(75)} now={75} label={`${75}%`} />
+                        </div>
+                    </Link>
+                )
             }
-            if (progress > 33) {
-                return 'warning'
-            }
-            return 'danger'
-        }
-
-        return (
-            <Card className={styles.bigCard}>     
-                <Card.Title>My Courses</Card.Title>
-                <div className={styles.wrapper}>
-                    {
-                        CourseData.map( (item, i)=>{
-                            return <Link key={`${i}`} to={`/home/course/${item.code}`} className={styles.course_link}>
-                                <img className={styles.course_img} src={item.pic} alt="Course"/>
-                                {/* <img className={styles.course_img} src={require(item.pic)}/> */}
-                                <div className={styles.course_content}>
-                                    <Card.Title>{item.name}</Card.Title>
-                                    <Card.Text>
-                                        {item.desc}
-                                    </Card.Text>
-                                    <ProgressBar variant={variant(item.progress)} now={item.progress} label={`${item.progress}%`} />
-                                </div>
-                            </Link>
-                        } )
-                    }
-                </div>   
-            </Card>
-        )
-    }
+            </div>   
+        </Card>
+    )
 }
 
 export default MyCourses;

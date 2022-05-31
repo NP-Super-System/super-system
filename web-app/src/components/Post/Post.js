@@ -18,8 +18,8 @@ class Post extends React.Component{
         this.user = this.context.user;
 
         this.state = {
-            isLiked: this.props.likedUsers.includes(this.user.email),
-            isDisliked: this.props.dislikedUsers.includes(this.user.email),
+            isLiked: this.props.likedUsers.includes(this.user.id),
+            isDisliked: this.props.dislikedUsers.includes(this.user.id),
         }
 
         this.thumbsUpImgSrc = 'https://img.icons8.com/material-rounded/24/777777/thumb-up.png';
@@ -41,7 +41,7 @@ class Post extends React.Component{
         this.updateIsDisliked = this.updateIsDisliked.bind(this);
     }
     componentDidMount(){
-        // console.log(this.props);
+        
     }
     updateIsLiked(isLiked){
         this.setState({ isLiked, isDisliked: false });
@@ -53,13 +53,32 @@ class Post extends React.Component{
         return (
             <Card className={styles.wrapper}>
 
-                <div className={styles.user_content}>
-                    <Image
-                        src={this.props.user.userPicture}
-                        className={styles.user_picture}
-                        referrerPolicy="no-referrer"/>
-                    <span className={styles.user_name}>{this.props.user.userName}</span>
+                <div className={styles.header}>
+                    <Link 
+                        to={`/profile/${this.props.user._id}`}
+                        style={{
+                            textDecoration: 'none',
+                            color: 'black',
+                        }}>
+                        <div className={styles.user_content}>
+                            <Image
+                                src={this.props.user.userPicture}
+                                className={styles.user_picture}
+                                referrerPolicy="no-referrer"/>
+                            <span className={styles.user_name}>{this.props.user.userName}</span>
+                        </div>
+                    </Link>
                     <span className={styles.post_age}>{getPostAge(this.props.createdAt)}</span>
+                </div>
+
+                <div className={styles.tags}>
+                    {
+                        this.props.tags.map( (tag, i) =>
+                            <div key={`${i}`} className={styles.tag}>
+                                <span>{tag}</span>
+                            </div>
+                        )
+                    }
                 </div>
 
                 <Link 
@@ -71,7 +90,7 @@ class Post extends React.Component{
                         <div className={styles.body}>{parse(this.props.body)}</div>
                     </div>
 
-                    {this.props.imgKey && <Image src={`http://localhost:5000/get-image/${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
+                    {this.props.imgKey && <Image src={`http://localhost:5000/s3/image/?key=${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
                 
                 </Link>
 
@@ -79,7 +98,7 @@ class Post extends React.Component{
                     <LikePostWrapper
                         liked={this.state.isLiked}
                         postId={this.props.postId}
-                        userEmail={this.user.email}
+                        userId={this.user.id}
                         updateIsLiked={this.updateIsLiked}>
                         <Button
                             variant='primary'
@@ -97,7 +116,7 @@ class Post extends React.Component{
                     <DislikePostWrapper
                         disliked={this.state.isDisliked}
                         postId={this.props.postId}
-                        userEmail={this.user.email}
+                        userId={this.user.id}
                         updateIsDisliked={this.updateIsDisliked}>
                         <Button 
                             variant='primary'

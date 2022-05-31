@@ -3,13 +3,13 @@ const Schema = mongoose.Schema;
 
 const QuestionSchema = require('./Question').schema;
 const UserSchema = require('../user/User').schema;
+const User = require('../user/User');
 
 // Schema for challenges
 
 const challengeSchema = new Schema({
 
-    userId: { type: Schema.Types.ObjectId, ref: UserSchema },
-
+    user: { type: Schema.Types.ObjectId, ref: User, required: true,  },
     title: { type: String, required: true, },
 
     pointCount: { type: Number, required: true, },
@@ -21,6 +21,6 @@ const challengeSchema = new Schema({
 
 // Create model for challenge collection
 
-const Challenge = mongoose.model('challenge', questionSchema);
+const Challenge = mongoose.model('challenge', QuestionSchema);
 
 module.exports = Challenge;

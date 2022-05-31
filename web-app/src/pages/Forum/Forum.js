@@ -15,7 +15,28 @@ const Forum = props=>{
 
     const { user } = useContext(GlobalContext);
     const screenType = useScreenType();
+
     const [posts, setPosts] = useState([]);
+    const [visiblePosts, setVisiblePosts] = useState([]);
+    const [searchFilter, setSearchFilter] = useState('');
+
+    const handleSearch = e => {
+        e.preventDefault();
+
+        if(!searchFilter){
+            setVisiblePosts(posts);
+            return;
+        }
+
+        const filteredPosts = posts.filter(post => {
+            const matchedTags = post.tags.filter(tag => {
+                return tag.toLowerCase().startsWith(searchFilter);
+            });
+            return matchedTags.length > 0;
+        })
+        console.log(filteredPosts);
+        setVisiblePosts(filteredPosts);
+    }
 
     useEffect(()=>{
         // Get all forum posts from server
@@ -25,6 +46,7 @@ const Forum = props=>{
                     .then(data => {
                         // Set posts
                         setPosts(data);
+                        setVisiblePosts(data);
                     })
                     .catch(err => console.log(err))
             )
@@ -34,35 +56,49 @@ const Forum = props=>{
     return (
         <PageContainer>
             <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.header_add_top}`}>
-                <input type='text' placeholder='Search filters' className={styles.filter}/>
+                <form className={styles.filter} onSubmit={handleSearch}>
+                    <input 
+                        type='text' 
+                        value={searchFilter}
+                        onChange={e => setSearchFilter(e.target.value)}
+                        placeholder='Search filters' 
+                        className={styles.input}/>
+                    <Button
+                        variant='primary'
+                        type='submit'
+                        className={styles.button}
+                        >
+                        <span>Search</span>
+                    </Button>
+                </form>
                 <Link to='/forum/create'>
                     <Button 
                         variant='primary'
                         className={styles.create_button}>
-                        <IoAddSharp className={styles.create_icon}/>
+                        <IoAddSharp className={styles.icon}/>
                     </Button>
                 </Link>
             </header>
             <div className={styles.wrapper}>
                 <Col className={screenType === 'phone' || styles.post_list}>
-                    {
-                        posts.map( (post, i) => 
-                            <Post key={`${i}`}
-                                postId={post._id.toString()}
-                                {...post}
-                            />
-                        )
-                    }
-                </Col>
                 {
-                    screenType === 'phone' ||
-
-                    <Col className={styles.friends_list}>
-                        <Card>
-                            <Card.Title>Friends List</Card.Title>
-                        </Card>
-                    </Col>
+                    visiblePosts.map( (post, i) => 
+                        <Post key={`${i}`}
+                            postId={post._id.toString()}
+                            {...post}
+                        />
+                    )
                 }
+                </Col>
+            {
+                screenType === 'phone' ||
+
+                <Col className={styles.friends_list}>
+                    <Card>
+                        <Card.Title>Friends List</Card.Title>
+                    </Card>
+                </Col>
+            }
             </div>
         </PageContainer>
     );

@@ -12,12 +12,34 @@
 
 }
 
-.user_content{
+.header{
     display: flex;
     flex-direction: row;
     align-items: center;
 
     padding: 0.5em 1em 0.15em 1em;
+}
+
+.tags{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-top: 0.5em;
+    padding: 0 1em;
+}
+.tags > .tag{
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    padding: 0.1em 0.75em;
+}
+
+.user_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .user_picture{
     width: 32px;

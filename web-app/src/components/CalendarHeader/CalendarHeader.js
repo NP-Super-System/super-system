@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import dayjs from 'dayjs';
-import {BsFillArrowLeftCircleFill, BsFillArrowRightCircleFill} from 'react-icons/bs';
+import {BsArrowLeft, BsArrowRight} from 'react-icons/bs';
 
 import styles from './CalendarHeader.module.css';
 
@@ -32,10 +32,10 @@ const CalendarHeader = props=>{
                 Today
             </button>
             <button className={styles.button} onClick={handlePrevMonth}>
-                <BsFillArrowLeftCircleFill />
+                <BsArrowLeft />
             </button>
             <button className={styles.button} onClick={handleNextMonth}>
-                <BsFillArrowRightCircleFill />
+                <BsArrowRight />
             </button>
             <span className={styles.date}>
                 {dayjs(new Date(dayjs().year(), monthIndex)).format('MMMM YYYY')}

@@ -4,7 +4,7 @@
     text-align: left;
     align-self: center;
 
-    padding: 1em 0 5em 0;
+    padding: 1em 0.5em 5em 0.5em;
     width: 100%;
     max-width: 800px;
 }
@@ -27,6 +27,22 @@
 }
 .post_age{
     font-size: 0.85em;
+}
+
+.tags{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 1em;
+    padding: 0;
+}
+.tags > .tag{
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    padding: 0.1em 0.75em;
 }
 
 .title{

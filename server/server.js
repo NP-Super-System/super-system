@@ -43,6 +43,10 @@ require('./crud/forumPost')(app);
 // Forum Post Comment / Reply
 require('./crud/comment')(app);
 // s3Image - get image from s3
-require('./crud/s3Image')(app);
+require('./crud/s3Bucket')(app);
 // Course
 require('./crud/course')(app);
+// Challenge
+require('./crud/challenge')(app);
+
+// require('./preset-data/courses');

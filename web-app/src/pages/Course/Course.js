@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
+import { Col, Row, Card } from 'react-bootstrap';
 
 import styles from './Course.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import Section from '../../components/Section/Section';
 
 const Course = props=>{
 
@@ -23,13 +25,34 @@ const Course = props=>{
 
     return (
         <PageContainer>
-            {
-                courseData &&
+        {
+            courseData &&
 
-                <>
-                    {JSON.stringify(courseData)}
-                </>
-            }
+            <Row>
+                <Col>
+                    <Card className={styles.sections}>
+                        <Card.Title className={styles.title}>{courseData.name}</Card.Title>
+                        {
+                            courseData.sections.map( (item, i) => 
+                                <Section key={`${i}`} {...item} courseId={courseData._id} courseCode={courseCode}/>
+                            )
+                        }
+                    </Card>
+                </Col>
+                <Col>
+                    <Card>
+                        <Card.Title>Announcements</Card.Title>
+                        {
+                            courseData.announcements.map( (item, i) => 
+                                <Card key={`${i}`}>
+                                    
+                                </Card>
+                            )
+                        }
+                    </Card>
+                </Col>
+            </Row>
+        }
         </PageContainer>
     );
 }

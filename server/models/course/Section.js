@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Schema for course sections
+const FileSchema = require('./File').schema;
 
+// Schema for file
+const fileSchema = new Schema({
+    
+    name: {type: String, required: true},
+    key: {type: String, required: true}
+
+});
+
+// Schema for course sections
 const sectionSchema = new Schema({
 
     title: {
         type: String,
         required: true,
     },
+
+    files: [FileSchema],
     
     challengeId: String,
 
