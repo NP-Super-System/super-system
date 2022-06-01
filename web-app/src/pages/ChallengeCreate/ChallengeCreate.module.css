@@ -15,7 +15,50 @@
 
 .backBtn {
     display: flex;
-    justify-content: left;
     padding: 0.5em;
     margin-bottom: 20px;
+}
+
+.options {
+    display: flex;
+}
+
+.create_button{
+    display: inline-flex;
+    margin-left: auto;
+    margin: 10px;
+    border: none;
+    padding: 0.1em;
+}
+
+.checkbox {
+    padding: 5px;
+    margin: auto;
+}
+
+.check_button{
+    display: flex;
+    margin-left: auto;
+    margin: 10px;
+    border: none;
+    padding: 0.1em;
+}
+
+.delete_button{
+    display: inline-flex;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: red;
+    border: none;
+
+    padding: 0.1em;
+}
+
+.delete_button:hover{
+    background-color: red;
+}
+.icon{
+    width: 20px;
+    height: 20px;
 }

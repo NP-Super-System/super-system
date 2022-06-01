@@ -15,6 +15,8 @@ const ChallengeList = props => {
 
     const screenType = useScreenType();
 
+    const [challenges, setChallenges] = useState([]);
+
     const rating = rate => {
         const items = []
 
@@ -30,8 +32,23 @@ const ChallengeList = props => {
     }
 
     useEffect(() => {
-
+        getChallenges()
     }, []);
+
+    const getChallenges = () => {
+        // Get all challenges from server
+        fetch('http://localhost:5000/challenge/read')
+            .then(
+                res => res.json()
+                    .then(data => {
+                        // Set challenges
+                        console.log(data);
+                        setChallenges(data);
+                    })
+                    .catch(err => console.log(err))
+            )
+            .catch(err => console.log(err));
+    }
 
     return (
         <PageContainer>
@@ -47,19 +64,18 @@ const ChallengeList = props => {
             </header>       
             <div className={styles.wrapper}>
                 {
-                    ChallengeListData.map( (item, i) => 
+                    challenges.map( (item, i) => 
                         (
-                            <Link key={`${i}`} to={`/challenges/${item.to}`} className={styles.challenge}>
+                            <Link key={`${i}`} to={`/challenges/${item._id}`} className={styles.challenge}>
                                 <Row>
                                     <Col className={styles.challenge_details}>
-                                        <h5>{item.challenge}</h5>
-                                        <span>By: {item.by}</span>
-                                        <span>Question Type: {item.type}</span>
+                                        <h5>{item.title}</h5>
+                                        <span>By: {item.user.userName}</span>
                                         <span>Rating: {rating(item.rating)}</span>
                                     </Col>
                                     <Col>
                                         <div className={styles.challenge_points}>
-                                            <h1>{item.points}</h1>
+                                            <h1>{item.pointCount}</h1>
                                             <span>points</span>
                                         </div>
                                     </Col>

@@ -7,7 +7,7 @@ const OptionSchema = require('./Option').schema;
 
 const questionSchema = new Schema({
 
-    isMultipleAns: { type: Boolean, required: true },
+    isMultipleAns: { type: Boolean, required: true, },
 
     text: { type: String, required: true, },
 

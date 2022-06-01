@@ -21,6 +21,6 @@ const challengeSchema = new Schema({
 
 // Create model for challenge collection
 
-const Challenge = mongoose.model('challenge', QuestionSchema);
+const Challenge = mongoose.model('challenge', challengeSchema);
 
 module.exports = Challenge;

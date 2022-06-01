@@ -1,15 +1,5 @@
 .challenge {
-    position: absolute;
-    left: 50vh;
-    top: 50vh;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    border: 1px solid;
-    border-radius: 5px;
-    background-color: lightyellow;
-    padding: 10px;
-    width: 70%;
-    min-height: 50vh;
+
 }
 
 .answersection {

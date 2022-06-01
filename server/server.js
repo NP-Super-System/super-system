@@ -49,4 +49,4 @@ require('./crud/course')(app);
 // Challenge
 require('./crud/challenge')(app);
 
-// require('./preset-data/courses');
+// require('./preset-data/challenges');

@@ -62,7 +62,6 @@ const operations = app => {
 
     app.get('/announcement/read/:announcementNum', async (req, res) => {
         const itemId = req.params.announcementNum;
-        const query = {_id: itemId, }
         await readSingleAnnouncement(res, itemId);
     })
 
