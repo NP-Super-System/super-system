@@ -65,7 +65,7 @@ const TodoList = props => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({ userId, itemId}),
+            body: JSON.stringify({ userId, itemId }),
         }
 
         console.log(`Deleting todo item...`);

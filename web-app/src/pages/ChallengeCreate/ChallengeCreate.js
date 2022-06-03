@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link, renderMatches } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
 import { BsFillTrash2Fill, BsFillCheckSquareFill } from 'react-icons/bs';
@@ -17,17 +17,15 @@ const ChallengeCreate = props => {
 
     const [title, setTitle] = useState('');
     const [points, setPoints] = useState('');
-    const [question, setQuestion] = useState('');
-    const [questionType, setQuestionType] = useState('');
-    const [buttonState, setButtonState] = useState('');
-    const [optionList, setOptionList] = useState([{ option: '', isCorrect: false}]);
     const [questionList, setQuestionList] = useState([{ question: '', isMultipleAns: false, options: [{ option: '', isCorrect: false}]}]);
+
+    const navigate = useNavigate();
 
     useEffect(()=>{
 
     }, []);
 
-    const handleQuestionAdd = () => {
+    const handleQuestionAdd = e => {
         setQuestionList([...questionList, { question: '', isMultipleAns: false, options: [{ option: '', isCorrect: false}]}])
     }
 
@@ -38,60 +36,60 @@ const ChallengeCreate = props => {
         setQuestionList(list);
     }
 
-    const handleQuestionTypeChange = (index) => {
-        if (questionList[index].isMultipleAns) {
-            questionList[index].isMultipleAns = false;
-            setQuestionType('S');
-        }
-        else {
-            questionList[index].isMultipleAns = true;
-            setQuestionType('M');
-        }
+    const handleQuestionTypeChange = (e, index) => {
+        let newQuestionList = [...questionList];
+        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
+
+        setQuestionList(newQuestionList);
     }
 
     const handleQuestionRemove = (e, index) => {
-        const list = [...questionList];
-        list.splice(index, 1);
-        setQuestionList(list);
+        const newQuestionList = [...questionList];
+
+        newQuestionList.splice(index, 1);
+        setQuestionList(newQuestionList);
     }
 
     const handleOptionAdd = (index) => {
-        const list = [...questionList];
-        list[index].options.push({ option: '', isCorrect: false})
-        setQuestionList(list);
+        const newQuestionList = [...questionList];
+
+        newQuestionList[index].options.push({ option: '', isCorrect: false})
+        setQuestionList(newQuestionList);
     }
 
     const handleOptionRemove = (qindex, oindex) => {
-        const list = [...questionList];
-        list[qindex].options.splice(oindex, 1);
-        setQuestionList(list);
+        const newQuestionList = [...questionList];
+
+        newQuestionList[qindex].options.splice(oindex, 1);
+        setQuestionList(newQuestionList);
+
+        console.log(newQuestionList[qindex].options);
     }
 
     const handleOptionChange = (e, qindex, oindex) => {
         const {name, value} = e.target;
-        const list = [...questionList];
-        list[qindex].options[oindex][name] = value;
-        setQuestionList(list);
+        const newQuestionList = [...questionList];
+        
+        newQuestionList[qindex].options[oindex][name] = value;
+        setQuestionList(newQuestionList);
     }
 
     const updateOption = (qindex, oindex) => {
-        const list = [...questionList];
-        const option = list[qindex].options[oindex];
-        if (list[qindex].isMultipleAns){
-            if (option.isCorrect) {
-                option.isCorrect = false;
-            }
-            else {
-                option.isCorrect = true;
-            }
+        const newQuestionList = [...questionList];
+        const option = newQuestionList[qindex].options[oindex];
+
+        if (newQuestionList[qindex].isMultipleAns){
+            option.isCorrect = !option.isCorrect;
         }
         else {
-            for (var i = 0; i < list[qindex].options.length; i++) {
-                list[qindex].options[i].isCorrect = false;
+            for (var i = 0; i < newQuestionList[qindex].options.length; i++) {
+                newQuestionList[qindex].options[i].isCorrect = false;
             }
             option.isCorrect = true;            
         }
-        console.log(list[qindex].options);
+
+        console.log(newQuestionList[qindex].options);
+        setQuestionList(newQuestionList);
     }
 
     const onSubmit = async e => {
@@ -116,6 +114,7 @@ const ChallengeCreate = props => {
         fetch(createChallengeUrl, options)
             .then(res => {
                 console.log('Added new challenge');
+                navigate('/challenges');
             })
             .catch(err => console.log(err));
     }
@@ -131,16 +130,30 @@ const ChallengeCreate = props => {
                     </Button>
                 </Link>
                 <Form.Group className={`mb-3`}>
-                    <Form.Control name='title' type='input' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} required/>
+                    <Form.Control 
+                        name='title' 
+                        type='input' 
+                        placeholder='Title' 
+                        value={title} 
+                        onChange={e => setTitle(e.target.value)} 
+                        required/>
                 </Form.Group>
                 <Form.Group className={`mb-3`}>
-                <Form.Control name='points' type='number' placeholder='Points' value={points} onChange={e => setPoints(e.target.value)} required/>
+                    <Form.Control 
+                        name='points' 
+                        type='number' 
+                        placeholder='Points' 
+                        value={points} 
+                        onChange={e => setPoints(e.target.value)} 
+                        required/>
                 </Form.Group>
                 {
                     questionList.map((question, qindex) => (
-                        <div key={qindex}>
-                            Question {qindex + 1}:
-                            {questionList.length - 1 === qindex &&
+                        <div key={`${qindex}`}>
+                            <span>Question {qindex + 1}:</span>
+                            {
+                                questionList.length - 1 === qindex &&
+
                                 <Button 
                                     variant='primary'
                                     className={styles.create_button}
@@ -148,7 +161,9 @@ const ChallengeCreate = props => {
                                     <IoAddSharp className={styles.icon}/>
                                 </Button>
                             }
-                            {questionList.length > 1 &&                         
+                            {
+                                questionList.length > 1 &&
+
                                 <Button
                                     className={styles.delete_button}
                                     onClick={() => handleQuestionRemove(qindex)}>
@@ -156,48 +171,61 @@ const ChallengeCreate = props => {
                                 </Button>
                             }
                             <Form.Group className={`mb-3`}>
-                            <Form.Select name='questionType' onChange={() => handleQuestionTypeChange(qindex)}>
-                                <option>Single Answer Question</option>
-                                <option>Multiple Answer Question</option>
-                            </Form.Select>
+                                <Form.Select 
+                                    name='questionType' 
+                                    onChange={e => handleQuestionTypeChange(e, qindex)}>
+                                    <option value='S'>Single Answer Question</option>
+                                    <option value='M'>Multiple Answer Question</option>
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
-                            <Form.Control name='question' placeholder={`Question ${qindex + 1}`} value={question.question} onChange={(e) => handleQuestionChange(e, qindex)} required/>
+                                <Form.Control 
+                                    name='question'     
+                                    placeholder={`Question ${qindex + 1}`} 
+                                    value={question.question} 
+                                    onChange={(e) => handleQuestionChange(e, qindex)} 
+                                    required/>
                             </Form.Group>
-                            {questionList[qindex].options.map((option, oindex) => (
-                                <Form.Group key={oindex} className={`mb-3 ${styles.options}`}>
-                                {questionList[qindex].isMultipleAns ? 
-                                    <Form.Check
-                                    type='checkbox'
-                                    name="radioOptions"
-                                    
-                                    className={styles.checkbox}
-                                    onChange={() => updateOption(qindex, oindex)}/>
-                                    :
-                                    <Form.Check
-                                    type='radio'
-                                    name="radioOptions"
-                                    className={styles.checkbox}
-                                    onChange={() => updateOption(qindex, oindex)}/>
-                                }
-                                <Form.Control name='option' placeholder={`Option ${oindex + 1}`} value={option.option} onChange={(e) => handleOptionChange(e, qindex, oindex)} required/>
-                                {questionList[qindex].options.length - 1 === oindex &&
-                                    <Button 
-                                        variant='primary'
-                                        className={styles.create_button}
-                                        onClick={() => handleOptionAdd(qindex)}>
-                                        <IoAddSharp className={styles.icon}/>
-                                    </Button>
-                                }
-                                {questionList[qindex].options.length > 1 &&                         
-                                    <Button
-                                        className={styles.delete_button}
-                                        onClick={() => handleOptionRemove(qindex, oindex)}>
-                                        <BsFillTrash2Fill className={styles.icon}/>
-                                    </Button>
-                                }
-                                </Form.Group>
-                            ))}
+                            {
+                                question.options.map((option, oindex) => {
+                                    console.log(option, oindex);
+                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
+
+                                        <Form.Check
+                                            type={questionList[qindex].isMultipleAns ? 'checkbox': 'radio'}
+                                            name="radioOptions"
+                                            className={styles.checkbox}
+                                            onChange={() => updateOption(qindex, oindex)}
+                                            checked={option.isCorrect}/>
+
+                                        <Form.Control 
+                                            name='option' 
+                                            placeholder={`Option ${oindex + 1}`} 
+                                            value={option.option} 
+                                            onChange={(e) => handleOptionChange(e, qindex, oindex)} 
+                                            required/>
+                                        {
+                                            questionList[qindex].options.length - 1 === oindex &&
+
+                                            <Button 
+                                                variant='primary'
+                                                className={styles.create_button}
+                                                onClick={() => handleOptionAdd(qindex)}>
+                                                <IoAddSharp className={styles.icon}/>
+                                            </Button>
+                                        }
+                                        {
+                                            questionList[qindex].options.length > 1 &&
+
+                                            <Button
+                                                className={styles.delete_button}
+                                                onClick={() => handleOptionRemove(qindex, oindex)}>
+                                                <BsFillTrash2Fill className={styles.icon}/>
+                                            </Button>
+                                        }
+                                    </Form.Group>
+                                })
+                            }
                         </div>
                     ))
                 }

@@ -8,7 +8,7 @@
     width: 200px;
     z-index: 1000;
 
-    background-color: var(--sidebar-bg-colour);
+    background-color: rgb(33, 37, 41);
 
     transition: 0.5s;
 }
@@ -36,28 +36,33 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
 
-    padding: 0.5em 1em 0.5em 1em;
-    margin-bottom: 0.5em;
+    padding: 1em;
 
     text-decoration: none;
 }
-.profile_active{
-    background-color: var(--active-blue);
+.profile:hover{
+    color: white;
+    background-color: rgb(78, 78, 78);
+}
+.profile.active{
+    background-color: rgb(0, 64, 116);
     transition: 0.25s;
 }
-.profile_icon{
+.profile .icon{
     margin-right: 1em;
 }
-.profile_name{
+.profile .name{
     color: white;
 }
+
 .menu{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
-.menu_item{
+.menu > .item{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -65,29 +70,20 @@
     text-decoration: none;
     color: white;
 
-    padding: 0.5em 1em 0.5em 1em;
-    margin-bottom: 0.5em;
+    padding: 0.75em 1em 0.75em 1em;
 }
-.menu_item:hover{
-    color: var(--active-blue);
-}
-.menu_item_active{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    text-decoration: none;
+.menu > .item:hover{
+    /* color: var(--active-blue); */
     color: white;
-
-    padding: 0.5em 1em 0.5em 1em;
-    margin-bottom: 0.5em;
-
+    background-color: rgb(78, 78, 78);
+}
+.menu > .item.active{
     background-color: var(--active-blue);
     transition: 0.25s;
 }
-.menu_item_active:hover{
+.menu > .item_active:hover{
     color: white;
 }
-.menu_item_icon{
+.menu > .item .icon{
     margin-right: 1em;
 }

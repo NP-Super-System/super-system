@@ -32,7 +32,7 @@ const operations = app => {
         User.findOne({_id: userId})
         .then(user => {
             if(!user){
-                res.send({_id: null});
+                res.send({});
                 return;
             }
             res.send(user.todolist);

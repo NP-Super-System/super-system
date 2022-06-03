@@ -28,20 +28,20 @@ const Sidebar = props=>{
             <div className={styles.logo}>
                 Super-System
             </div>
-            <Link to='/profile' className={`${styles.profile} ${activeIndex === 0 ? styles.profile_active : ''}`}>
-                <div className={styles.profile_icon}>
+            <Link to='/profile' className={`${styles.profile} ${activeIndex === 0 && styles.active}`}>
+                <div className={styles.icon}>
                     <Image 
                         src={user.picture || `media/default-profile-pic.jpeg`}
                         alt='Profile Picture' 
                         style={{
-                            width: 50,
-                            height: 50,
-                            borderRadius: 25,
+                            width: 46,
+                            height: 46,
+                            borderRadius: 23,
                         }}
                         referrerPolicy="no-referrer"
                     />
                 </div>
-                <div className={styles.profile_name}>
+                <div className={styles.name}>
                     <span>{user.name || 'Loading name...'}</span>
                 </div>
             </Link>
@@ -50,8 +50,8 @@ const Sidebar = props=>{
                     NavData.map( (item, i)=>{
                         return item.show ? 
                         
-                        <Link key={`${i}`} to={item.to} className={activeIndex === i ? styles.menu_item_active : styles.menu_item}>
-                            <div className={styles.menu_item_icon}>
+                        <Link key={`${i}`} to={item.to} className={`${styles.item} ${activeIndex === i && styles.active}`}>
+                            <div className={styles.icon}>
                                 {activeIndex === i ? item.iconActive : item.icon}
                             </div>
                             <div className={styles.menu_item_title}>

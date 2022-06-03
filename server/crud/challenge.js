@@ -1,16 +1,18 @@
-const { checkPrime } = require('crypto');
 const Challenge = require('../models/challenge/Challenge');
 const Question = require('../models/challenge/Question');
 const Option = require('../models/challenge/Option');
 const User = require('../models/user/User');
 
+const appUrl = 'http://localhost:3000';
+
 // CRUD operations
+
 
 const operations = app => {
 
     // Create challenge
     const createChallenge = async (res, userId, title, points, content) => {
-        const questionsList = [];
+        const questionList = [];
         for (var i = 0; i < content.length; i++) {
             const optionsList = [];
             for (var j = 0; j < content[i].options.length; j++) {
@@ -25,20 +27,25 @@ const operations = app => {
                 isMultipleAns: content[i].isMultipleAns,
                 options: optionsList,
             })
-            questionsList.push(newQuestion);
+            questionList.push(newQuestion);
         }
-        const newChallenge = new Challenge({
-            user: userId, 
+
+        const user = await User.findOne({_id: userId});
+        const challengeData = {
+            user, 
             title,
             pointCount: points,
             rating: 3,
-            questions: questionsList,
-        });
+            questions: questionList,
+        }
+
+        const newChallenge = new Challenge(challengeData);
 
         newChallenge.save()
             .then(result => {
-                console.log('Created new challenge');
-                res.redirect('http://localhost:3000/challenges');
+                console.log('Created new challenge. Redirect');
+                // res.redirect(200, `${appUrl}/challenge`);
+                res.send(result);
             })
             .catch(err => console.log(err));
     }
@@ -71,19 +78,14 @@ const operations = app => {
         console.log("read single challenge")
         Challenge.findOne({_id: itemId})
             .then( (result) => {
-                // if(err){
-                //     console.log(err);
-                //     res.redirect('http://localhost:3000/challenges');
-                //     return;
-                // }
                 res.send(result);
             } )
             .catch(err => console.log(err))
     }
 
     app.get('/challenge/read/:challengeId', async (req, res) => {
-        const itemId = req.params.challengeId;
-        await readSingleChallenge(res, itemId);
+        const { challengeId } = req.params;
+        await readSingleChallenge(res, challengeId);
     })
 
     // Update challenge
