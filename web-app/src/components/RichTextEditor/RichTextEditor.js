@@ -15,10 +15,12 @@ class RichTextEditor extends React.Component {
 
       this.focus = () => this.refs.editor.focus();
       this.onChange = (editorState) => {
+        const text = draftToHtml(convertToRaw(editorState.getCurrentContent()));
         this.setState({
             editorState,
-            text: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            text,
         });
+        this.props.onChange(text);
       };
 
       this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -84,7 +86,7 @@ class RichTextEditor extends React.Component {
 
       return (
         <>
-            <input type='hidden' name='body' value={this.state.text}></input>
+            <input type='hidden' name={this.props.name || 'body'} value={this.state.text}></input>
             <div className="RichEditor-root">
                 <BlockStyleControls
                     editorState={editorState}

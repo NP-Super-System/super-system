@@ -64,15 +64,15 @@ const operations = app => {
             .then(result => {
                 //redirect to forum page after submitting post
                 console.log('Successfully posted!');
-                res.redirect(`${appUrl}/forum`);
+                res.send(result);
             })
             .catch(err => console.log(err));
     }
 
-    app.post('/add-forum-post', uploadLocal.single('file'), async (req, res)=>{
+    app.post('/forum/create', uploadLocal.single('file'), async (req, res)=>{
         const imgKey = await uploadImage(req);
         const {userId, title, body, tags} = req.body;
-        await createForumPost(res, userId, title, body, imgKey, tags);
+        await createForumPost(res, userId, title, body, imgKey, tags.split(','));
     });
 
     // Read - get forum posts

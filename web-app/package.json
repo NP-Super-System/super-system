@@ -37,6 +37,7 @@
     "react-router-bootstrap": "^0.26.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
+    "reactjs-popup": "^2.0.5",
     "sweetalert2": "^11.4.17",
     "web-vitals": "^2.1.4"
   },

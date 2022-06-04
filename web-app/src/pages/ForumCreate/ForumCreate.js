@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button, Image } from 'react-bootstrap';
 import { BsX } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import styles from './ForumCreate.module.css';
 
@@ -11,8 +13,10 @@ import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 const ForumCreate = props=>{
 
     const { user } = useContext(GlobalContext);
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
     const [currTag, setCurrTag] = useState('');
     const [tags, setTags] = useState([]);
 
@@ -41,9 +45,37 @@ const ForumCreate = props=>{
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedImage]);
 
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        let formData = new FormData();
+        formData.append('userId', user.id);
+        formData.append('title', title);
+        formData.append('body', body);
+        formData.append('tags', tags);
+        formData.append('file', selectedImage);
+
+        const url = 'http://localhost:5000/forum/create';
+        const options = {
+            method: 'POST',
+            body: formData,
+        }
+
+        fetch(url, options)
+            .then(result => {
+                console.log('Added new forum post');
+                toast.success('Successfully created post!');
+                navigate('/forum');
+            })
+            .catch(err => {
+                toast.error('Error creating post');
+                console.log(err);
+            });
+    }
+
     return (
         <PageContainer>
-            <form action='http://localhost:5000/add-forum-post' method='POST' encType='multipart/form-data' className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Title</Form.Label>
                     <Form.Control 
@@ -57,7 +89,7 @@ const ForumCreate = props=>{
 
                 <Form.Group className={`mb-3`}>
                     <Form.Label>Text</Form.Label>
-                    <RichTextEditor />
+                    <RichTextEditor name='body' onChange={text => setBody(text)}/>
                 </Form.Group>
 
                 <Form.Group className={`mb-3`}>

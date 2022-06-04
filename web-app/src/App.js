@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from 'react-bootstrap';
 import { useScreenType } from './modules/useScreenType';
+import { Toaster } from 'react-hot-toast';
 
 import './App.css';
 import GlobalContext from './context/GlobalContext';
@@ -109,6 +110,9 @@ function App() {
 
 					<Navbar />
 				}
+				<Toaster 
+					position="bottom-center"
+					reverseOrder={false}/>
 				<Routes>
 					<Route path='/profile/' element={<Pages.Profile />} />
 					<Route path='/profile/:userId' element={<Pages.UserProfile />} />

@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
 import { BsFillTrash2Fill, BsFillCheckSquareFill } from 'react-icons/bs';
-
+import toast from 'react-hot-toast';
 
 import styles from './ChallengeCreate.module.css';
 
@@ -114,9 +114,13 @@ const ChallengeCreate = props => {
         fetch(createChallengeUrl, options)
             .then(res => {
                 console.log('Added new challenge');
+                toast.success('Successfully created challenge!');
                 navigate('/challenges');
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                toast.error('Error creating challenge');
+                console.log(err);
+            });
     }
 
     return (
