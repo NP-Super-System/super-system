@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "file-saver": "^2.0.5",
-    "react-file-icon": "^1.1.0",
-    "sweetalert2": "^11.4.17"
-  }
-}

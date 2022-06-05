@@ -11,14 +11,14 @@ const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Auth0Provider
-    domain={domain}
-    clientId={clientId}
-    redirectUri={window.location.origin}>
-    <ContextWrapper>
-      <App />
-    </ContextWrapper>
-  </Auth0Provider>
+	<Auth0Provider
+		domain={domain}
+		clientId={clientId}
+		redirectUri={window.location.origin}>
+		<ContextWrapper>
+			<App />
+		</ContextWrapper>
+	</Auth0Provider>
 );
 
 reportWebVitals();

@@ -1,21 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Card, Form, Col, Row } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { saveAs } from 'file-saver';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import { BsFillTrash2Fill } from 'react-icons/bs';
+import parse from 'html-react-parser';
 
 import styles from './CourseSection.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import TextModal from './TextModal';
 
 const CourseSection = props => {
 
     const { courseCode, sectionId } = useParams();
     const [sectionData, setSectionData] = useState(null);
     const [filesToBeAdded, setFilesToBeAdded] = useState([]);
+    const [showTextModal, setShowTextModal] = useState(false);
 
     useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
         fetch(`http://localhost:5000/course/read/${courseCode}/${sectionId}`)
             .then(res => {
                 res.json()
@@ -26,7 +33,7 @@ const CourseSection = props => {
                     .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
-    }, []);
+    }
 
     const onFileChange = e => {
         setFilesToBeAdded(e.target.files);
@@ -51,9 +58,9 @@ const CourseSection = props => {
                 <div className={styles.top_row}>
                     <Card className={styles.file_section}>
                         <div className={styles.header}>
-                            <h3>Files</h3>
+                            <h4>Files</h4>
                             <form 
-                                action='http://localhost:5000/course/update/section'
+                                action='http://localhost:5000/course/update/section/file'
                                 method='POST'
                                 encType='multipart/form-data'
                                 className={styles.add_file_form}>
@@ -129,13 +136,23 @@ const CourseSection = props => {
                         }
                         </div>
                     </Card>
-                    <Card className={styles.url_section}>
+                    <Card className={styles.text_section}>
                         <div className={styles.header}>
-                            <h3>URLs</h3>
-                            <span>Add Url</span>
+                            <h4>Text</h4>
+                            <Button
+                                onClick={e => setShowTextModal(true)}>
+                                <span>Add Text</span>
+                            </Button>
+                            <TextModal showModal={showTextModal} setShowModal={setShowTextModal} fetchData={fetchData}/>
                         </div>
-                        <div className={styles.url_list}>
-
+                        <div className={styles.text_list}>
+                        {
+                            sectionData.textList.map( (item, i) =>
+                                <React.Fragment key={`${i}`}>
+                                    {parse(item.text)}
+                                </React.Fragment>
+                            )
+                        }
                         </div>
                     </Card>
                 </div>

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const FileSchema = require('./File').schema;
+const TextSchema = require('./Text').schema;
 
 // Schema for file
 const fileSchema = new Schema({
@@ -20,6 +21,7 @@ const sectionSchema = new Schema({
     },
 
     files: [FileSchema],
+    textList: [TextSchema],
     
     challengeId: String,
 

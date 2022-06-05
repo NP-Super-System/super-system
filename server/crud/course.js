@@ -5,6 +5,7 @@ const { uploadFile, deleteFile } = require('../s3');
 const Course = require('../models/course/Course');
 const Section = require('../models/course/Section');
 const File = require('../models/course/File');
+const Text = require('../models/course/Text');
 
 const appUrl = 'http://localhost:3000';
 
@@ -62,7 +63,7 @@ const operations = app => {
     // Update
 
     // Add file to section
-    const updateCourseSection = async (res, courseCode, sectionId, fileName, fileKey) => {
+    const addFileToSection = async (res, courseCode, sectionId, fileName, fileKey) => {
         const course = await getCourse(courseCode);
         const [section] = course.sections.filter(section => section._id == sectionId);
         console.log(section);
@@ -75,7 +76,7 @@ const operations = app => {
         res.redirect(`${appUrl}/home/course/${courseCode}`);
     }
 
-    app.post('/course/update/section', uploadLocal.single('file'), async (req, res) => {
+    app.post('/course/update/section/file', uploadLocal.single('file'), async (req, res) => {
         const { courseCode, sectionId } = req.body;
         let fileKey = '';
         try{
@@ -89,7 +90,28 @@ const operations = app => {
             console.log(err);
         }
 
-        await updateCourseSection(res, courseCode, sectionId, req.file.originalname, fileKey);
+        await addFileToSection(res, courseCode, sectionId, req.file.originalname, fileKey);
+    });
+
+    // Add text to section
+
+    const addTextToSection = async (res, courseCode, sectionId, text) => {
+        const course = await getCourse(courseCode);
+        const [section] = course.sections.filter(section => section._id == sectionId);
+        console.log(section);
+        
+        const textDetails = new Text({
+            text,
+        });
+        section.textList.push(textDetails);
+
+        const result = await course.save();
+        res.send(result);
+    }
+
+    app.post('/course/update/section/text', async (req, res) => {
+        const { courseCode, sectionId, text } = req.body;
+        await addTextToSection(res, courseCode, sectionId, text);
     });
 
     // Delete
