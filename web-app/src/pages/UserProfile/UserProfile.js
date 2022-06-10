@@ -41,7 +41,7 @@ const UserProfile = props => {
 
             isOwnProfile ?
 
-            <Navigate to={`/profile`}/>
+            <Navigate to={`/profile`} replace/>
 
             :
 

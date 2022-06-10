@@ -3,11 +3,8 @@
 }
 
 .top_row{
-    /* display: flex;
-    flex-direction: row;
-    align-items: flex-start; */
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr 2fr;
 
     margin-bottom: 0.5em;
 }
@@ -15,7 +12,8 @@
 .file_section{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
 
     margin-right: 0.5em;
 }
@@ -87,6 +85,7 @@
 .text_section{
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: flex-start;
 }
 .text_section .header{
@@ -100,7 +99,23 @@
     flex-direction: column;
     align-items: center;
 
-    padding: 0.5em;
+    width: 100%;
+}
+.text_section .text_list > .text{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    background-color: #ffffff;
+    border: 1px solid rgb(236, 236, 236);
+    width: 100%;
+    padding: 0.5em 1em;
+}
+.text_section .text_list > .text:first-child{
+    border-radius: 5px 5px 0 0;
+}
+.text_section .text_list > .text:last-child{
+    border-radius: 0 0 5px 5px;
 }
 
 .challenge_section{

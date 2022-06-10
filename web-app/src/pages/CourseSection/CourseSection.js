@@ -136,7 +136,7 @@ const CourseSection = props => {
                         }
                         </div>
                     </Card>
-                    <Card className={styles.text_section}>
+                    <div className={styles.text_section}>
                         <div className={styles.header}>
                             <h4>Text</h4>
                             <Button
@@ -148,13 +148,13 @@ const CourseSection = props => {
                         <div className={styles.text_list}>
                         {
                             sectionData.textList.map( (item, i) =>
-                                <React.Fragment key={`${i}`}>
+                                <div key={`${i}`} className={styles.text}>
                                     {parse(item.text)}
-                                </React.Fragment>
+                                </div>
                             )
                         }
                         </div>
-                    </Card>
+                    </div>
                 </div>
                 <Card className={styles.challenge_section}>
                 {

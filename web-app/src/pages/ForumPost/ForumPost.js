@@ -82,11 +82,11 @@ const ForumPost = props => {
                 <div className={styles.wrapper}>
                     <div className={styles.op_content}>
                         <Image
-                            src={postData.user && postData.user.userPicture}
+                            src={postData?.user?.userPicture}
                             className={styles.op_picture}
                             referrerPolicy="no-referrer"
                             />
-                        <span className={styles.op_name}>{postData.user && postData.user.userName}</span>
+                        <span className={styles.op_name}>{postData?.user?.userName}</span>
                         <span className={styles.post_age}>{getPostAge(postData.createdAt)}</span>
                     </div>
 
@@ -103,7 +103,7 @@ const ForumPost = props => {
                     </div>
 
                     <Card.Title className={styles.title}>{postData.title}</Card.Title>
-                    <div className={styles.body}>{postData.body && parse(postData.body)}</div>
+                    <div className={styles.body}>{postData?.body && parse(postData.body)}</div>
                     {   
                         imageSrc &&
                         <Image 

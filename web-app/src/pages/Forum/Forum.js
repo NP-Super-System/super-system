@@ -30,7 +30,7 @@ const Forum = props=>{
 
         const filteredPosts = posts.filter(post => {
             const matchedTags = post.tags.filter(tag => {
-                return tag.toLowerCase().startsWith(searchFilter);
+                return tag.toLowerCase().startsWith(searchFilter.toLowerCase());
             });
             return matchedTags.length > 0;
         })

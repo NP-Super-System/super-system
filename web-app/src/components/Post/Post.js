@@ -81,17 +81,15 @@ class Post extends React.Component{
                     }
                 </div>
 
+
+                <div className={styles.text_content}>
+                    <h5 className={styles.title}>{this.props.title}</h5>
+                    <div className={styles.body}>{parse(this.props.body)}</div>
+                </div>
                 <Link 
                     to={`/forum/post/${this.props.postId}`} 
                     style={{textDecoration: 'none', color: 'black'}}>
-
-                    <div className={styles.text_content}>
-                        <h5 className={styles.title}>{this.props.title}</h5>
-                        <div className={styles.body}>{parse(this.props.body)}</div>
-                    </div>
-
                     {this.props.imgKey && <Image src={`http://localhost:5000/s3/image/?key=${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
-                
                 </Link>
 
                 <div className={styles.actions}>
