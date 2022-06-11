@@ -15,6 +15,7 @@ import * as Pages from './pages/index';
 // Components
 import Sidebar from './nav-components/Sidebar/Sidebar';
 import Navbar from './nav-components/Navbar/Navbar';
+import RequireRole from './RequireRole';
 
 function App() {
 	const screenType = useScreenType();
@@ -30,6 +31,7 @@ function App() {
 			userName: name,
 			userEmail: email,
 			userPicture: picture,
+			userRoles: ['Student'],
 		}
 		console.log(newUser);
 
@@ -118,7 +120,9 @@ function App() {
 					<Route path='/profile/:userId' element={<Pages.UserProfile />} />
 					<Route path='/home' element={<Pages.Dashboard />} />        
 					<Route path='/home/announcement/:announcementNum' element={<Pages.Announcement />} />
-					<Route path='/home/announcement/create' element={<Pages.AnnouncementCreate />} /> 
+					<Route element={<RequireRole allowedRoles={['Lecturer']} />} >
+						<Route path='/home/announcement/create' element={<Pages.AnnouncementCreate />} /> 
+					</Route>
 					<Route path='/home/announcement/update/:announcementNum' element={<Pages.AnnouncementUpdate />} />     
 					<Route path='/home/course/:courseCode' element={<Pages.Course />} />
 					<Route path='/home/course/:courseCode/:sectionId' element={<Pages.CourseSection />} />
@@ -132,6 +136,11 @@ function App() {
 					<Route path='/challenges/create' element={<Pages.ChallengeCreate />} />
 					<Route path='/event' element={<Pages.Event />} />
 					<Route path='/game' element={<Pages.Game />} />
+					<Route path='/unauthorized' element={<Pages.Unauthorized />} />
+					<Route element={<RequireRole allowedRoles={['Admin']} />} >
+						<Route path='/roles' element={<Pages.Roles />} />
+						<Route path='/roles/update/:userId' element={<Pages.EditUserRoles />} />
+					</Route>
 					<Route 
 						path='*'
 						element={<Navigate to='/home' replace/>}

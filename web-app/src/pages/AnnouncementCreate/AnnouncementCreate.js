@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 
 import styles from './AnnouncementCreate.module.css';
@@ -17,13 +17,16 @@ const AnnouncementCreate = props => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
+    const navigate = useNavigate();
+    const goBack = () => navigate(-1);
+
     useEffect(()=>{
         
     }, []);
 
     const backBtn = () => {
         if ((title === '') && (body === '')) {
-            window.location = "http://localhost:3000/home";     
+            goBack(); 
         }      
         else {
             Swal.fire({
@@ -36,7 +39,7 @@ const AnnouncementCreate = props => {
                 confirmButtonText: 'Yes, discard changes!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = "http://localhost:3000/home";
+                    goBack();
                 }
             })                
         }        

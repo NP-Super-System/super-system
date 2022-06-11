@@ -52,8 +52,54 @@ const operations = app => {
         catch(err){console.log(err);}
     })
 
-    // Update - update user
+    const readAllUsers = async (res) => {
+        User
+            .find({})
+            .exec((err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                res.send(result);
+            });
+    }
 
+    app.get('/user/all/read', async (req, res) => {
+        await readAllUsers(res);
+    })
+
+    app.get('/get-userId/:userId', async (req, res) => {
+        const { userId } = req.params;
+        User
+        .findOne({_id: userId})
+        .exec( (err, result) => {
+            if(err){
+                console.log(err);
+                res.redirect('http://localhost:3000/home');
+                return;
+            }
+            res.send(result);
+        } );
+    });
+
+    // Update - update user
+    const updateUserRoles = async (res, userId, userRoles) => {
+        User
+        .findOne({_id: userId})
+        .updateOne({userRoles: userRoles})
+            .then(result => {
+                console.log('Updated user role');
+                res.send();
+            })
+            .catch(err => console.log(err));
+    }
+
+    app.post('/roles/update/:userId', async (req, res) => {
+        const { userRoles } = req.body;
+        const userId = req.params.userId;
+        console.log(userId, userRoles);
+        await updateUserRoles(res, userId, userRoles);
+    });
     // Delete - delete user
 }
 

@@ -1,0 +1,25 @@
+.backBtn {
+    display: flex;
+    justify-content: left;
+    padding: 0.5em;
+    margin: 50px;
+    width: 34px;
+    height: 34px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+  }
+  
+td, th {
+border: 1px solid #dddddd;
+text-align: center;
+padding: 8px;
+}
+
+tr:nth-child(even) {
+background-color: #dddddd;
+}

@@ -1,5 +1,4 @@
 const Challenge = require('../models/challenge/Challenge');
-const Questions = require('../models/challenge/Question');
 const Option = require('../models/challenge/Option');
 const Question = require('../models/challenge/Question');
 

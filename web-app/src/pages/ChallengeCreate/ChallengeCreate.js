@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
 import { BsFillTrash2Fill, BsFillCheckSquareFill } from 'react-icons/bs';
@@ -15,11 +15,12 @@ const ChallengeCreate = props => {
 
     const { user } = useContext(GlobalContext);
 
+    const navigate = useNavigate();
+    const goBack = () => navigate(-1);
+
     const [title, setTitle] = useState('');
     const [points, setPoints] = useState('');
     const [questionList, setQuestionList] = useState([{ question: '', isMultipleAns: false, options: [{ option: '', isCorrect: false}]}]);
-
-    const navigate = useNavigate();
 
     useEffect(()=>{
 
@@ -126,13 +127,12 @@ const ChallengeCreate = props => {
     return (
         <PageContainer>
             <form onSubmit={onSubmit} className={styles.form}>
-                <Link to='/challenges'>
-                    <Button 
-                        variant='outline-primary' 
-                        className={styles.backBtn}>
-                        <BsFillArrowLeftCircleFill />
-                    </Button>
-                </Link>
+                <Button 
+                    variant='outline-primary' 
+                    className={styles.backBtn}
+                    onClick={goBack}>
+                    <BsFillArrowLeftCircleFill />
+                </Button>
                 <Form.Group className={`mb-3`}>
                     <Form.Control 
                         name='title' 

@@ -26,3 +26,8 @@ export {default as ChallengeCreate} from  './ChallengeCreate/ChallengeCreate';
 
 export {default as Event} from  './Event/Event';
 export {default as Game} from  './Game/Game';
+
+export {default as Unauthorized} from  './Unauthorized/Unauthorized';
+
+export {default as Roles} from  './Roles/Roles';
+export {default as EditUserRoles} from  './Roles/EditUserRoles';

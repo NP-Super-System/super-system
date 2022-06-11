@@ -16,7 +16,9 @@ const userSchema = new Schema({
         required: true,
     },
     userPicture: String,
-
+    userRoles: {
+        type: Array,
+    },
     // Other user info
     todolist: [TodoItemSchema],
 

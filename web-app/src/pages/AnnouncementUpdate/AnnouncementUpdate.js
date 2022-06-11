@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 
 import styles from './AnnouncementUpdate.module.css';
@@ -15,6 +15,9 @@ const AnnouncementUpdate = props => {
 
     const { user } = useContext(GlobalContext);
     const { announcementNum } = useParams();
+
+    const navigate = useNavigate();
+    const goBack = () => navigate(-1);
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -54,12 +57,12 @@ const AnnouncementUpdate = props => {
                 confirmButtonText: 'Yes, discard changes!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location = "http://localhost:3000/home";
+                    goBack();
                 }
             })            
         }
         else {
-            window.location = "http://localhost:3000/home";
+            goBack();
         }
     }
 

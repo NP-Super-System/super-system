@@ -65,7 +65,7 @@ const operations = app => {
         await readSingleAnnouncement(res, itemId);
     })
 
-    // Update - update todoitem
+    // Update - update announcement
     const updateAnnouncement = async (res, userId, title, body, itemId) => {
         Announcement
         .findOne({_id: itemId})
