@@ -48,8 +48,11 @@ require('./crud/s3Bucket')(app);
 require('./crud/course')(app);
 // Challenge
 require('./crud/challenge')(app);
+// Events
+require('./crud/event')(app);
 // Roles
 require('./crud/role')(app);
+
 
 // require('./preset-data/courses');
 // require('./preset-data/challenges');
