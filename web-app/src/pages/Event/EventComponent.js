@@ -17,19 +17,22 @@ const EventComponent = props => {
 
     return (
         <Card className={styles.wrapper}>
-            <Image
-                className={styles.img}
-                src={`http://localhost:5000/s3/image/?key=${imgKey}`}/>
+            {
+                imgKey &&
+                <Image
+                    className={styles.img}
+                    src={imgKey && `http://localhost:5000/s3/image/?key=${imgKey}`}/>
+            }
             <div className={styles.panes}>
                 <div className={styles.left_pane}>
-                    <span>Start Datetime: {startDt.getDate()}/{startDt.getMonth()+1}/{startDt.getFullYear()}</span>
-                    <span>End Datetime: {endDt.getDate()}/{endDt.getMonth()+1}/{endDt.getFullYear()}</span>
-                </div>
-                <div className={styles.right_pane}>
                     <Card.Title>{title}</Card.Title>
                     <div className={styles.desc}>
                         {parse(description)}
                     </div>
+                </div>
+                <div className={styles.right_pane}>
+                    <span>Start: {startDt.getDate()}/{startDt.getMonth()+1}/{startDt.getFullYear()}</span>
+                    <span>End: {endDt.getDate()}/{endDt.getMonth()+1}/{endDt.getFullYear()}</span>
                 </div>
             </div>
         </Card>

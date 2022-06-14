@@ -2,13 +2,12 @@
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 
-    padding: 0.5em;
+    padding: 1em 0.5em;
 }
 .wrapper .img{
     width: 100%;
-    max-width: 600px;
     max-height: 300px;
     object-fit: cover;
     border-radius: 3px;
@@ -18,23 +17,32 @@
 
 .panes{
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 2fr 1fr;
 
-    width: 100%;    
+    width: 100%;
 }
 
 .wrapper .left_pane{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-
+    justify-content: flex-start;
+}
+.wrapper .left_pane .title{
     
 }
+.wrapper .left_pane .desc{
 
-.wrapper .right_pane .title{
-    
 }
-.wrapper .right_pane .desc{
+.wrapper .left_pane .desc > *{
+    overflow-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}
 
+.wrapper .right_pane{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }

@@ -38,7 +38,7 @@ const operations = app => {
 
         const user = await getUser(userId);
 
-        const imgKey = await uploadImage(req);
+        const imgKey = req.file ? await uploadImage(req) : '';
 
         const eventDetails = {
             title,

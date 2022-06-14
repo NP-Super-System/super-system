@@ -8,8 +8,11 @@ import styles from './Event.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import EventComponent from './EventComponent';
+import { useScreenType } from '../../modules/useScreenType';
 
 const Event = props=>{
+
+    const screenType = useScreenType();
 
     const [events, setEvents] = useState([]);
     const [searchFilter, setSearchFilter] = useState('');
@@ -26,7 +29,7 @@ const Event = props=>{
 
     return (
         <PageContainer>
-            <header className={styles.header}>
+            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.add_top}`}>
                 <div className={styles.filter}>
                     <input
                         className={styles.input} 
@@ -50,18 +53,9 @@ const Event = props=>{
                     </Button>
                 </Link>
             </header>
-            <div className={styles.wrapper}>
+            <div className={styles.events}>
             {
                 events.map( (event, i) =>
-                    // <Card key={`${i}`} className={styles.event}>
-                    //     <Image
-                    //         className={styles.img}
-                    //         src={`http://localhost:5000/s3/image/?key=${event.imgKey}`}/>
-                    //     <Card.Title>{event.title}</Card.Title>
-                    //     <div className={styles.desc}>
-                    //         {parse(event.description)}
-                    //     </div>
-                    // </Card>
                     <EventComponent key={`${i}`} {...event}/>
                 )
             }
