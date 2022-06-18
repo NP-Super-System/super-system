@@ -1,16 +1,28 @@
-.challenge {
-
-}
-
 .answersection {
     padding: 10px;
 }
 
 .button {
     margin-bottom: 10px;
-}  
+}
 
 label {
     margin: auto;
     width: 20%;
+}
+
+.rater {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.showScore {
+    margin-top: auto;
+}
+
+.challenge {
+    position: relative;
+    top: 50%;    
+    transform: translateY(+50%);
 }

@@ -35,9 +35,6 @@
     margin-bottom: 0.5em;
 }
 
-.announcement_desc{
-
-}
 
 .create_button{
     display: inline-flex;
@@ -57,9 +54,6 @@
 .announcement .user_content {
     font-size: 65%;
     color: gray;
-}
-
-.create_icon{
 }
 
 .buttons {
@@ -95,4 +89,14 @@
 }
 .announcement .delete_btn:hover .icon{
     color: white;
+}
+
+.show {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.show:hover {
+    transform: scale(1.1);
 }

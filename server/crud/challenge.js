@@ -35,8 +35,9 @@ const operations = app => {
             user, 
             title,
             pointCount: points,
-            rating: 3,
+            rating: 0,
             questions: questionList,
+            numberOfRatings: 0,
         }
 
         const newChallenge = new Challenge(challengeData);
@@ -89,6 +90,22 @@ const operations = app => {
     })
 
     // Update challenge
+    const updateChallengeRating = async (res, rating, ratings, itemId) => {
+        Challenge
+        .findOne({_id: itemId})
+        .updateOne({rating: rating, numberOfRatings: ratings})
+            .then(result => {
+                console.log('Updated ratings');
+                res.send();
+            })
+            .catch(err => console.log(err));
+    }
+
+    app.post('/challenge/rating/:challengeId', async (req, res) => {
+        const { newRating, ratings } = req.body;
+        const itemId = req.params.challengeId;
+        await updateChallengeRating(res, newRating, ratings, itemId);
+    });
 
     // Delete challenge
 

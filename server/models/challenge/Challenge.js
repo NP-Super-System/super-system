@@ -14,6 +14,7 @@ const challengeSchema = new Schema({
 
     pointCount: { type: Number, required: true, },
     rating: { type: Number, required: true, },
+    numberOfRatings: { type: Number, required: true, },
 
     questions: [QuestionSchema],
 

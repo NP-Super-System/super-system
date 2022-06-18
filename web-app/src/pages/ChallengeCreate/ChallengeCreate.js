@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
@@ -10,6 +10,8 @@ import styles from './ChallengeCreate.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
+import Swal from 'sweetalert2'
+
 
 const ChallengeCreate = props => {
 
@@ -19,19 +21,19 @@ const ChallengeCreate = props => {
     const goBack = () => navigate(-1);
 
     const [title, setTitle] = useState('');
-    const [points, setPoints] = useState('');
-    const [questionList, setQuestionList] = useState([{ question: '', isMultipleAns: false, options: [{ option: '', isCorrect: false}]}]);
+    const [points, setPoints] = useState(0);
+    const [questionList, setQuestionList] = useState([{ question: '', points: 0, isMultipleAns: false, options: [{ option: '', isCorrect: false }] }]);
 
-    useEffect(()=>{
+    useEffect(() => {        
 
     }, []);
 
     const handleQuestionAdd = e => {
-        setQuestionList([...questionList, { question: '', isMultipleAns: false, options: [{ option: '', isCorrect: false}]}])
+        setQuestionList([...questionList, { question: '', points: 0, isMultipleAns: false, options: [{ option: '', isCorrect: false }] }])
     }
 
     const handleQuestionChange = (e, index) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         const list = [...questionList];
         list[index][name] = value;
         setQuestionList(list);
@@ -40,21 +42,18 @@ const ChallengeCreate = props => {
     const handleQuestionTypeChange = (e, index) => {
         let newQuestionList = [...questionList];
         newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
-
         setQuestionList(newQuestionList);
     }
 
-    const handleQuestionRemove = (e, index) => {
+    const handleQuestionRemove = (index) => {
         const newQuestionList = [...questionList];
-
         newQuestionList.splice(index, 1);
         setQuestionList(newQuestionList);
     }
 
     const handleOptionAdd = (index) => {
         const newQuestionList = [...questionList];
-
-        newQuestionList[index].options.push({ option: '', isCorrect: false})
+        newQuestionList[index].options.push({ option: '', isCorrect: false })
         setQuestionList(newQuestionList);
     }
 
@@ -63,14 +62,13 @@ const ChallengeCreate = props => {
 
         newQuestionList[qindex].options.splice(oindex, 1);
         setQuestionList(newQuestionList);
-
         console.log(newQuestionList[qindex].options);
     }
 
     const handleOptionChange = (e, qindex, oindex) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         const newQuestionList = [...questionList];
-        
+
         newQuestionList[qindex].options[oindex][name] = value;
         setQuestionList(newQuestionList);
     }
@@ -79,21 +77,44 @@ const ChallengeCreate = props => {
         const newQuestionList = [...questionList];
         const option = newQuestionList[qindex].options[oindex];
 
-        if (newQuestionList[qindex].isMultipleAns){
+        if (newQuestionList[qindex].isMultipleAns) {
             option.isCorrect = !option.isCorrect;
         }
         else {
             for (var i = 0; i < newQuestionList[qindex].options.length; i++) {
                 newQuestionList[qindex].options[i].isCorrect = false;
             }
-            option.isCorrect = true;            
+            option.isCorrect = true;
         }
 
         console.log(newQuestionList[qindex].options);
         setQuestionList(newQuestionList);
     }
 
+    const handlePointsChange = (index, newPoints) => {
+        const newQuestionList = [...questionList];
+        newQuestionList[index].points = Number(newPoints);
+        setQuestionList(newQuestionList);
+        setPoints(questionList.reduce((a,v) =>  a = a + v.points , 0));
+    }
+
     const onSubmit = async e => {
+        for (var i = 0; i < questionList.length; i++) {
+            var hasAnswer = false;
+            for (var j = 0; j < questionList[i].options.length; j++) {
+                if (questionList[i].options[j].isCorrect === true) {
+                    hasAnswer = true;
+                }
+            }
+            if (hasAnswer !== true) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please select an answer for each of the questions!',
+                })
+                return;
+            }
+        }
         e.preventDefault();
         createChallenge(user.id, title, points, questionList);
     }
@@ -126,30 +147,24 @@ const ChallengeCreate = props => {
 
     return (
         <PageContainer>
-            <form onSubmit={onSubmit} className={styles.form}>
-                <Button 
-                    variant='outline-primary' 
+            <form className={styles.form}>
+                <Button
+                    variant='outline-primary'
                     className={styles.backBtn}
                     onClick={goBack}>
                     <BsFillArrowLeftCircleFill />
                 </Button>
+                <div>
+                    Total Points: {points}
+                </div>
                 <Form.Group className={`mb-3`}>
-                    <Form.Control 
-                        name='title' 
-                        type='input' 
-                        placeholder='Title' 
-                        value={title} 
-                        onChange={e => setTitle(e.target.value)} 
-                        required/>
-                </Form.Group>
-                <Form.Group className={`mb-3`}>
-                    <Form.Control 
-                        name='points' 
-                        type='number' 
-                        placeholder='Points' 
-                        value={points} 
-                        onChange={e => setPoints(e.target.value)} 
-                        required/>
+                    <Form.Control
+                        name='title'
+                        type='input'
+                        placeholder='Title'
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                        required />
                 </Form.Group>
                 {
                     questionList.map((question, qindex) => (
@@ -158,11 +173,11 @@ const ChallengeCreate = props => {
                             {
                                 questionList.length - 1 === qindex &&
 
-                                <Button 
+                                <Button
                                     variant='primary'
                                     className={styles.create_button}
                                     onClick={handleQuestionAdd}>
-                                    <IoAddSharp className={styles.icon}/>
+                                    <IoAddSharp className={styles.icon} />
                                 </Button>
                             }
                             {
@@ -171,51 +186,57 @@ const ChallengeCreate = props => {
                                 <Button
                                     className={styles.delete_button}
                                     onClick={() => handleQuestionRemove(qindex)}>
-                                    <BsFillTrash2Fill className={styles.icon}/>
+                                    <BsFillTrash2Fill className={styles.icon} />
                                 </Button>
                             }
                             <Form.Group className={`mb-3`}>
-                                <Form.Select 
-                                    name='questionType' 
+                                <Form.Select
+                                    name='questionType'
                                     onChange={e => handleQuestionTypeChange(e, qindex)}>
                                     <option value='S'>Single Answer Question</option>
                                     <option value='M'>Multiple Answer Question</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
-                                <Form.Control 
-                                    name='question'     
-                                    placeholder={`Question ${qindex + 1}`} 
-                                    value={question.question} 
-                                    onChange={(e) => handleQuestionChange(e, qindex)} 
-                                    required/>
+                                <Form.Control
+                                    name='points'
+                                    type='number'
+                                    value={question.points}
+                                    onChange={(e) => handlePointsChange(qindex, e.target.value)}
+                                    required />
+                            </Form.Group>
+                            <Form.Group className={`mb-3`}>
+                                <Form.Control
+                                    name='question'
+                                    placeholder={`Question ${qindex + 1}`}
+                                    value={question.question}
+                                    onChange={(e) => handleQuestionChange(e, qindex)}
+                                    required />
                             </Form.Group>
                             {
                                 question.options.map((option, oindex) => {
-                                    console.log(option, oindex);
-                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
-
+                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>                                    
                                         <Form.Check
-                                            type={questionList[qindex].isMultipleAns ? 'checkbox': 'radio'}
-                                            name="radioOptions"
+                                            type={questionList[qindex].isMultipleAns ? 'checkbox' : 'radio'}
+                                            name={`Question ${qindex + 1}`}
                                             className={styles.checkbox}
                                             onChange={() => updateOption(qindex, oindex)}
-                                            checked={option.isCorrect}/>
+                                            checked={option.isCorrect} />
 
-                                        <Form.Control 
-                                            name='option' 
-                                            placeholder={`Option ${oindex + 1}`} 
-                                            value={option.option} 
-                                            onChange={(e) => handleOptionChange(e, qindex, oindex)} 
-                                            required/>
+                                        <Form.Control
+                                            name='option'
+                                            placeholder={`Option ${oindex + 1}`}
+                                            value={option.option}
+                                            onChange={(e) => handleOptionChange(e, qindex, oindex)}
+                                            required />
                                         {
                                             questionList[qindex].options.length - 1 === oindex &&
 
-                                            <Button 
+                                            <Button
                                                 variant='primary'
                                                 className={styles.create_button}
                                                 onClick={() => handleOptionAdd(qindex)}>
-                                                <IoAddSharp className={styles.icon}/>
+                                                <IoAddSharp className={styles.icon} />
                                             </Button>
                                         }
                                         {
@@ -224,7 +245,7 @@ const ChallengeCreate = props => {
                                             <Button
                                                 className={styles.delete_button}
                                                 onClick={() => handleOptionRemove(qindex, oindex)}>
-                                                <BsFillTrash2Fill className={styles.icon}/>
+                                                <BsFillTrash2Fill className={styles.icon} />
                                             </Button>
                                         }
                                     </Form.Group>
@@ -234,9 +255,10 @@ const ChallengeCreate = props => {
                     ))
                 }
                 <input type='hidden' name='userId' value={user.id} />
-                <Button 
-                    variant='primary' 
-                    type='submit'>
+                <Button
+                    variant='primary'
+                    type='submit'
+                    onClick={() => onSubmit()}>
                     Create
                 </Button>
             </form>

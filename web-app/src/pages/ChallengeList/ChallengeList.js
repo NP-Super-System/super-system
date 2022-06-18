@@ -17,14 +17,19 @@ const ChallengeList = props => {
 
     const [challenges, setChallenges] = useState([]);
 
-    const rating = rate => {
+    const rating = (rate, ratings) => {
+        var rating = Math.floor(rate/ratings);
+        if (ratings === 0 || rate === 0) {
+            rating = 0;
+        }
+
         const items = []
 
-        for (var i = 0; i < rate; i++) {
+        for (var i = 0; i < rating; i++) {
             items.push(<BsStarFill key={`${i}`} />)
         }
         
-        for (var j = i; j < 5-rate + i; j++) {
+        for (var j = i; j < 5-rating + i; j++) {
             items.push(<BsStar key={`${j}`} />)
         }
 
@@ -71,7 +76,7 @@ const ChallengeList = props => {
                                     <Col className={styles.challenge_details}>
                                         <h5>{item.title}</h5>
                                         <span>By: {item.user.userName}</span>
-                                        <span>Rating: {rating(item.rating)}</span>
+                                        <span>Rating: {rating(item.rating, item.numberOfRatings)}</span>
                                     </Col>
                                     <Col>
                                         <div className={styles.challenge_points}>

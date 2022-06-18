@@ -25,6 +25,7 @@ const EditUserRoles = () => {
     useEffect(()=>{
         getUser();
         getRoles();
+        setIsLoaded(true);
     }, []);
 
     const getUser = () => {
@@ -47,7 +48,6 @@ const EditUserRoles = () => {
                 res => res.json()
                     .then(data => {
                         setRoles(data);
-                        setIsLoaded(true);
                     })
                     .catch(err => console.log(err))
             )
@@ -104,40 +104,57 @@ const EditUserRoles = () => {
 
     return (
         <PageContainer>
-            <Button 
-                variant='outline-primary' 
-                className={styles.backBtn}
-                onClick={goBack}>
-                <BsFillArrowLeftCircleFill />
-            </Button>
-            <div>
-                <p>User Name: {user.userName}</p>
-                <p>User Email: {user.userEmail}</p>
-                <p>User Role(s): {user.userRoles}</p>
-
-                {
-                    isLoaded ?
-                    <form onSubmit={onSubmit}>
-                        <Form.Check>
+            {
+                isLoaded ?
+                <div>
+                    <Button 
+                        variant='outline-primary' 
+                        className={styles.backBtn}
+                        onClick={goBack}>
+                        <BsFillArrowLeftCircleFill />
+                    </Button>
+                    <div>
+                        <p>User Name: {user.userName}</p>
+                        <p>User Email: {user.userEmail}</p>
+                        <p>User Role(s): 
                             {
-                                roles.map((role, index) =>
-                                <div key={index}>
-                                    <Form.Check.Input type='checkbox' checked={isChecked(index)} onChange={() => handleRoleChange(index)} />    
-                                    <Form.Check.Label>{role.roleName}</Form.Check.Label>
-                                </div>
-                                )
+                                user.userRoles?.length === 0 ?
+                                ' User has no roles'
+                                :
+                                user.userRoles?.length === 2 ?
+                                ` ${user.userRoles[0]}, ${user.userRoles[1]}`
+                                :
+                                user.userRoles?.length === 3 ?
+                                ` ${user.userRoles[0]}, ${user.userRoles[1]}, ${user.userRoles[2]}`
+                                :
+                                user.userRoles
                             }
-                        </Form.Check>
-                        <Button 
-                            variant='primary'
-                            className={styles.updateBtn} 
-                            type='submit'>
-                            Update
-                        </Button>
-                    </form>
-                    : <span>loading</span>
-                }
-            </div>
+                        </p>
+
+                        {
+                            <form onSubmit={onSubmit}>
+                                <Form.Check>
+                                    {
+                                        roles.map((role, index) =>
+                                        <div key={index}>
+                                            <Form.Check.Input type='checkbox' checked={isChecked(index)} onChange={() => handleRoleChange(index)} />    
+                                            <Form.Check.Label>{role.roleName}</Form.Check.Label>
+                                        </div>
+                                        )
+                                    }
+                                </Form.Check>
+                                <Button 
+                                    variant='primary'
+                                    className={styles.updateBtn} 
+                                    type='submit'>
+                                    Update
+                                </Button>
+                            </form>
+                        }
+                    </div>
+                </div>
+                :<span>loading</span>
+            }
         </PageContainer>
     )
 }

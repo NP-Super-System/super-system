@@ -24,6 +24,7 @@ const operations = app => {
 
     app.post('/announcement/create', async (req, res) => {
         const { userId, title, body } = req.body;
+        console.log(req.body);
         await createAnnouncement(res, userId, title, body);
     });
 
@@ -67,16 +68,16 @@ const operations = app => {
 
     // Update - update announcement
     const updateAnnouncement = async (res, userId, title, body, itemId) => {
+        const user = await User.findOne({_id: userId});
         Announcement
         .findOne({_id: itemId})
-        .updateOne({userUpdate: userId, title: title, body: body})
+        .updateOne({userUpdate: user.userName, title: title, body: body})
             .then(result => {
                 console.log('Updated announcement');
                 res.send();
             })
             .catch(err => console.log(err));
         res.redirect('http://localhost:3000/home');
-
     }
 
     app.post('/announcement/update/:announcementNum', async (req, res) => {
