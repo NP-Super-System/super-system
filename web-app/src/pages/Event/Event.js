@@ -8,7 +8,7 @@ import styles from './Event.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import EventComponent from './EventComponent';
-import { useScreenType } from '../../modules/useScreenType';
+import { useScreenType } from '../../hooks/useScreenType';
 
 const Event = props=>{
 

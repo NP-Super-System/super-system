@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { Card, Image, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 
 import styles from './EventComponent.module.css';
@@ -35,6 +36,13 @@ const EventComponent = props => {
                     <span>End: {endDt.getDate()}/{endDt.getMonth()+1}/{endDt.getFullYear()}</span>
                 </div>
             </div>
+            <Link to='/event/test' style={{textDecoration: 'none', color: 'black', width: '100%'}}>
+                <Button
+                    variant='secondary'
+                    className={styles.button}>
+                    See More
+                </Button>
+            </Link>
         </Card>
     );
 }

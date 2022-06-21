@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap';
 
 import styles from './Login.module.css';
 
-import LoginButton from '../../components/LoginButton/LoginButton';
+import LoginButton from './LoginButton';
 
 const Login = props=>{
 

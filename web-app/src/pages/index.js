@@ -16,21 +16,21 @@ export {default as Calendar} from  './Calendar/Calendar';
 
 export {default as Deadline} from  './Deadline/Deadline';
 
-export {default as Forum} from  './Forum/Forum';
-export {default as ForumCreate} from  './ForumCreate/ForumCreate';
-export {default as ForumPost} from  './ForumPost/ForumPost';
+export {default as Forum} from  './Forum';
+export {default as ForumCreate} from './ForumCreate';
+export {default as ForumExpand} from './ForumExpand';
 
 export {default as ChallengeList} from  './ChallengeList/ChallengeList';
 export {default as Challenge} from  './Challenge/Challenge';
 export {default as ChallengeCreate} from  './ChallengeCreate/ChallengeCreate';
 
-export {default as Event} from  './Event/';
+export {default as Event} from  './Event';
 export {default as EventCreate} from './EventCreate';
 export {default as EventExpand} from './EventExpand';
 
 export {default as Game} from  './Game/Game';
 
-export {default as Unauthorized} from  './Unauthorized/Unauthorized';
+export {default as Unauthorized} from './Unauthorized/Unauthorized';
 
-export {default as Roles} from  './Roles/Roles';
-export {default as EditUserRoles} from  './Roles/EditUserRoles';
+export {default as Roles} from './Roles/Roles';
+export {default as EditUserRoles} from './Roles/EditUserRoles';

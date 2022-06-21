@@ -4,10 +4,10 @@ import { Row, Col } from 'react-bootstrap';
 import styles from './Dashboard.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import MyCourses from '../../components/MyCourses/MyCourses';
-import Announcements from '../../components/Announcements/Announcements'
-import Deadline from '../../components/Deadlines/Deadlines'
-import TodoList from '../../components/TodoList/TodoList';
+import Courses from './Courses';
+import Announcements from './Announcements';
+import Deadlines from './Deadlines';
+import TodoList from './TodoList';
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -18,12 +18,12 @@ class Dashboard extends React.Component{
             <PageContainer>
                 <Row>
                     <Col>
-                        <MyCourses />
+                        <Courses />
                     </Col>
                     <Col>
                         <TodoList />
                         <Announcements />
-                        <Deadline />
+                        <Deadlines />
                     </Col>
                 </Row>
             </PageContainer>

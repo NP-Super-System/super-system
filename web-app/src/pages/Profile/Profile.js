@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import styles from './Profile.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import LogoutButton from '../../components/LogoutButton/LogoutButton';
+import LogoutButton from './LogoutButton';
 import GlobalContext from '../../context/GlobalContext';
 
 const Profile = props=>{

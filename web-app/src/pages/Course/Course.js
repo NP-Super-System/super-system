@@ -5,7 +5,7 @@ import { Col, Row, Card } from 'react-bootstrap';
 import styles from './Course.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import Section from '../../components/Section/Section';
+import Section from './Section';
 
 const Course = props=>{
 

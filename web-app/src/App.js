@@ -3,7 +3,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from 'react-bootstrap';
-import { useScreenType } from './modules/useScreenType';
+import { useScreenType } from './hooks/useScreenType';
 import { Toaster } from 'react-hot-toast';
 
 import './App.css';
@@ -130,7 +130,7 @@ function App() {
 					<Route path='/calendar' element={<Pages.Calendar />} />
 					<Route path='/forum' element={<Pages.Forum />} />
 					<Route path='/forum/create' element={<Pages.ForumCreate />} />
-					<Route path='/forum/post/:postId' element={<Pages.ForumPost />} />
+					<Route path='/forum/:postId' element={<Pages.ForumExpand />} />
 					<Route path='/challenges' element={<Pages.ChallengeList />} />
 					<Route path='/challenges/:challengeId' element={<Pages.Challenge />} />
 					<Route path='/challenges/create' element={<Pages.ChallengeCreate />} />
