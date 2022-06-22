@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Card, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
-import ContentLoader from 'react-content-loader';
+import { BsCalendar4Event } from 'react-icons/bs';
 
 import styles from './EventComponent.module.css';
 
@@ -21,17 +21,19 @@ const EventComponent = props => {
 
     return (
         <Card className={styles.wrapper}>
-            {
-                !loaded && <div className={styles.loading}></div>
-            }
-            {
-                imgKey &&
-
-                <Image
-                    className={styles.img}
-                    src={imgKey && `http://localhost:5000/s3/image/?key=${imgKey}`}
-                    onLoad={() => setLoaded(true)}/>
-            }
+        {   
+            imgKey ?
+            <Image
+                className={styles.img}
+                src={`http://localhost:5000/s3/image/?key=${imgKey}`}
+                onLoad={() => setLoaded(true)}
+                
+                height={160}/>
+            :
+            <div className={styles.no_img}>
+                <BsCalendar4Event className={styles.icon}/>
+            </div>
+        }
             <div className={styles.panes}>
                 <div className={styles.left_pane}>
                     <Card.Title>{title}</Card.Title>

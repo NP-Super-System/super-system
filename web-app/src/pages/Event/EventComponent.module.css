@@ -13,15 +13,22 @@
     border-radius: 3px;
 
     margin-bottom: 0.5em;
+    background-color: rgb(209, 209, 209);
 }
-.wrapper .loading{
+.wrapper .no_img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 100%;
-    min-height: 160px;
+    height: 160px;
     border-radius: 3px;
     margin-bottom: 0.5em;
-
-    background-color: rgb(209, 209, 209);
-    /* background: linear-gradient(to right, rgba(255, 255, 255, 1) 25%, rgb(229, 229, 229) 50%, rgba(255, 255, 255, 1) 75%); */
+    background-color: rgb(237, 237, 237);
+}
+.wrapper .no_img .icon{
+    width: 40px;
+    height: 40px;
 }
 
 .panes{

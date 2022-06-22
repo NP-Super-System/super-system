@@ -62,30 +62,28 @@ const operations = app => {
 
     // Read
     const getEvents = async id => {
-        return await Event.find(id ? {_id: id} : {});
+        const result = await Event.find(id ? {_id: id} : {})
+            .populate({
+                path: 'user',
+            })
+            .exec((err, res) => res);
+        return result;
     }
 
     app.get('/event/read', async (req, res) => {
         const { id } = req.query;
-        if(id){
-            try{
-                const [myEvent] = await getEvents(id);
-                res.status(200).send(myEvent);
-            }
-            catch(err){
-                console.log(err);
-                res.status(404).send(err);
-            }
-            return;
-        }
-        try{
-            const events = await getEvents();
-            res.status(200).send(events);
-        }
-        catch(err){
-            console.log(err);
-            res.status(404).send(err);
-        }
+        Event.find(id ? {_id: id} : {})
+            .populate({
+                path: 'user',
+            })
+            .exec((err, result) => {
+                if(err){
+                    res.status(404).send(err);
+                    return;
+                }
+                console.log(result);
+                res.status(200).send(result.length > 1 ? result : result[0]);
+            });
     });
     // Update
     app.post('/event/update', async (req, res) => {
