@@ -5,7 +5,6 @@ import { Button, Form } from 'react-bootstrap';
 import styles from './Challenge.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import { challenge } from './ChallengeData.js';
 import { Link } from "react-router-dom";
 import BeautyStars from 'beauty-stars';
 

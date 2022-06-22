@@ -96,6 +96,18 @@ const operations = app => {
     // Delete
     app.get('/event/delete', async (req, res) => {
         const { id } = req.query;
+
+        // Delete image
+        try{
+            const [event] = await getEvents(id);
+            const { imgKey } = event;
+            imgKey && await deleteFile(imgKey, 'image');
+            console.log(`Deleted event img: ${imgKey}`);
+        }
+        catch(err){
+            console.log(err);
+        }
+
         try{
             const result = await Event.deleteOne({_id: id});
             res.status(200).send(result);

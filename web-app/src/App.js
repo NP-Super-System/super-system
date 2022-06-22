@@ -12,10 +12,10 @@ import GlobalContext from './context/GlobalContext';
 // Pages
 import * as Pages from './pages/index';
 
-// Components
-import Sidebar from './nav-components/Sidebar/Sidebar';
-import Navbar from './nav-components/Navbar/Navbar';
-import RequireRole from './RequireRole';
+// Navigation
+import Sidebar from './navigation/Sidebar';
+import Navbar from './navigation/Navbar';
+import RequireRole from './components/RequireRole/RequireRole';
 
 function App() {
 	const screenType = useScreenType();
