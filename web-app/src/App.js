@@ -32,6 +32,12 @@ function App() {
 			userEmail: email,
 			userPicture: picture,
 			userRoles: ['Student'],
+
+			level: {
+				count: 1,
+				progress: 0,
+			},
+			coinCount: 10,
 		}
 		console.log(newUser);
 
