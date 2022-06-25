@@ -97,6 +97,19 @@ function App() {
 		)();
 	}, [isAuthenticated]);
 
+	useEffect(()=>{
+		if(!userCtx) return;
+        fetch(`http://localhost:5000/user/read/?userId=${userCtx.id}`)
+            .then(res => {
+                res.json()
+                    .then(data => {
+                        console.log('User data:', data);
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log('Error getting user data: ', err));
+    }, [userCtx]);
+
 	return (
 		<div className="App">
 		{

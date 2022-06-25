@@ -37,6 +37,16 @@ function uploadFile(file, bucketType){
     return bucket.instance.upload(uploadParams).promise();
 }
 
+// delete file locally
+function deleteLocalFile(fileKey){
+    try{
+        fs.unlinkSync(`./uploads/${fileKey}`);
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 // download file from s3
 
 function getFileStream(fileKey, bucketType){
@@ -66,4 +76,4 @@ function deleteFile(fileKey, bucketType){
     });
 }
 
-module.exports = { uploadFile, getFileStream, deleteFile };
+module.exports = { uploadFile, getFileStream, deleteFile, deleteLocalFile };
