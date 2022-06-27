@@ -57,7 +57,8 @@ const Event = props=>{
                 </Link>
             </header>
             <div className={styles.events}>
-            {
+            {   
+                events &&
                 events.map( (event, i) =>
                     <EventComponent key={`${i}`} {...event}/>
                 )

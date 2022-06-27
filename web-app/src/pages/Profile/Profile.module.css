@@ -36,6 +36,27 @@
     max-width: 760px;
 
 }
+.user_level{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.user_level .level{
+    max-width: 85px;
+    max-height: 85px;
+    margin-right: 2.5em;
+}
+.user_level .coins{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.5em;
+    color: goldenrod;
+}
+
 .user_info .info{
     display: flex;
     flex-direction: row;

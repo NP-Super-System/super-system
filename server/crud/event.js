@@ -1,6 +1,6 @@
 const multer = require('multer');
 const uploadLocal = multer({dest: __dirname + '/../uploads/'});
-const { uploadFile, getFileStream, deleteFile } = require('../s3');
+const { uploadFile, getFileStream, deleteFile, deleteLocalFile } = require('../s3');
 
 const User = require('../models/user/User');
 const Event = require("../models/event/Event");
@@ -19,9 +19,6 @@ const operations = app => {
             const uploadFileRes = await uploadFile(req.file, 'image');
             console.log(uploadFileRes);
             imgKey = uploadFileRes.key || '';
-    
-            //Remove file from server
-            fs.unlinkSync(__dirname + `/../uploads/${imgKey}`);
         }
         catch(err){
             console.log('Image does not exist or upload to s3 failed');
@@ -39,6 +36,7 @@ const operations = app => {
         const user = await getUser(userId);
 
         const imgKey = req.file ? await uploadImage(req) : '';
+        deleteLocalFile(imgKey);
 
         const eventDetails = {
             title,
@@ -82,7 +80,10 @@ const operations = app => {
                     return;
                 }
                 console.log(result);
-                res.status(200).send(result.length > 1 ? result : result[0]);
+                if(id){
+                    result = result[0];
+                }
+                res.status(200).send(result);
             });
     });
     // Update

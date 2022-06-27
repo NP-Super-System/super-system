@@ -84,7 +84,7 @@ const EventExpand = props => {
                             Register
                         </Button>
                     {
-                        eventData.user &&
+                        eventData?.user &&
                         <div className={styles.host}>
                             <span style={{marginBottom: '0.5em'}}>Organised by:</span>
                             <div className={styles.profile}>
