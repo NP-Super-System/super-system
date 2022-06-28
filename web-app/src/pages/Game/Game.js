@@ -54,8 +54,8 @@ const Game = props=>{
             <div className={styles.contents} class="container">
                 <div class="row align-items-start">
                     <div className={styles.stats} class="col align-self-center">
-                        <h1>Harry the Hamster</h1>
-                        <h2>Level = {level}</h2>
+                        <h1 className={styles.title}>Harry the Hamster</h1>
+                        <h2 className={styles.level}>Level = {level}</h2>
                         <p>Happiness = {happiness}</p>
                         <p>Food Received = {hunger}</p>
                         <p>Cleanliness = {cleanliness}</p>
@@ -65,10 +65,10 @@ const Game = props=>{
                 <div class="row align-items-center">
                     <div class="col">
                         <Image className={styles.icon} src='media/game/soap.png' onClick={checkClean}></Image>
-                        <label style={{color: 'palevioletred'}}>Clean Me!</label>
+                        <label className={styles.label} style={{color: 'palevioletred'}}>Clean Me!</label>
                     </div>
                     <div class="col">
-                    <label style={{color: 'green'}}>Feed Me!</label>
+                    <label className={styles.label} style={{color: 'green'}}>Feed Me!</label>
                     <Image className={styles.icon} src='media/game/food.png' onClick={checkHunger}></Image>
                     </div>
                 </div>

@@ -8,12 +8,12 @@
 
 }
 
-h1{
+.title{
     color: red;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
-h2{
+.level{
     font-style: italic;
 }
 
@@ -27,7 +27,7 @@ h2{
     background-color: white;
 }
 
-label{
+.label{
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
 }
 
