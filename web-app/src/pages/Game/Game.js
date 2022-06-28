@@ -92,11 +92,19 @@ const Game = props=>{
 
     return (
         <PageContainer>
+<<<<<<< HEAD
             <div className={styles.contents + " container"}>
                 <div className="row align-items-start">
                     <div className={styles.stats + " col align-self-center" }>
                         <h1>Harry the Hamster</h1>
                         <h2>Level = {level}</h2>
+=======
+            <div className={styles.contents} class="container">
+                <div class="row align-items-start">
+                    <div className={styles.stats} class="col align-self-center">
+                        <h1 className={styles.title}>Harry the Hamster</h1>
+                        <h2 className={styles.level}>Level = {level}</h2>
+>>>>>>> b6677c2bffb417d8b528ce4683f7313f4a7e33bd
                         <p>Happiness = {happiness}</p>
                         <p>Food Received = {food}</p>
                         <p>Cleanliness = {cleanliness}</p>
@@ -106,11 +114,17 @@ const Game = props=>{
                 <div className ="row align-items-center">
                     <div className ="col">
                         <Image className={styles.icon} src='media/game/soap.png' onClick={checkClean}></Image>
-                        <label style={{color: 'palevioletred'}}>Clean Me!</label>
+                        <label className={styles.label} style={{color: 'palevioletred'}}>Clean Me!</label>
                     </div>
+<<<<<<< HEAD
                     <div className="col">
                     <label style={{color: 'green'}}>Feed Me!</label>
                     <Image className={styles.icon} src='media/game/food.png' onClick={checkFood}></Image>
+=======
+                    <div class="col">
+                    <label className={styles.label} style={{color: 'green'}}>Feed Me!</label>
+                    <Image className={styles.icon} src='media/game/food.png' onClick={checkHunger}></Image>
+>>>>>>> b6677c2bffb417d8b528ce4683f7313f4a7e33bd
                     </div>
                 </div>
         
