@@ -5,7 +5,6 @@ import { Button, Form } from 'react-bootstrap';
 import styles from './Challenge.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import { challenge } from './ChallengeData.js';
 import { Link } from "react-router-dom";
 import BeautyStars from 'beauty-stars';
 
@@ -99,6 +98,8 @@ const Challenge = props => {
 						title: 'Oops...',
 						text: 'Please select an answer!',
 					})
+				: challenge[currentQuestion].isImageUpload ?
+				ansSelected()
 				:
 				isClicked ?
 					ansSelected()
@@ -108,38 +109,36 @@ const Challenge = props => {
 						title: 'Oops...',
 						text: 'Please select an answer!',
 					})
+				
 		}
 	};
 
 	const submitRating = () => {
 		var newRating = challengeRating + rating;
-		if (rating === 0) {
-			var ratings = numberOfRatings;
-		}
-		else {
+		if (rating !== 0) {
 			var ratings = numberOfRatings + 1;
-		}
-		const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ newRating, ratings }),
-        }
-
-		console.log(`Submitting rating`);
-
-		const submitRating = `http://localhost:5000/challenge/rating/${challengeId}`;
-
-		fetch(submitRating, options)
-            .then(res => {
-                console.log('Submitted rating');
-            })
-            .catch(err => {
-                console.log('Error submitting rating');
-                console.log(err);
-            });
+			const options = {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({ newRating, ratings }),
+			}
+	
+			console.log(`Submitting rating`);
+	
+			const submitRating = `http://localhost:5000/challenge/rating/${challengeId}`;
+	
+			fetch(submitRating, options)
+				.then(res => {
+					console.log('Submitted rating');
+				})
+				.catch(err => {
+					console.log('Error submitting rating');
+					console.log(err);
+				});
+		}	
 	}
 
 	const restartChallenge = () => {
@@ -206,7 +205,6 @@ const Challenge = props => {
 							</Link>
 						</div>
 						:
-
 						<>
 							{
 								challenge[currentQuestion] &&
@@ -224,6 +222,8 @@ const Challenge = props => {
 														<label className="btn btn-outline-primary" htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
 													</div>
 												))
+												: challenge[currentQuestion].isImageUpload ?
+												'image upload'
 												:
 												challenge[currentQuestion].options.map((answerOption, i) => (
 													<div key={i + currentQuestion * 10} className={styles.button}>

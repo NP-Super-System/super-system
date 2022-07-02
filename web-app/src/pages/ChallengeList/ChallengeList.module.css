@@ -28,16 +28,19 @@
 }
 
 .challenge{
+    border: 1px solid rgb(215, 215, 215);
+    border-radius: 5px;
+    
+    margin-bottom: 1em;
+    padding: 1em;
+}
+
+.challenge_info{
     display: flex;
     flex-direction: column;
 
     text-decoration: none;
     color: black;
-    border: 1px solid rgb(215, 215, 215);
-    border-radius: 5px;
-
-    margin-bottom: 1em;
-    padding: 1em;
 
     text-align: left;
 }
@@ -62,4 +65,40 @@
 .create_icon{
     width: 28px;
     height: 28px;
+}
+
+.edit_btn{
+    background-color: transparent;
+    align-items: right;
+    border: none;
+    margin-right: 5px;
+}
+.edit_btn:hover{
+    background-color: greenyellow;
+}
+.edit_btn .icon{
+    color: greenyellow;
+    font-size: 1.25em;
+}
+.edit_btn:hover .icon{
+    color: white;
+}
+
+.delete_btn{
+    background-color: transparent;
+    border: none;
+}
+.delete_btn:hover{
+    background-color: red;
+}
+.delete_btn .icon{
+    color: red;
+    font-size: 1.25em;
+}
+.delete_btn:hover .icon{
+    color: white;
+}
+.buttons {
+    display: flex;
+    justify-content: center;
 }

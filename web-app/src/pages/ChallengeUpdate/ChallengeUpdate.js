@@ -1,31 +1,37 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
+
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
 import { BsFillTrash2Fill, BsFillCheckSquareFill } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 
-import styles from './ChallengeCreate.module.css';
+import styles from './ChallengeUpdate.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
 import Swal from 'sweetalert2'
 
 
-const ChallengeCreate = props => {
+const ChallengeUpdate = props => {
 
     const { user } = useContext(GlobalContext);
+
+    const { challengeId } = useParams();
 
     const navigate = useNavigate();
     const goBack = () => navigate(-1);
 
-    const [title, setTitle] = useState('');
     const [points, setPoints] = useState(0);
-    const [questionList, setQuestionList] = useState([{ text: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }]);
+    const [rating, setRating] = useState(0);
+    const [numberOfRatings, setNumberOfRatings] = useState(0);
+    const [title, setTitle] = useState('');
+    const [questionList, setQuestionList] = useState([]);
 
     useEffect(() => {
-
+        getChallenge();
     }, []);
 
     const backBtn = () => {
@@ -44,22 +50,26 @@ const ChallengeCreate = props => {
         })
     }
 
+    const getChallenge = () => {
+        // Get all challenges from server
+        fetch(`http://localhost:5000/challenge/read/${challengeId}`)
+            .then(
+                res => res.json()
+                    .then(data => {
+                        // Set challenges
+                        setRating(data.rating);
+                        setNumberOfRatings(data.numberOfRatings);
+                        setPoints(data.pointCount);
+                        setTitle(data.title);
+                        setQuestionList(data.questions);
+                    })
+                    .catch(err => console.log(err))
+            )
+            .catch(err => console.log(err));
+    }
+
     const handleQuestionAdd = e => {
-        setQuestionList([...questionList, { text: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }])
-    }
-
-    const handleQuestionChange = (e, index) => {
-        const { name, value } = e.target;
-        const list = [...questionList];
-        list[index].text = value;
-        setQuestionList(list);
-    }
-
-    const handleQuestionTypeChange = (e, index) => {
-        let newQuestionList = [...questionList];
-        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
-        newQuestionList[index].isImageUpload = e.target.value === 'I';
-        setQuestionList(newQuestionList);
+        setQuestionList([...questionList, { question: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ option: '', isCorrect: false }] }])
     }
 
     const handleQuestionRemove = (index) => {
@@ -68,26 +78,27 @@ const ChallengeCreate = props => {
         setQuestionList(newQuestionList);
     }
 
-    const handleOptionAdd = (index) => {
-        const newQuestionList = [...questionList];
-        newQuestionList[index].options.push({ text: '', isCorrect: false })
+    const handleQuestionTypeChange = (e, index) => {
+        let newQuestionList = [...questionList];
+        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
+        newQuestionList[index].isImageUpload = e.target.value === 'I';
         setQuestionList(newQuestionList);
+        console.log(questionList);
     }
 
-    const handleOptionRemove = (qindex, oindex) => {
+    const handlePointsChange = (index, newPoints) => {
         const newQuestionList = [...questionList];
-
-        newQuestionList[qindex].options.splice(oindex, 1);
+        newQuestionList[index].points = Number(newPoints);
         setQuestionList(newQuestionList);
-        console.log(newQuestionList[qindex].options);
+        console.log(questionList);
+        setPoints(questionList.reduce((a, v) => a = a + v.points, 0));
     }
 
-    const handleOptionChange = (e, qindex, oindex) => {
-        const { name, value } = e.target;
-        const newQuestionList = [...questionList];
-
-        newQuestionList[qindex].options[oindex].text = value;
-        setQuestionList(newQuestionList);
+    const handleQuestionChange = (e, index) => {
+        const { value } = e.target;
+        const list = [...questionList];
+        list[index].text = value;
+        setQuestionList(list);
     }
 
     const updateOption = (qindex, oindex) => {
@@ -108,11 +119,26 @@ const ChallengeCreate = props => {
         setQuestionList(newQuestionList);
     }
 
-    const handlePointsChange = (index, newPoints) => {
+    const handleOptionChange = (e, qindex, oindex) => {
+        const { name, value } = e.target;
         const newQuestionList = [...questionList];
-        newQuestionList[index].points = Number(newPoints);
+
+        newQuestionList[qindex].options[oindex].text = value;
         setQuestionList(newQuestionList);
-        setPoints(questionList.reduce((a, v) => a = a + v.points, 0));
+    }
+
+    const handleOptionAdd = (index) => {
+        const newQuestionList = [...questionList];
+        newQuestionList[index].options.push({ option: '', isCorrect: false })
+        setQuestionList(newQuestionList);
+    }
+
+    const handleOptionRemove = (qindex, oindex) => {
+        const newQuestionList = [...questionList];
+
+        newQuestionList[qindex].options.splice(oindex, 1);
+        setQuestionList(newQuestionList);
+        console.log(newQuestionList[qindex].options);
     }
 
     const onSubmit = async e => {
@@ -132,13 +158,12 @@ const ChallengeCreate = props => {
                 return;
             }
         }
-        e.preventDefault();
+        e.preventDefault();        
+        deleteChallenge(user.id, challengeId);
         createChallenge(user.id, title, points, questionList);
     }
 
     const createChallenge = (userId, title, points, content) => {
-        const rating = 0 , numberOfRatings = 0;
-
         const options = {
             headers: {
                 'Accept': 'application/json',
@@ -148,20 +173,41 @@ const ChallengeCreate = props => {
             body: JSON.stringify({ userId, title, points, rating, numberOfRatings, content }),
         }
 
-        console.log(`Creating new challenge`);
+        console.log(`Updating challenge`);
 
         const createChallengeUrl = 'http://localhost:5000/challenge/create';
 
         fetch(createChallengeUrl, options)
             .then(res => {
-                console.log('Added new challenge');
-                toast.success('Successfully created challenge!');
+                console.log('Updated challenge');
+                toast.success('Successfully updated challenge!');
                 navigate('/challenges');
             })
             .catch(err => {
-                toast.error('Error creating challenge');
+                toast.error('Error updatnig challenge');
                 console.log(err);
             });
+    }
+
+    const deleteChallenge = (userId, itemId) => {
+        const options = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({ userId, itemId }),
+        }
+
+        // console.log(`Deleting challenge...`);
+
+        const deleteItemUrl = 'http://localhost:5000/challenge/delete';
+
+        fetch(deleteItemUrl, options)
+            .then(res => {
+                // console.log('Delete challenge');
+            })
+            .catch(err => console.log(err));
     }
 
     return (
@@ -177,13 +223,7 @@ const ChallengeCreate = props => {
                     Total Points: {points}
                 </div>
                 <Form.Group className={`mb-3`}>
-                    <Form.Control
-                        name='title'
-                        type='input'
-                        placeholder='Title'
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        required />
+                    <Form.Control name='title' type='input' placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} />
                 </Form.Group>
                 {
                     questionList.map((question, qindex) => (
@@ -211,7 +251,8 @@ const ChallengeCreate = props => {
                             <Form.Group className={`mb-3`}>
                                 <Form.Select
                                     name='questionType'
-                                    onChange={e => handleQuestionTypeChange(e, qindex)}>
+                                    onChange={e => handleQuestionTypeChange(e, qindex)}
+                                    defaultValue={question.isMultipleAns ? 'M' : question.isImageUpload ? 'I' : 'S'}>
                                     <option value='S'>Single Answer Question</option>
                                     <option value='M'>Multiple Answer Question</option>
                                     <option value='I'>Image Upload</option>
@@ -221,10 +262,10 @@ const ChallengeCreate = props => {
                                 <Form.Control
                                     name='points'
                                     type='number'
-                                    placeholder='Points'
                                     value={question.points}
+                                    placeholder='Points'
                                     onChange={(e) => handlePointsChange(qindex, e.target.value)}
-                                    required />
+                                />
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
                                 <Form.Control
@@ -232,48 +273,48 @@ const ChallengeCreate = props => {
                                     placeholder={`Question ${qindex + 1}`}
                                     value={question.text}
                                     onChange={(e) => handleQuestionChange(e, qindex)}
-                                    required />
+                                />
                             </Form.Group>
                             {
                                 question.isImageUpload ?
-                                <span></span>
-                                :
-                                question.options.map((option, oindex) => {
-                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
-                                        <Form.Check
-                                            type={questionList[qindex].isMultipleAns ? 'checkbox' : 'radio'}
-                                            name={`Question ${qindex + 1}`}
-                                            className={styles.checkbox}
-                                            onChange={() => updateOption(qindex, oindex)}
-                                            checked={option.isCorrect} />
+                                    <span></span>
+                                    :
+                                    question.options.map((option, oindex) => {
+                                        return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
+                                            <Form.Check
+                                                type={questionList[qindex].isMultipleAns ? 'checkbox' : 'radio'}
+                                                name={`Question ${qindex + 1}`}
+                                                className={styles.checkbox}
+                                                onChange={() => updateOption(qindex, oindex)}
+                                                checked={option.isCorrect} />
 
-                                        <Form.Control
-                                            name='option'
-                                            placeholder={`Option ${oindex + 1}`}
-                                            value={option.text}
-                                            onChange={(e) => handleOptionChange(e, qindex, oindex)}
-                                            required />
-                                        {
-                                            questionList[qindex].options.length - 1 === oindex &&
+                                            <Form.Control
+                                                name='option'
+                                                placeholder={`Option ${oindex + 1}`}
+                                                value={option.text}
+                                                onChange={(e) => handleOptionChange(e, qindex, oindex)}
+                                                required />
+                                            {
+                                                questionList[qindex].options.length - 1 === oindex &&
 
-                                            <Button
-                                                variant='primary'
-                                                className={styles.create_button}
-                                                onClick={() => handleOptionAdd(qindex)}>
-                                                <IoAddSharp className={styles.icon} />
-                                            </Button>
-                                        }
-                                        {
-                                            questionList[qindex].options.length > 1 &&
+                                                <Button
+                                                    variant='primary'
+                                                    className={styles.create_button}
+                                                    onClick={() => handleOptionAdd(qindex)}>
+                                                    <IoAddSharp className={styles.icon} />
+                                                </Button>
+                                            }
+                                            {
+                                                questionList[qindex].options.length > 1 &&
 
-                                            <Button
-                                                className={styles.delete_button}
-                                                onClick={() => handleOptionRemove(qindex, oindex)}>
-                                                <BsFillTrash2Fill className={styles.icon} />
-                                            </Button>
-                                        }
-                                    </Form.Group>
-                                })
+                                                <Button
+                                                    className={styles.delete_button}
+                                                    onClick={() => handleOptionRemove(qindex, oindex)}>
+                                                    <BsFillTrash2Fill className={styles.icon} />
+                                                </Button>
+                                            }
+                                        </Form.Group>
+                                    })
                             }
                         </div>
                     ))
@@ -281,11 +322,11 @@ const ChallengeCreate = props => {
                 <Button
                     variant='primary'
                     onClick={(e) => onSubmit(e)}>
-                    Create
+                    Update
                 </Button>
             </form>
         </PageContainer>
     );
 }
 
-export default ChallengeCreate;
+export default ChallengeUpdate;

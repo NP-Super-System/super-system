@@ -11,20 +11,22 @@ const appUrl = 'http://localhost:3000';
 const operations = app => {
 
     // Create challenge
-    const createChallenge = async (res, userId, title, points, content) => {
+    const createChallenge = async (res, userId, title, points, rating, numberOfRatings, content) => {
         const questionList = [];
         for (var i = 0; i < content.length; i++) {
             const optionsList = [];
             for (var j = 0; j < content[i].options.length; j++) {
                 const newOption = new Option({
-                    text: content[i].options[j].option,
+                    text: content[i].options[j].text,
                     isCorrect: content[i].options[j].isCorrect,
                 });
                 optionsList.push(newOption);
             }
             const newQuestion = new Question({
-                text: content[i].question,
+                text: content[i].text,
                 isMultipleAns: content[i].isMultipleAns,
+                isImageUpload: content[i].isImageUpload,
+                points: content[i].points,
                 options: optionsList,
             })
             questionList.push(newQuestion);
@@ -35,9 +37,9 @@ const operations = app => {
             user, 
             title,
             pointCount: points,
-            rating: 0,
+            rating,
             questions: questionList,
-            numberOfRatings: 0,
+            numberOfRatings,
         }
 
         const newChallenge = new Challenge(challengeData);
@@ -52,8 +54,8 @@ const operations = app => {
     }
 
     app.post('/challenge/create', async (req, res) => {
-        const { userId, title, points, content } = req.body;
-        await createChallenge(res, userId, title, points, content);
+        const { userId, title, points, rating, numberOfRatings, content } = req.body;
+        await createChallenge(res, userId, title, points, rating, numberOfRatings, content);
     });
 
     // Read challenges
@@ -108,7 +110,20 @@ const operations = app => {
     });
 
     // Delete challenge
+    const deleteChallenge = async (res, userId, itemId) => {
+        Challenge
+        .deleteOne({_id: itemId})
+        .then(result => {
+            console.log('Successfully deleted announcement!');
+            res.send();
+        })
+        .catch(err => console.log(err));
+    }
 
+    app.post('/challenge/delete', async (req, res) => {
+        const { userId, itemId } = req.body;
+        await deleteChallenge(res, userId, itemId);
+    })
 }
 
 module.exports = operations;

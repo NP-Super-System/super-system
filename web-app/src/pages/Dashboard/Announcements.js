@@ -16,7 +16,7 @@ const Announcements = props => {
     const Swal = require('sweetalert2')
     const [announcements, setAnnouncements] = useState([]);
     const [isCollapsed, setCollapsedState] = useState(false);
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { user } = useAuth0();
     const [userRoles, setUserRoles] = useState(false);
     const [showMore, setShowMore] = useState(true);
 
@@ -59,7 +59,7 @@ const Announcements = props => {
             body: JSON.stringify({ userId, itemId }),
         }
 
-        console.log(`Deleting todo item...`);
+        console.log(`Deleting announcement...`);
 
         const deleteItemUrl = 'http://localhost:5000/announcement/delete';
 
