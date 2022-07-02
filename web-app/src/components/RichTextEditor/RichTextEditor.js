@@ -34,12 +34,13 @@ const RichTextEditor = props => {
                 }
                 init={{
                     selector: 'textarea',
-                    plugins: 'a11ychecker advcode casechange export formatpainter image editimage link anchor linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-                    toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents link anchor',
+                    plugins: 'image link anchor table ',
+                    toolbar: 'image link anchor table',
                     toolbar_mode: 'floating',
                     menubar: "insert",
                     tinycomments_mode: 'embedded',
-                    tinycomments_author: 'Author name',
+                    tinycomments_author: 'Super System',
+                    resize: false,
                 }}
                 onEditorChange={handleChange} />
         </>

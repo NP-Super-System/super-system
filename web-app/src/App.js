@@ -12,10 +12,10 @@ import GlobalContext from './context/GlobalContext';
 // Pages
 import * as Pages from './pages/index';
 
-// Components
-import Sidebar from './nav-components/Sidebar/Sidebar';
-import Navbar from './nav-components/Navbar/Navbar';
-import RequireRole from './RequireRole';
+// Navigation
+import Sidebar from './navigation/Sidebar';
+import Navbar from './navigation/Navbar';
+import RequireRole from './components/RequireRole/RequireRole';
 
 function App() {
 	const screenType = useScreenType();
@@ -32,6 +32,12 @@ function App() {
 			userEmail: email,
 			userPicture: picture,
 			userRoles: ['Student'],
+
+			level: {
+				count: 1,
+				progress: 0,
+			},
+			coinCount: 10,
 		}
 		console.log(newUser);
 
@@ -90,6 +96,19 @@ function App() {
 			}
 		)();
 	}, [isAuthenticated]);
+
+	useEffect(()=>{
+		if(!userCtx) return;
+        fetch(`http://localhost:5000/user/read/?userId=${userCtx.id}`)
+            .then(res => {
+                res.json()
+                    .then(data => {
+                        console.log('User data:', data);
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log('Error getting user data: ', err));
+    }, [userCtx]);
 
 	return (
 		<div className="App">

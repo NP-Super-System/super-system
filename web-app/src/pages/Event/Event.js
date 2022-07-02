@@ -21,7 +21,10 @@ const Event = props=>{
         fetch('http://localhost:5000/event/read')
             .then(res => {
                 res.json()
-                    .then(data => setEvents(data))
+                    .then(data => {
+                        setEvents(data);
+                        console.log(data);
+                    })
                     .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
@@ -54,7 +57,8 @@ const Event = props=>{
                 </Link>
             </header>
             <div className={styles.events}>
-            {
+            {   
+                events &&
                 events.map( (event, i) =>
                     <EventComponent key={`${i}`} {...event}/>
                 )

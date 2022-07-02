@@ -19,7 +19,13 @@ const userSchema = new Schema({
     userRoles: {
         type: Array,
     },
+
     // Other user info
+    level: {
+        count: {type: Number},
+        progress: {type: Number},
+    },
+    coinCount: {type: Number},
     todolist: [TodoItemSchema],
 
 }, { timestamps: true });

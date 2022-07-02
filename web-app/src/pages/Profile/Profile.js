@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Card, Image } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 import styles from './Profile.module.css';
 
@@ -10,37 +12,68 @@ import GlobalContext from '../../context/GlobalContext';
 
 const Profile = props=>{
 
-    const { user } = useContext(GlobalContext);
+    const { user: userCtx } = useContext(GlobalContext);
     const { userId } = useParams();
     
+    const [user, setUser] = useState(null);
+
+    useEffect(()=>{
+        fetch(`http://localhost:5000/user/read/?userId=${userCtx.id}`)
+            .then(res => {
+                res.json()
+                    .then(data => {
+                        console.log(data);
+                        setUser(data);
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+    }, []);
+
     return (
         <PageContainer>
+        {
+            user &&
             <div className={styles.wrapper}>
                 <header className={styles.header}>
                     <Image
-                        src={user.picture}
+                        src={user.userPicture}
                         className={styles.user_picture}
                         />
                     <span className={styles.user_name}>
-                        Welcome back, {user.name}
+                        Welcome back, {user.userName}
                     </span>
                 </header>
+                <div className={`${styles.card} ${styles.user_level}`}>
+                    <div className={styles.level}>
+                        <CircularProgressbar 
+                            value={user.level.progress} 
+                            maxValue={100} 
+                            text={user.level.count}
+                            styles={buildStyles({
+                                textSize: '2em',
+                            })}/>
+                    </div>
+                    <div className={styles.coins}>
+                        <Image src='./media/coin.png'/>
+                        <span>{user.coinCount}</span>
+                    </div>
+                </div>
                 <Card className={`${styles.card} ${styles.user_info}`}>
-                    <Card.Title>
-                        <span>Personal Details</span>
-                    </Card.Title>
+                    <Card.Title>Personal Details</Card.Title>
                     <div className={styles.info}>
                         <span className={styles.label}>Name:</span>
-                        <span className={styles.value}>{user.name}</span>
+                        <span className={styles.value}>{user.userName}</span>
                     </div>
                     <div className={styles.info}>
                         <span className={styles.label}>Email:</span> 
-                        <span className={styles.value}>{user.email}</span>
+                        <span className={styles.value}>{user.userEmail}</span>
                     </div>
                 </Card>
                 <Card className={`${styles.card} ${styles.game}`}>
                     <Link to='/game' style={{textDecoration: 'none', color: 'black'}}>
                         <Card.Title>My Pet</Card.Title>
+                        <Image src='media/game/vpet.png'></Image>
                     </Link>
                 </Card>
                 <Card className={`${styles.card} ${styles.settings}`}>
@@ -50,6 +83,7 @@ const Profile = props=>{
                     <LogoutButton />
                 </Card>
             </div>
+        }
         </PageContainer>
     );
 }
