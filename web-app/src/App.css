@@ -20,3 +20,25 @@ html, body{
   top: 50%;
   left: 50%;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #787878 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: none;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #787878;
+  border-radius: 10px;
+  border: 2px solid rgba(240, 240, 240, 1);
+}

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TodoItemSchema = require('../todolist/TodoItem').schema;
+const CalendarEventSchema = require('../calendarEvent/CalendarEvent').schema;
 
 // Schema for users
 
@@ -27,6 +28,7 @@ const userSchema = new Schema({
     },
     coinCount: {type: Number},
     todolist: [TodoItemSchema],
+    calendarEvents: [CalendarEventSchema],
 
 }, { timestamps: true });
 

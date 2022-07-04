@@ -54,6 +54,8 @@ require('./crud/event')(app);
 require('./crud/role')(app);
 // Pet
 // require('./crud/pet')(app);
+// Calendar
+require('./crud/calendar')(app);
 
 
 // require('./preset-data/courses');

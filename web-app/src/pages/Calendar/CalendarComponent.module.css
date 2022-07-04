@@ -4,6 +4,11 @@
     margin-bottom: 0.25em;
 }
 
+.day_name{
+    text-align: left;
+    padding: 0 1em;
+}
+
 .months{
     flex: 1;
     display: grid;

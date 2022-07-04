@@ -7,6 +7,7 @@ import { useScreenType } from './hooks/useScreenType';
 import { Toaster } from 'react-hot-toast';
 
 import './App.css';
+import "react-datepicker/dist/react-datepicker.css";
 import GlobalContext from './context/GlobalContext';
 
 // Pages
@@ -20,7 +21,7 @@ import RequireRole from './components/RequireRole/RequireRole';
 function App() {
 	const screenType = useScreenType();
 	const { user: userCtx, setUser: setUserCtx } = useContext(GlobalContext);
-
+	const [hasSetUser, setHasSetUser] = useState(false);
 	// Auth0
 	const { user, isAuthenticated, isLoading } = useAuth0();
 
@@ -38,6 +39,8 @@ function App() {
 				progress: 0,
 			},
 			coinCount: 10,
+			todolist: [],
+			calendarEvents: [],
 		}
 		console.log(newUser);
 
@@ -99,11 +102,14 @@ function App() {
 
 	useEffect(()=>{
 		if(!userCtx) return;
+		if(hasSetUser) return;
         fetch(`http://localhost:5000/user/read/?userId=${userCtx.id}`)
             .then(res => {
                 res.json()
                     .then(data => {
                         console.log('User data:', data);
+						setUserCtx({...userCtx, ...data});
+						setHasSetUser(true);
                     })
                     .catch(err => console.log(err));
             })

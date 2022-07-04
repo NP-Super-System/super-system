@@ -1,12 +1,17 @@
 .header{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    padding: 0.25em 0.5em 0.5em 0.5em;
+}
+
+.date_actions{
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    margin-bottom: 0.5em;
 }
 
-.button{
+.date_actions .button{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,10 +19,33 @@
     padding: 1em;
     background: none;
     border: none;
+    border-radius: 5px;
+
+    width: 100%;
+    height: 100%;
+    max-width: 56px;
+}
+.date_actions .button:hover{
+    background: rgba(138, 138, 138, 0.5);
+}
+.date_actions .today_button{
+    padding: 0.5em 2em !important;
 }
 
-.date{
+.date_actions .date{
     font-weight: bold;
     font-size: 1.5em;
     margin-left: 1em;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-left: 2em;
+}
+.actions > *{
+    margin-left: 0.75em;
 }

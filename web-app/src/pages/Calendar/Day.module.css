@@ -2,15 +2,28 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgb(209, 215, 228);
+    border: 1px solid rgba(224, 228, 238, 1);
+    transition: 0.11s;
+}
+
+/* .within_month{
+    
+} */
+.within_month:hover{
+    background-color:rgba(214, 214, 214, 0.5);
+    cursor: pointer;
+}
+.not_within_month{
+    background-color: rgb(224, 228, 238);
 }
 
 .header{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
     width: 100%;
-    padding-top: 0.25em;
+    padding: 0.25em 0.5em 0 0.5em;
 }
 
 .daytext{
@@ -25,7 +38,7 @@
 }
 
 .gray_daytext{
-    color: rgb(194, 194, 194);
+    color: rgb(168, 168, 168);
 }
 
 .today_daytext{
@@ -35,5 +48,14 @@
 }
 
 .content{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
     height: 13vh;
 }
