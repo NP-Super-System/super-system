@@ -70,6 +70,7 @@ const operations = app => {
     }
 
     app.post('/forum/create', uploadLocal.single('file'), async (req, res)=>{
+        console.log(req.body);
         const imgKey = await uploadImage(req);
         const {userId, title, body, tags} = req.body;
         await createForumPost(res, userId, title, body, imgKey, tags.split(','));

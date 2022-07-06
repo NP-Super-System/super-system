@@ -22,13 +22,12 @@ html, body{
 }
 
 /* ===== Scrollbar CSS ===== */
-/* Firefox */
+
 * {
   scrollbar-width: auto;
   scrollbar-color: #787878 #ffffff;
 }
 
-/* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 12px;
 }

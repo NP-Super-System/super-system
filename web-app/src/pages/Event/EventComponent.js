@@ -3,6 +3,7 @@ import { Card, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { BsCalendar4Event } from 'react-icons/bs';
+import dayjs from 'dayjs';
 
 import styles from './EventComponent.module.css';
 
@@ -36,14 +37,16 @@ const EventComponent = props => {
         }
             <div className={styles.panes}>
                 <div className={styles.left_pane}>
+                    <span>From:</span>
+                    <span className={styles.from_date}>{dayjs(startDt).format('D MMM YYYY')}</span>
+                    <span>To:</span>
+                    <span className={styles.to_date}>{dayjs(endDt).format('D MMM YYYY')}</span>
+                </div>
+                <div className={styles.right_pane}>
                     <Card.Title>{title}</Card.Title>
                     <div className={styles.desc}>
                         {parse(description)}
                     </div>
-                </div>
-                <div className={styles.right_pane}>
-                    <span>Start: {startDt.getDate()}/{startDt.getMonth()+1}/{startDt.getFullYear()}</span>
-                    <span>End: {endDt.getDate()}/{endDt.getMonth()+1}/{endDt.getFullYear()}</span>
                 </div>
             </div>
             <Link to={`/event/${_id}`} style={{textDecoration: 'none', color: 'black', width: '100%'}}>

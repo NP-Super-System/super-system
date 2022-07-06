@@ -30,14 +30,14 @@ const ChallengeList = props => {
             rating = 0;
         }
 
-        const items = []
+        const items = [];
 
         for (var i = 0; i < rating; i++) {
-            items.push(<BsStarFill key={`${i}`} />)
+            items.push(<BsStarFill key={`${i}`} />);
         }
 
         for (var j = i; j < 5 - rating + i; j++) {
-            items.push(<BsStar key={`${j}`} />)
+            items.push(<BsStar key={`${j}`} />);
         }
 
         return items;
@@ -76,7 +76,7 @@ const ChallengeList = props => {
             if (result.isConfirmed) {
                 Swal.fire(
                     'Deleted!',
-                    'Your announcement has been deleted.',
+                    'Your challenge has been deleted.',
                     'success'
                 )
                 deleteChallenge(userId, itemId);
@@ -124,7 +124,7 @@ const ChallengeList = props => {
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.header_add_top}`}>
+            <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter} />
                 <Link to='/challenges/create'>
                     <Button

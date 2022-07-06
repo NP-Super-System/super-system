@@ -17,7 +17,6 @@ const operations = app => {
             }));
 
             const result = await user.save();
-            console.log(user.calendarEvents, result);
             res.send(result);
         }
         catch(err){

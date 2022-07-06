@@ -1,5 +1,5 @@
 .header{
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 10;
 
@@ -7,13 +7,14 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     margin-bottom: 0.5em;
     padding: 0.5em;
     background-color: rgb(33, 37, 41);
 }
-.header_add_top{
-    top: 56px;
+.header.add_top{
+    top: 56px !important;
 }
 
 .filter{
@@ -53,7 +54,7 @@
 
     margin: auto;
     width: 100%;
-    padding: 0;
+    padding: 56px;
 }
 
 .post_list{

@@ -55,6 +55,10 @@ const ForumCreate = props=>{
         formData.append('tags', tags);
         formData.append('file', selectedImage);
 
+        for (var pair of formData){
+            console.log(pair);
+        }
+
         const url = 'http://localhost:5000/forum/create';
         const options = {
             method: 'POST',

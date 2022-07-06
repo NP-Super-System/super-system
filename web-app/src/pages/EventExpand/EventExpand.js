@@ -4,6 +4,7 @@ import { Card, Image, Button } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import parse from 'html-react-parser';
 import { BsCalendar4Event } from 'react-icons/bs';
+import dayjs from 'dayjs';
 
 import styles from './EventExpand.module.css';
 
@@ -35,13 +36,6 @@ const EventExpand = props => {
             });
     }, []);
 
-    const showTime = date => {
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const output = `${hours.toString().length < 2 ? '0' : ''}${hours % 13 + (hours > 12 ? 1 : 0)}:${minutes.toString().length < 2 ? '0' : ''}${minutes} ${hours > 12 ? 'pm' : 'am'}`;
-        return output;
-    }
-
     return (
         <PageContainer>
             <div className={styles.wrapper}>
@@ -66,13 +60,13 @@ const EventExpand = props => {
                         <>
                             <div className={styles.from}>
                                 <span>From:</span>
-                                <span>{eventData.startDatetime.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span>
-                                <span>{showTime(eventData.startDatetime)}</span>
+                                <span className={styles.date}>{dayjs(eventData.startDatetime).format('MMM D, YYYY | dddd')}</span>
+                                <span className={styles.time}>{dayjs(eventData.startDatetime).format('h:mm a')}</span>
                             </div>
                             <div className={styles.to}>
                                 <span>To:</span>
-                                <span>{eventData.endDatetime.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span>
-                                <span>{showTime(eventData.endDatetime)}</span>
+                                <span className={styles.date}>{dayjs(eventData.endDatetime).format('MMM D, YYYY | dddd')}</span>
+                                <span className={styles.time}>{dayjs(eventData.endDatetime).format('h:mm a')}</span>
                             </div>
                         </>
                     }

@@ -6,7 +6,7 @@
     margin-bottom: 10px;
 }
 
-label {
+.label {
     margin: auto;
     width: 20%;
 }
@@ -22,7 +22,12 @@ label {
 }
 
 .challenge {
-    position: relative;
+    /* position: relative;
     top: 50%;    
-    transform: translateY(+50%);
+    transform: translateY(+50%); */
+}
+
+.img{
+    max-height: 450px;
+    height: 100%;
 }

@@ -1,5 +1,5 @@
 .header{
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 10;
 
@@ -7,12 +7,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     margin-bottom: 0.5em;
     padding: 0.5em;
     background-color: rgb(33, 37, 41);
 }
-.header_add_top{
+.header.add_top{
     top: 56px;
 }
 
@@ -24,7 +25,7 @@
 }
 
 .wrapper{
-    padding: 1em;
+    padding: 56px 1em 1em 1em;
 }
 
 .challenge{

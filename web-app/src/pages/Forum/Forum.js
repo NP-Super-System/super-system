@@ -55,7 +55,7 @@ const Forum = props=>{
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.header_add_top}`}>
+            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.add_top}`}>
                 <form className={styles.filter} onSubmit={handleSearch}>
                     <input 
                         type='text' 
@@ -79,7 +79,7 @@ const Forum = props=>{
                     </Button>
                 </Link>
             </header>
-            <div className={styles.wrapper}>
+            <div className={`${styles.wrapper} ${screenType !== 'show-sidebar' && styles.add_top}`}>
                 <Col className={screenType === 'phone' || styles.post_list}>
                 {
                     visiblePosts.map( (post, i) => 

@@ -12,8 +12,9 @@ const questionSchema = new Schema({
     points: { type: Number, required: true, },
 
     text: { type: String, required: true, },
+    imgKey: String,
 
-    options: [OptionSchema]
+    options: [OptionSchema],
 
 });
 

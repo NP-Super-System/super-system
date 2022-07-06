@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Image } from 'react-bootstrap';
 import styles from './Challenge.module.css';
 
 import PageContainer from '../../layout/PageContainer';
@@ -212,6 +212,12 @@ const Challenge = props => {
 									<div>
 										<span>Challenge {currentQuestion + 1}</span>/{challenge.length}
 									</div>
+								{
+									challenge[currentQuestion].imgKey &&
+									<Image
+										className={styles.img}
+										src={`http://localhost:5000/s3/image/?key=${challenge[currentQuestion].imgKey}`}/>
+								}
 									<div>{challenge[currentQuestion].text}</div>
 									<div className={styles.answersection}>
 										{
@@ -219,7 +225,7 @@ const Challenge = props => {
 												challenge[currentQuestion].options.map((answerOption, i) => (
 													<div key={i + currentQuestion * 10} className={styles.button}>
 														<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
-														<label className="btn btn-outline-primary" htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
+														<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
 													</div>
 												))
 												: challenge[currentQuestion].isImageUpload ?
@@ -228,12 +234,12 @@ const Challenge = props => {
 												challenge[currentQuestion].options.map((answerOption, i) => (
 													<div key={i + currentQuestion * 10} className={styles.button}>
 														<input type="radio" className="btn-check" name="options" id={answerOption._id} />
-														<label className="btn btn-outline-primary" htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
+														<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
 													</div>
 												))
 										}
 									</div>
-									<label className="btn btn-outline-success" onClick={() => handleAnswerOptionClick()}>Next</label>
+									<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
 								</div>
 							}
 						</>

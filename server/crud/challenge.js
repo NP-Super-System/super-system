@@ -1,3 +1,8 @@
+const fs = require('fs');
+const multer = require('multer');
+const uploadLocal = multer({dest: __dirname + '/../uploads/'});
+const { uploadFile, getFileStream, deleteFile } = require('../s3');
+
 const Challenge = require('../models/challenge/Challenge');
 const Question = require('../models/challenge/Question');
 const Option = require('../models/challenge/Option');
@@ -10,8 +15,36 @@ const appUrl = 'http://localhost:3000';
 
 const operations = app => {
 
+    // Upload Images
+    const uploadImages = async req => {
+        let imgKeyList = [];
+        console.log(req.files);
+        for (var img of req.files){
+            let imgKey = '';
+
+            try{
+                const uploadFileRes = await uploadFile(img, 'image');
+                console.log(uploadFileRes);
+                imgKey = uploadFileRes.key || '';
+        
+                //Remove file from server
+                fs.unlinkSync(__dirname + `/../uploads/${imgKey}`);
+            }
+            catch(err){
+                console.log('Image does not exist or upload to s3 failed');
+            }
+            finally{
+                imgKey = imgKey || '';
+            }
+    
+            imgKeyList.push(imgKey);
+        }
+        console.log(imgKeyList);
+        return imgKeyList;
+    }
+
     // Create challenge
-    const createChallenge = async (res, userId, title, points, rating, numberOfRatings, content) => {
+    const createChallenge = async (res, userId, title, points, rating, numberOfRatings, content, imgKeyObj) => {
         const questionList = [];
         for (var i = 0; i < content.length; i++) {
             const optionsList = [];
@@ -28,6 +61,7 @@ const operations = app => {
                 isImageUpload: content[i].isImageUpload,
                 points: content[i].points,
                 options: optionsList,
+                imgKey: imgKeyObj[i.toString()] || '',
             })
             questionList.push(newQuestion);
         }
@@ -47,15 +81,22 @@ const operations = app => {
         newChallenge.save()
             .then(result => {
                 console.log('Created new challenge. Redirect');
-                // res.redirect(200, `${appUrl}/challenge`);
                 res.send(result);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(`Error: ${err}`));
+        res.send('debug');
     }
 
-    app.post('/challenge/create', async (req, res) => {
-        const { userId, title, points, rating, numberOfRatings, content } = req.body;
-        await createChallenge(res, userId, title, points, rating, numberOfRatings, content);
+    app.post('/challenge/create', uploadLocal.any('imgList'), async (req, res) => {
+        const { userId, title, points, rating, numberOfRatings, content, imgIndexList } = req.body;
+        // console.log(req.body);
+        const imgKeyList = await uploadImages(req);
+        let imgKeyObj = {}
+        for (var index in imgKeyList){
+            imgKeyObj[imgIndexList[index]] = imgKeyList[index];
+        }
+        console.log(imgKeyObj);
+        await createChallenge(res, userId, title, points, rating, numberOfRatings, JSON.parse(content), imgKeyObj);
     });
 
     // Read challenges
@@ -110,11 +151,24 @@ const operations = app => {
     });
 
     // Delete challenge
+    const deleteImagesFromS3 = async (itemId) => {
+        try{
+            const forumPost = await Challenge.findOne({_id: itemId});
+            for(var question of forumPost.questions){
+                const { imgKey } = question;
+                imgKey && await deleteFile(imgKey, 'image');
+                console.log(`Deleted challenge img: ${imgKey}`);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     const deleteChallenge = async (res, userId, itemId) => {
         Challenge
         .deleteOne({_id: itemId})
         .then(result => {
-            console.log('Successfully deleted announcement!');
+            console.log('Successfully deleted challenge!');
             res.send();
         })
         .catch(err => console.log(err));
@@ -122,6 +176,7 @@ const operations = app => {
 
     app.post('/challenge/delete', async (req, res) => {
         const { userId, itemId } = req.body;
+        await deleteImagesFromS3(itemId);
         await deleteChallenge(res, userId, itemId);
     })
 }

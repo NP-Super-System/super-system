@@ -33,7 +33,7 @@
 
 .panes{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 3fr;
 
     width: 100%;
 }
@@ -41,31 +41,43 @@
 .wrapper .left_pane{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-}
-.wrapper .left_pane .title{
-    
-}
-.wrapper .left_pane .desc{
-    display: flex;
-    flex-wrap: wrap;
 
-    max-height: 200px;
-    overflow-y: auto;
+    padding: 0.5em 1em 1em 1em;
 }
-.wrapper .left_pane .desc > *{
-    /* overflow-wrap: break-word; */
-    word-break: break-all;
+.wrapper .left_pane .from_date{
+    font-weight: 600;
+}
+.wrapper .left_pane .to_date{
+    font-weight: 600;
 }
 
 .wrapper .right_pane{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
+    padding: 0.5em 1em;
+}
+.wrapper .right_pane .title{
+    
+}
+.wrapper .right_pane .desc{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+
+
+    max-height: 200px;
+    overflow-y: auto;
+}
+.wrapper .right_pane .desc > *{
+    /* overflow-wrap: break-word; */
+    word-break: break-all;
 }
 
+
 .wrapper .button{
-    float: right;
+    float: left;
 }

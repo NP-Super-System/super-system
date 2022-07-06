@@ -64,17 +64,31 @@
     flex-direction: column;
     padding-right: 1em;
 }
+
 .content .left_pane .from{
     display: flex;
     flex-direction: column;
     text-align: left;
     margin-bottom: 0.5em;
 }
+.content .left_pane .from .date{
+    font-weight: 600;
+}
+.content .left_pane .from .time{
+    font-weight: 600;
+}
 .content .left_pane .to{
     display: flex;
     flex-direction: column;
     text-align: left;
 }
+.content .left_pane .to .date{
+    font-weight: 600;
+}
+.content .left_pane .to .time{
+    font-weight: 600;
+}
+
 .content .left_pane .register_btn{
     margin-top: 1em;
     margin-bottom: 2em;
