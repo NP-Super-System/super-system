@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Image, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { BsChatLeft, BsArrow90DegRight, BsLayers } from 'react-icons/bs';
+import { BsChatLeft, BsArrow90DegRight, BsLayers, BsFillFileEarmarkFill } from 'react-icons/bs';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
 
@@ -91,6 +91,16 @@ class Post extends React.Component{
                     style={{textDecoration: 'none', color: 'black'}}>
                     {this.props.imgKey && <Image src={`http://localhost:5000/s3/image/?key=${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
                 </Link>
+                
+                {
+                    this.props.files?.length > 0 &&
+                    <Link to={`/forum/${this.props.postId}`}  className={styles.file_content}>
+                        <div className={styles.icon}>
+                            <BsFillFileEarmarkFill />
+                        </div>
+                        <span className={styles.text}>{this.props.files.length} files included</span>
+                    </Link>
+                }
 
                 <div className={styles.actions}>
                     <LikePostWrapper

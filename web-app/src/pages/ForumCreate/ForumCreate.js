@@ -3,6 +3,7 @@ import { Form, Button, Image } from 'react-bootstrap';
 import { BsX } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FileIcon, defaultStyles } from 'react-file-icon';
 
 import styles from './ForumCreate.module.css';
 
@@ -24,17 +25,20 @@ const ForumCreate = props=>{
         setTags(tags.filter(tag => tag !== tagToDelete));
     }
 
-    const [selectedImage, setSelectedImage] = useState(undefined);
-    const [preview, setPreview] = useState(undefined);
-
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [preview, setPreview] = useState(null);
     const onImageChange = e=>{
         if(!e.target.files || e.target.files.length === 0) return;
 
         const file = e.target.files[0];
-
-        setSelectedImage(file); 
+        
+        setSelectedImage(file);
     }
-
+    const [imgInputKey, setImgInputKey] = useState('0');
+    const clearImage = e => {
+        setSelectedImage(null);
+        setImgInputKey(Math.random().toString(36));
+    }
     useEffect(()=>{
         if (!selectedImage) return;
 
@@ -45,6 +49,21 @@ const ForumCreate = props=>{
         return () => URL.revokeObjectURL(objectUrl);
     }, [selectedImage]);
 
+    const [fileList, setFileList] = useState([]);
+    const handleFileChange = e => {
+        if(!e.target.files || e.target.files.length === 0) return;
+
+        const newFileList = Object.values(e.target.files);
+        setFileList(newFileList);
+        console.log(newFileList);
+    }
+    const [fileInputKey, setFileInputKey] = useState('0');
+    const clearFileList = e => {
+        setFileList([]);
+        setFileInputKey(Math.random().toString(36));
+    }
+
+
     const handleSubmit = async e => {
         e.preventDefault();
 
@@ -53,7 +72,10 @@ const ForumCreate = props=>{
         formData.append('title', title);
         formData.append('body', body);
         formData.append('tags', tags);
-        formData.append('file', selectedImage);
+        for (var file of fileList){
+            formData.append('files[]', file);
+        }
+        formData.append('img', selectedImage);
 
         for (var pair of formData){
             console.log(pair);
@@ -97,13 +119,62 @@ const ForumCreate = props=>{
                 </Form.Group>
 
                 <Form.Group className={`mb-3`}>
+                    <Form.Label>Files</Form.Label>
+                    <div className={styles.files}>
+                    {
+                        fileList.map((file, i) => {
+                            const { name } = file;
+                            let line = name.split('.');
+                            const fileExt = line[line.length-1];
+
+                            return <div key={`${i}`} className={styles.file}>
+                                <div className={styles.fileicon}>
+                                    <FileIcon 
+                                        extension={fileExt}
+                                        {...defaultStyles[fileExt]}/>
+                                </div>
+                                <span className={styles.filename}>{name}</span>
+                            </div>
+                        })
+                    }
+                    </div>
+                    <div className={styles.file_input}>
+                        <Form.Control
+                            key={fileInputKey}
+                            type='file'
+                            size='sm'
+                            onChange={handleFileChange}
+                            multiple/>
+                    {
+                        fileList.length > 0 &&
+                        <Button
+                            variant='danger'
+                            onClick={clearFileList}>
+                            Cancel
+                        </Button>
+                    }
+                    </div>
+                </Form.Group>
+
+                <Form.Group className={`mb-3`}>
                     <Form.Label>Image</Form.Label>
-                    <Form.Control 
-                        name='file' 
-                        type='file' 
-                        accept='image/png, image/jpeg' 
-                        size='sm' 
-                        onChange={onImageChange}/>
+                    <div className={styles.img_input}>
+                        <Form.Control
+                            key={imgInputKey}
+                            name='img' 
+                            type='file' 
+                            accept='image/png, image/jpeg' 
+                            size='sm' 
+                            onChange={onImageChange}/>
+                    {
+                        selectedImage &&
+                        <Button
+                            variant='danger'
+                            onClick={clearImage}>
+                            Cancel
+                        </Button>
+                    }
+                    </div>
                     {selectedImage && <Image src={preview} className={styles.preview}/>}
                 </Form.Group>
 

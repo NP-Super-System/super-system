@@ -5,6 +5,8 @@ import { BsArrow90DegRight, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
+import { saveAs } from 'file-saver';
+import { FileIcon, defaultStyles } from 'react-file-icon';
 
 import styles from './ForumExpand.module.css';
 
@@ -42,6 +44,13 @@ const ForumExpand = props => {
     const [commentCount, setCommentCount] = useState(0);
 
     const [showCommentSubmit, setShowCommentSubmit] = useState(false);
+
+    const saveFile = (fileName, fileKey) => {
+        saveAs(
+            `http://localhost:5000/s3/file/${fileKey}`,
+            fileName,
+        );
+    }
 
     useEffect(()=>{
         // Get specific forum post from server
@@ -92,9 +101,9 @@ const ForumExpand = props => {
 
                     <div className={styles.tags}>
                     {
-                        postData.tags &&
+                        postData?.tags &&
 
-                        postData.tags.map( (tag, i) =>
+                        postData?.tags.map( (tag, i) =>
                             <div key={`${i}`} className={styles.tag}>
                                 <span>{tag}</span>
                             </div>
@@ -102,7 +111,7 @@ const ForumExpand = props => {
                     }
                     </div>
 
-                    <Card.Title className={styles.title}>{postData.title}</Card.Title>
+                    <Card.Title className={styles.title}>{postData?.title}</Card.Title>
                     <div className={styles.body}>{postData?.body && parse(postData.body)}</div>
                     {   
                         imageSrc &&
@@ -112,6 +121,30 @@ const ForumExpand = props => {
                             onClick={() => { window.open(imageSrc, 'post-image') }}
                             />
                     }
+                    <div className={styles.files}>
+                    {
+                        postData?.files &&
+                        postData.files.map( (file, i) => {
+                            const { name, key } = file;
+                            const list = name.split('.');
+                            const fileExt = list[list.length - 1];
+                            return <Button 
+                                key={`${i}`} 
+                                className={styles.file}
+                                variant='none'
+                                onClick={() => saveFile(name, key)}>
+
+                                <div className={styles.fileicon}>
+                                    <FileIcon 
+                                        extension={fileExt}
+                                        {...defaultStyles[fileExt]}/>
+                                </div>
+                                <span className={styles.filename}>{name}</span>
+                                
+                            </Button>
+                        })
+                    }
+                    </div>
 
                     <div className={styles.actions}>
                         <LikePostWrapper

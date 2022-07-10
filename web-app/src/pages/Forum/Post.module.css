@@ -56,7 +56,7 @@
 }
 
 .text_content{
-    padding: 1em;
+    padding: 1em 1em 0 1em;
 }
 .title{
     margin-bottom: 0.5em;
@@ -68,6 +68,30 @@
     width: 100%;
     align-self: center;
     cursor: pointer;
+
+    padding-top: 0.5em;
+}
+
+.file_content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 0.5em 1em 0 1em;
+    margin-bottom: 1em;
+    color: black;
+    text-decoration: none;
+}
+.file_content .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 0.5em;
+}
+.file_content .text{
+    font-size: 0.9em;
 }
 
 .actions{
