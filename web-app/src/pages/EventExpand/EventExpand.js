@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Image, Button } from 'react-bootstrap';
 import toast from 'react-hot-toast';
@@ -9,10 +9,12 @@ import dayjs from 'dayjs';
 import styles from './EventExpand.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 
 const EventExpand = props => {
 
     const { eventId } = useParams();
+    const { user } = useContext(GlobalContext);
 
     const [eventData, setEventData] = useState(null);
 
@@ -35,6 +37,32 @@ const EventExpand = props => {
                 console.log(err);
             });
     }, []);
+
+    const handleRegister = e => {
+        if(!user) return;
+        const url = 'http://localhost:5000/event/update/register';
+
+        console.log({ id: eventId, userId: user.id });
+        const options = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({ id: eventId, userId: user.id }),
+        }
+
+        fetch(url, options)
+            .then(async res => {
+                const data = JSON.parse(await res.text());
+                toast.success(data.msg);
+                console.log(data.msg);
+            })
+            .catch(err => {
+                toast.error('Error registering for event');
+                console.log(err);
+            });
+    }
 
     return (
         <PageContainer>
@@ -70,13 +98,16 @@ const EventExpand = props => {
                             </div>
                         </>
                     }
+                    {
+                        user?.id &&
                         <Button
                             type='submit'
                             variant='primary'
                             className={styles.register_btn}
-                            >
+                            onClick={handleRegister}>
                             Register
                         </Button>
+                    }
                     {
                         eventData?.user &&
                         <div className={styles.host}>

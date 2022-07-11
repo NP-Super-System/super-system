@@ -16,6 +16,10 @@ const eventSchema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: User, required: true},
     imgKey: String,
 
+    registeredUsers: [
+        { type: Schema.Types.ObjectId, ref: User }
+    ],
+
 }, { timestamps: true });
 
 // Create model for events collection

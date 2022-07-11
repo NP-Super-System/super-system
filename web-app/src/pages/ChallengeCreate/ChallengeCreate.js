@@ -127,21 +127,12 @@ const ChallengeCreate = props => {
         if (!e.target.files || e.target.files.length === 0) return;
         const img = e.target.files[0];
 
-        // let list = [...questionList];
-        // list[qindex].img = img;
-        // setQuestionList(list);
-        // console.log(list);
         let newImgList = [...imgList];
         newImgList[qindex] = img;
         setImgList(newImgList);
         console.log(newImgList);
     }
     const cancelImageUpload = (e, qindex) => {
-        // let list = [...questionList];
-        // list[qindex].img = null;
-        // list[qindex].fileInputKey = Math.random().toString(36);
-        // setQuestionList(list);
-        // console.log(list);
         let list = [...questionList];
         list[qindex].fileInputKey = Math.random().toString(36);
         setQuestionList(list);
