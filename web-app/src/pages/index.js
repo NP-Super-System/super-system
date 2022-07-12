@@ -30,6 +30,8 @@ export {default as Event} from  './Event';
 export {default as EventCreate} from './EventCreate';
 export {default as EventExpand} from './EventExpand';
 
+export {default as Rewards} from './Rewards';
+
 export {default as Game} from  './Game/Game';
 
 export {default as Unauthorized} from './Unauthorized/Unauthorized';

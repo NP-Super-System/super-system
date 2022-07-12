@@ -47,6 +47,8 @@ const operations = app => {
 
             user,
             imgKey,
+
+            registeredUsers: [],
         }
         const newEvent = new Event(eventDetails);
         try{
@@ -64,7 +66,6 @@ const operations = app => {
             .populate({
                 path: 'user',
             })
-            .exec((err, res) => res);
         return result;
     }
 
@@ -87,9 +88,28 @@ const operations = app => {
             });
     });
     // Update
-    app.post('/event/update', async (req, res) => {
-        const { id } = req.body;
-        const [myEvent] = await getEvents(id);
+    app.post('/event/update/register', async (req, res) => {
+        const { id, userId } = req.body;
+
+        console.log(req.body);
+        const [evt] = await getEvents(id);
+        if(!evt.registeredUsers){
+            await Event.updateOne( {_id: id}, {registeredUsers: []});
+        }
+
+        if(evt.registeredUsers.includes(userId)){
+            const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(uid => uid != userId)});
+            console.log(`Removed registered user ${userId} for event ${id}`);
+            res.send({msg: 'Unregistered from event'});
+            return;
+        }
+
+        const user = await User.findOne({_id: userId});
+        evt.registeredUsers.push(user);
+        
+        const result = await evt.save();
+        console.log(`Added registered user ${userId} for event ${id}`);
+        res.send({msg: 'Successfully registered for event'});
     });
 
     // Delete
