@@ -1,17 +1,17 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Form, Button } from 'react-bootstrap';
-import { BsArrow90DegRight, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
+import { BsShare, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
-import { saveAs } from 'file-saver';
-import { FileIcon, defaultStyles } from 'react-file-icon';
+import toast from 'react-hot-toast';
 
 import styles from './ForumExpand.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
+import File from './File';
 import LikePostWrapper from '../../components/LikePostWrapper/LikePostWrapper';
 import DislikePostWrapper from '../../components/DislikePostWrapper/DislikePostWrapper';
 import Comment from './Comment';
@@ -44,13 +44,6 @@ const ForumExpand = props => {
     const [commentCount, setCommentCount] = useState(0);
 
     const [showCommentSubmit, setShowCommentSubmit] = useState(false);
-
-    const saveFile = (fileName, fileKey) => {
-        saveAs(
-            `http://localhost:5000/s3/file/${fileKey}`,
-            fileName,
-        );
-    }
 
     useEffect(()=>{
         // Get specific forum post from server
@@ -128,20 +121,8 @@ const ForumExpand = props => {
                             const { name, key } = file;
                             const list = name.split('.');
                             const fileExt = list[list.length - 1];
-                            return <Button 
-                                key={`${i}`} 
-                                className={styles.file}
-                                variant='none'
-                                onClick={() => saveFile(name, key)}>
 
-                                <div className={styles.fileicon}>
-                                    <FileIcon 
-                                        extension={fileExt}
-                                        {...defaultStyles[fileExt]}/>
-                                </div>
-                                <span className={styles.filename}>{name}</span>
-                                
-                            </Button>
+                            return <File key={`${i}`} fileName={name} fileKey={key} fileExt={fileExt}/>
                         })
                     }
                     </div>
@@ -176,8 +157,14 @@ const ForumExpand = props => {
                                     className={styles.dislike_icon}/>
                             </Button>
                         </DislikePostWrapper>
-                        <Button variant='primary' className={styles.action_button}>
-                            <BsArrow90DegRight className={styles.action_icon}/>
+                        <Button 
+                            variant='primary' 
+                            className={styles.action_button}
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${window.location.href}/${postId}`)
+                                toast.success(`Copied post URL to clipboard`);
+                            }}>
+                            <BsShare className={styles.action_icon}/>
                             <span>Share</span>
                         </Button>
                         <Button variant='primary' className={styles.action_button}>

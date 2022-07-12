@@ -18,7 +18,7 @@ const EventExpand = props => {
 
     const [eventData, setEventData] = useState(null);
 
-    useEffect(()=>{
+    const fetchEventData = () => {
         fetch(`http://localhost:5000/event/read?id=${eventId}`)
             .then(res => res.json()
                 .then(data => {
@@ -36,7 +36,16 @@ const EventExpand = props => {
                 toast.error('Error retrieving event data');
                 console.log(err);
             });
+    }
+
+    useEffect(()=>{
+        fetchEventData();
     }, []);
+
+    useEffect(()=>{
+        console.log(eventData?.registeredUsers);
+        console.log(eventData?.registeredUsers.map(ru => ru._id).includes(user?.id))
+    }, [eventData]);
 
     const handleRegister = e => {
         if(!user) return;
@@ -57,6 +66,7 @@ const EventExpand = props => {
                 const data = JSON.parse(await res.text());
                 toast.success(data.msg);
                 console.log(data.msg);
+                fetchEventData();
             })
             .catch(err => {
                 toast.error('Error registering for event');
@@ -99,7 +109,18 @@ const EventExpand = props => {
                         </>
                     }
                     {
-                        user?.id &&
+                        eventData?.registeredUsers.map(ru => ru._id).includes(user?.id) ? 
+
+                        <Button
+                            type='submit'
+                            variant='secondary'
+                            className={styles.unregister_btn}
+                            onClick={handleRegister}>
+                            Unregister
+                        </Button>
+
+                        :
+
                         <Button
                             type='submit'
                             variant='primary'
@@ -121,7 +142,44 @@ const EventExpand = props => {
                         </div>
                     }
                     </section>
-                    <section className={styles.description}>{eventData?.description && parse(eventData.description)}</section>
+                    <section className={styles.right_pane}>
+                        <div className={styles.description}>
+                            {eventData?.description && parse(eventData.description)}
+                        </div>
+                        <hr></hr>
+                        <div className={styles.registered_users}>
+                        {
+                            eventData?.registeredUsers?.length > 0 ?
+
+                            <>
+                                <ul className={styles.icon_container} style={{width: `${Math.min(eventData.registeredUsers.length, 3) * 20}px`}}>
+                                {
+                                    eventData.registeredUsers.slice(0, 3).map( (ruser, i) => {
+                                        const { userName, userPicture } = ruser;
+                                        
+                                        return <li key={`${i}`} className={styles.icon_wrapper} style={{ left: `${i * 20}px`}}>
+                                            <Image
+                                                src={userPicture}
+                                                className={styles.icon}/>
+                                        </li>
+                                    })
+                                }
+                                </ul>
+                            {
+                                eventData.registeredUsers.length > 1 ?
+
+                                <span>{eventData.registeredUsers[0].userName} and {eventData.registeredUsers.length-1} others are attending</span>
+                                :
+                                <span>{eventData.registeredUsers.length} person is attending</span>
+                            }
+                            </>
+
+                            :
+
+                            <span className={styles.first_text}>Be the first to attend this event!</span>
+                        }
+                        </div>
+                    </section>
                 </div>
             </div>
         </PageContainer>

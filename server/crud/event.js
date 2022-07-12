@@ -56,36 +56,54 @@ const operations = app => {
             res.send(result);
         }
         catch(err){
-            res.staus(404).send(err);
+            res.status(404).send(err);
         }
     });
 
     // Read
     const getEvents = async id => {
         const result = await Event.find(id ? {_id: id} : {})
-            .populate({
-                path: 'user',
-            })
+            .populate({ path: 'user', })
+        return result;
+    }
+    const getEventsWithRegisteredUsers = async id => {
+        const result = await Event.find(id ? {_id: id} : {})
+            .populate({ path: 'user', })
+            .populate({ path: 'registeredUsers', });
         return result;
     }
 
     app.get('/event/read', async (req, res) => {
         const { id } = req.query;
-        Event.find(id ? {_id: id} : {})
-            .populate({
-                path: 'user',
-            })
-            .exec((err, result) => {
-                if(err){
-                    res.status(404).send(err);
-                    return;
-                }
-                console.log(result);
-                if(id){
-                    result = result[0];
-                }
-                res.status(200).send(result);
-            });
+        // Event.find(id ? {_id: id} : {})
+        //     .populate({
+        //         path: 'user',
+        //     })
+        //     .exec((err, result) => {
+        //         if(err){
+        //             res.status(404).send(err);
+        //             return;
+        //         }
+        //         console.log(result);
+        //         if(id){
+        //             result = result[0];
+        //         }
+        //         res.status(200).send(result);
+        //     });
+        try{
+            const result = await getEventsWithRegisteredUsers(id);
+
+            if(result.length <= 1){
+                res.send(result[0]);
+                console.log(result[0].registeredUsers);
+                return;
+            }
+            res.send(result);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
     });
     // Update
     app.post('/event/update/register', async (req, res) => {
@@ -98,7 +116,7 @@ const operations = app => {
         }
 
         if(evt.registeredUsers.includes(userId)){
-            const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(uid => uid != userId)});
+            const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(ui => ui != userId)});
             console.log(`Removed registered user ${userId} for event ${id}`);
             res.send({msg: 'Unregistered from event'});
             return;

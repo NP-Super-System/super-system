@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, Image, Button } from 'react-bootstrap';
+import { Card, Image, Button, } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { BsChatLeft, BsArrow90DegRight, BsLayers, BsFillFileEarmarkFill } from 'react-icons/bs';
+import { BsChatLeft, BsShare, BsLayers, BsFillFileEarmarkFill } from 'react-icons/bs';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
+import toast from 'react-hot-toast';
 
 import styles from './Post.module.css';
 
@@ -143,8 +144,15 @@ class Post extends React.Component{
                             <span>Comments ({this.commentCount})</span>
                         </Button>
                     </Link>
-                    <Button variant='primary' className={styles.action_button}>
-                        <BsArrow90DegRight className={styles.action_icon}/>
+                    <Button 
+                        variant='primary' 
+                        className={styles.action_button}
+                        onClick={() => {
+                            navigator.clipboard.writeText(`${window.location.href}/${this.props.postId}`)
+                            toast.success(`Copied post URL to clipboard`);
+                        }}>
+                        <BsShare 
+                            className={styles.action_icon}/>
                         <span>Share</span>
                     </Button>
                     <Button variant='primary' className={styles.action_button}>
