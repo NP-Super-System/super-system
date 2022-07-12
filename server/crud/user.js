@@ -97,9 +97,27 @@ const operations = app => {
     app.post('/roles/update/:userId', async (req, res) => {
         const { userRoles } = req.body;
         const userId = req.params.userId;
-        console.log(userId, userRoles);
         await updateUserRoles(res, userId, userRoles);
     });
+
+    const incrementUserPoints = async (res, userId, userCoins) => {
+        const user = await getUserById(userId);
+        user
+        .updateOne({coinCount: user.coinCount + userCoins})
+            .then(result => {
+                console.log('Updated user coins');
+                res.send();
+            })
+            .catch(err => console.log(err));
+    }
+
+    app.post('/increase/points/:userId', async (req, res) => {
+        const { points } = req.body;
+        const userId = req.params.userId;
+        console.log(userId, points);
+        await incrementUserPoints(res, userId, points);
+    });
+
     // Delete - delete user
 }
 

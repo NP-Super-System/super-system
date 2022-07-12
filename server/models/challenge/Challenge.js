@@ -17,6 +17,7 @@ const challengeSchema = new Schema({
     numberOfRatings: { type: Number, required: true, },
 
     questions: [QuestionSchema],
+    usersCompleted: [Schema.Types.ObjectId]
 
 }, { timestamps: true });
 

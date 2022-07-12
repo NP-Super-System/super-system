@@ -100,7 +100,7 @@ const Announcements = props => {
     }
 
     const isOwner = (index) => {
-        if (user.email === announcements[index].user.userEmail || userRoles.includes('Admin')) {
+        if (user.id === announcements[index].user._id || userRoles.includes('Admin')) {
             return true;
         }
         return false;

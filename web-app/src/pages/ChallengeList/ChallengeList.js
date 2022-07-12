@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useScreenType } from '../../hooks/useScreenType';
 import { IoAddSharp } from 'react-icons/io5';
-import { BsFillTrash2Fill, BsPencilFill } from 'react-icons/bs';
+import { BsFillTrash2Fill, BsPencilFill, BsFillFileEarmarkFontFill } from 'react-icons/bs';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
 import Swal from 'sweetalert2'
-import { useAuth0 } from '@auth0/auth0-react';
+import GlobalContext from '../../context/GlobalContext';
 
 import PageContainer from '../../layout/PageContainer';
 
 const ChallengeList = props => {
 
     const screenType = useScreenType();
-    const { user } = useAuth0();
+    const { user } = useContext(GlobalContext);
     const [userRoles, setUserRoles] = useState(false);
     const [challenges, setChallenges] = useState([]);
+    const [usersCompleted, setUsersCompleted] = useState([]);
 
     const getRating = (rate, ratings) => {
-        return Math.floor(rate / ratings);
+        if (rate === 0) {
+            return 0;
+        }
+        else {
+            return Math.floor(rate / ratings);
+        }
     }
 
     const rating = (rate, ratings) => {
@@ -55,8 +61,8 @@ const ChallengeList = props => {
                 res => res.json()
                     .then(data => {
                         // Set challenges
-                        console.log(data);
                         setChallenges(data);
+                        setUsersCompleted(data.usersCompleted);
                     })
                     .catch(err => console.log(err))
             )
@@ -116,7 +122,15 @@ const ChallengeList = props => {
     }
 
     const isOwner = (index) => {
-        if (user.email === challenges[index].user.userEmail || userRoles.includes('Admin')) {
+        if (user.id === challenges[index].user._id || userRoles.includes('Admin')) {
+            return true;
+        }
+        return false;
+    }
+
+    const isCompleted = (index) => {
+        console.log(challenges[index].usersCompleted)
+        if (challenges[index].usersCompleted.includes(user.id)) {
             return true;
         }
         return false;
@@ -154,28 +168,43 @@ const ChallengeList = props => {
                                     </Col>
                                 </Row>
                             </Link>
-                            {
-                                isOwner(i) ?
-                                    <div className={styles.buttons}>
-                                        <Link to={`/challenges/update/${item._id}`}>
+                            <div className={styles.buttons}>
+                                {
+                                    isCompleted(i) ?
+                                        <Link to={`/challenges/answers/${item._id}`}>
                                             <Button
                                                 variant='primary'
-                                                className={styles.edit_btn}>
-                                                <BsPencilFill
+                                                className={styles.answer_btn}>
+                                                <BsFillFileEarmarkFontFill
                                                     className={styles.icon} />
                                             </Button>
                                         </Link>
-                                        <Button
-                                            variant='primary'
-                                            onClick={e => deleteBtn(item.user.userId, item._id)}
-                                            className={styles.delete_btn}>
-                                            <BsFillTrash2Fill
-                                                className={styles.icon} />
-                                        </Button>
-                                    </div>
-                                    :
-                                    <span></span>
-                            }
+                                        :
+                                        <span></span>
+                                }
+                                {
+                                    isOwner(i) ?
+                                        <div>
+                                            <Link to={`/challenges/update/${item._id}`}>
+                                                <Button
+                                                    variant='primary'
+                                                    className={styles.edit_btn}>
+                                                    <BsPencilFill
+                                                        className={styles.icon} />
+                                                </Button>
+                                            </Link>
+                                            <Button
+                                                variant='primary'
+                                                onClick={e => deleteBtn(item.user.userId, item._id)}
+                                                className={styles.delete_btn}>
+                                                <BsFillTrash2Fill
+                                                    className={styles.icon} />
+                                            </Button>
+                                        </div>
+                                        :
+                                        <span></span>
+                                }
+                            </div>
                         </div>
                     )
                     )
