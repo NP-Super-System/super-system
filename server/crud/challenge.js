@@ -133,10 +133,9 @@ const operations = app => {
     })
 
     // Update challenge
-    const updateChallengeRating = async (res, rating, ratings, itemId) => {
-        Challenge
-        .findOne({_id: itemId})
-        .updateOne({rating: rating, numberOfRatings: ratings})
+    const updateChallengeRating = async (res, rating, itemId) => {
+        const challenge = await Challenge.findOne({_id: itemId});
+        challenge.updateOne({rating: challenge.rating + rating, numberOfRatings: challenge.numberOfRatings + 1})
             .then(result => {
                 console.log('Updated ratings');
                 res.send();
@@ -145,9 +144,18 @@ const operations = app => {
     }
 
     app.post('/challenge/rating/:challengeId', async (req, res) => {
-        const { newRating, ratings } = req.body;
+        const { rating } = req.body;
         const itemId = req.params.challengeId;
-        await updateChallengeRating(res, newRating, ratings, itemId);
+        await updateChallengeRating(res, rating, itemId);
+    });
+
+    app.post('/challenge/completed/:userId', async (req, res) => {
+        const userId = req.params.userId;
+        const { challengeId } = req.body;
+        console.log(userId, challengeId);        
+        const challenge = await Challenge.findOne({_id: challengeId});
+        challenge.usersCompleted.push(userId);
+        challenge.save();
     });
 
     // Delete challenge

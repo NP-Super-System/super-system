@@ -24,6 +24,7 @@ export {default as ChallengeList} from  './ChallengeList/ChallengeList';
 export {default as Challenge} from  './Challenge/Challenge';
 export {default as ChallengeCreate} from  './ChallengeCreate/ChallengeCreate';
 export {default as ChallengeUpdate} from  './ChallengeUpdate/ChallengeUpdate';
+export {default as ChallengeAnswers} from  './ChallengeAnswers/ChallengeAnswers';
 
 export {default as Event} from  './Event';
 export {default as EventCreate} from './EventCreate';

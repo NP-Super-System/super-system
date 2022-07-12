@@ -99,6 +99,22 @@
 .delete_btn:hover .icon{
     color: white;
 }
+
+.answer_btn{
+    background-color: transparent;
+    border: none;
+}
+.answer_btn:hover{
+    background-color: blue;
+}
+.answer_btn .icon{
+    color: blue;
+    font-size: 1.25em;
+}
+.answer_btn:hover .icon{
+    color: white;
+}
+
 .buttons {
     display: flex;
     justify-content: center;

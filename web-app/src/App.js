@@ -159,6 +159,7 @@ function App() {
 					<Route path='/challenges' element={<Pages.ChallengeList />} />
 					<Route path='/challenges/:challengeId' element={<Pages.Challenge />} />
 					<Route path='/challenges/update/:challengeId' element={<Pages.ChallengeUpdate />} />
+					<Route path='/challenges/answers/:challengeId' element={<Pages.ChallengeAnswers />} />
 					<Route path='/challenges/create' element={<Pages.ChallengeCreate />} />
 					<Route path='/event' element={<Pages.Event />} />
 					<Route path='/event/:eventId' element={<Pages.EventExpand />} />
