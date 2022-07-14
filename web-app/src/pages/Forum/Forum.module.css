@@ -1,50 +1,18 @@
-.header{
-    position: fixed;
-    top: 0;
-    z-index: 10;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    margin-bottom: 0.5em;
-    padding: 0.5em;
-    background-color: rgb(33, 37, 41);
-}
-.header.add_top{
-    top: 56px !important;
-}
-
-.filter{
+.action_btn{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 
-    margin-right: 1.5em;
+    padding: 0.2em 0.5em;
+    margin-left: 1em;
 }
-.filter .input{
-    margin-right: 0.5em;
-    padding: 0.25em 0.5em;
-    border-radius: 4px;
-    border: none;
+.action_btn.create_link{
+    padding-left: 0.2em;
 }
-.filter .button{
-    
-}
-
-.create_button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0.1em;
-}
-.create_button .icon{
-    width: 28px;
-    height: 28px;
+.action_btn.create_link .icon{
+    width: 25px;
+    height: 25px;
 }
 
 .wrapper{

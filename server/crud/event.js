@@ -4,6 +4,7 @@ const { uploadFile, getFileStream, deleteFile, deleteLocalFile } = require('../s
 
 const User = require('../models/user/User');
 const Event = require("../models/event/Event");
+const EventToUser = require('../models/event/EventToUser');
 
 // CRUD operations
 
@@ -30,13 +31,31 @@ const operations = app => {
         return imgKey;
     }
 
+    const initEventToUser = async userId => {
+        const eventToUser = await EventToUser.findOne({ user: userId });
+        const user = await getUser(userId);
+        if(!eventToUser){
+            const newEventToUser = new EventToUser({
+                user,
+                events: [],
+            });
+            const result = await newEventToUser.save();
+            console.log(result);
+            return result;
+        }
+
+        return eventToUser;
+    }
+
     app.post('/event/create', uploadLocal.single('file'), async (req, res) => {
         const {userId, title, description, startDatetime, endDatetime} = req.body;
 
         const user = await getUser(userId);
 
         const imgKey = req.file ? await uploadImage(req) : '';
-        deleteLocalFile(imgKey);
+        if(imgKey){
+            deleteLocalFile(imgKey);
+        }
 
         const eventDetails = {
             title,
@@ -51,12 +70,25 @@ const operations = app => {
             registeredUsers: [],
         }
         const newEvent = new Event(eventDetails);
+
         try{
             const result = await newEvent.save();
             res.send(result);
         }
         catch(err){
-            res.status(404).send(err);
+            res.send({err});
+        }
+
+        
+        try{
+            const eventToUser = await initEventToUser(userId);
+            console.log(eventToUser);
+            eventToUser.events.push(newEvent);
+            const result = await eventToUser.save();
+            console.log(`Saved event ${result._id} to user ${userId}`);
+        }
+        catch(err){
+            console.log(err);
         }
     });
 
@@ -67,38 +99,51 @@ const operations = app => {
         return result;
     }
     const getEventsWithRegisteredUsers = async id => {
-        const result = await Event.find(id ? {_id: id} : {})
-            .populate({ path: 'user', })
-            .populate({ path: 'registeredUsers', });
+        const result = await Event.find(id ? {_id: id} : {});
+        // console.log(result, result.length > 0);
+        if(result.length > 0){
+            const resultPopulated = 
+                await Event.find(id ? {_id: id} : {})
+                    .populate({ path: 'user', })
+                    .populate({ path: 'registeredUsers', });
+            return resultPopulated;
+        }
         return result;
     }
 
     app.get('/event/read', async (req, res) => {
         const { id } = req.query;
-        // Event.find(id ? {_id: id} : {})
-        //     .populate({
-        //         path: 'user',
-        //     })
-        //     .exec((err, result) => {
-        //         if(err){
-        //             res.status(404).send(err);
-        //             return;
-        //         }
-        //         console.log(result);
-        //         if(id){
-        //             result = result[0];
-        //         }
-        //         res.status(200).send(result);
-        //     });
+
         try{
             const result = await getEventsWithRegisteredUsers(id);
 
-            if(result.length <= 1){
+            if(!result){
+                res.send([]);
+                return;
+            }
+            if(id){
                 res.send(result[0]);
-                console.log(result[0].registeredUsers);
                 return;
             }
             res.send(result);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
+    });
+    app.get('/event/read/organised', async (req, res) => {
+        const { userId } = req.query;
+
+        try{
+            const eventToUser = await initEventToUser(userId);
+            if(!eventToUser){
+                res.send([]);
+                return;
+            }
+            const eventToUserPopulated = await EventToUser.findOne({userId})
+                .populate({ path: 'events', });
+            res.send(eventToUserPopulated);
         }
         catch(err){
             console.log(err);

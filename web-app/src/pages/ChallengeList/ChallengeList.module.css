@@ -24,6 +24,23 @@
     border: none;
 }
 
+.action_btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.2em 0.5em;
+    margin-left: 1em;
+}
+.action_btn.create_link{
+    padding-left: 0.2em;
+}
+.action_btn.create_link .icon{
+    width: 25px;
+    height: 25px;
+}
+
 .wrapper{
     padding: 56px 1em 1em 1em;
 }

@@ -3,20 +3,24 @@ import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { useScreenType } from '../../hooks/useScreenType';
-import { IoAddSharp } from 'react-icons/io5';
-import { BsFillTrash2Fill, BsPencilFill, BsFillFileEarmarkFontFill } from 'react-icons/bs';
+import { BsFillTrash2Fill, BsPencilFill, BsFillFileEarmarkFontFill, BsPlus } from 'react-icons/bs';
+import Swal from 'sweetalert2'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
-import Swal from 'sweetalert2'
-import GlobalContext from '../../context/GlobalContext';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
+import PageHeader from '../../components/PageHeader';
+import SearchBar from '../../components/SearchBar';
 
 const ChallengeList = props => {
 
     const screenType = useScreenType();
     const { user } = useContext(GlobalContext);
+
+    const [searchFilter, setSearchFilter] = useState('');
+
     const [userRoles, setUserRoles] = useState(false);
     const [challenges, setChallenges] = useState([]);
     const [usersCompleted, setUsersCompleted] = useState([]);
@@ -138,16 +142,29 @@ const ChallengeList = props => {
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.add_top}`}>
+            {/* <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.add_top}`}>
                 <input type='text' placeholder='Search filters' className={styles.filter} />
                 <Link to='/challenges/create'>
                     <Button
                         variant='primary'
-                        className={styles.create_button}>
-                        <IoAddSharp className={styles.create_icon} />
+                        className={`${styles.action_btn} ${styles.create_link}`}>
+                        <IoAddSharp className={styles.icon} />
                     </Button>
                 </Link>
-            </header>
+            </header> */}
+            <PageHeader
+                searchBarElement={
+                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} />
+                }
+                screenType={screenType}>
+                <Link to='/challenges/create'>
+                    <Button
+                        variant='primary'
+                        className={`${styles.action_btn} ${styles.create_link}`}>
+                        <BsPlus className={styles.icon} /> Challenge
+                    </Button>
+                </Link>
+            </PageHeader>
             <div className={styles.wrapper}>
                 {
                     challenges.sort((a, b) => getRating(a.rating, a.numberOfRatings) > getRating(b.rating, b.numberOfRatings) ? -1 : 1).map((item, i) =>
