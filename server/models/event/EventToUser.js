@@ -8,7 +8,12 @@ const Event = require('./Event');
 const eventToUserSchema = new Schema({
 
     user: { type: Schema.Types.ObjectId,  ref: User, required: true},
-    events: [
+
+    registeredEvents: [
+        { type: Schema.Types.ObjectId, ref: Event, required: true },
+    ],
+
+    organisedEvents: [
         { type: Schema.Types.ObjectId, ref: Event, required: true },
     ],
 

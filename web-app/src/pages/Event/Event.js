@@ -47,6 +47,13 @@ const Event = props=>{
                         View Organised Events
                     </Button>
                 </Link>
+                <Link to='/event/registered'>
+                    <Button
+                        className={`${styles.action_btn} ${styles.registered_link}`}
+                        variant='primary'>
+                        View Registered Events
+                    </Button>
+                </Link>
                 <Link to='/event/create'>
                     <Button
                         className={`${styles.action_btn} ${styles.create_link}`}

@@ -1,21 +1,78 @@
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
 
 .container{
-    display: inline-flex;
+    /* display: inline-flex;
+    align-items: center;
+    justify-content: center; */
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    width: 100%;
+    height: 100vh;
+}
+.container_phone{
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
     width: 100%;
-    max-width: 800px;
+    height: 100vh;
+
+    background-color: rgb(33, 37, 41);
+}
+
+.left_pane{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgb(33, 37, 41);
+    padding: 1em;
+
     height: 100vh;
 }
-
-.card{
-    padding: 1em;
+.left_pane .title{
+    font-family: 'Shadows Into Light', cursive;
+    color: white;
+    margin-bottom: 0.5em;
+}
+.left_pane .description{
+    color: white;
+    margin-bottom: 2em;
+}
+.left_pane .img{
+    max-height: 65%;
+}
+.left_pane .content{
+    color: white;
+}
+.left_pane .content .slogan{
+    font-style: italic;
 }
 
-.title{
-    font-family: 'Shadows Into Light', cursive;
-    font-size: 2.5em;
-    margin-bottom: 1em;
+.right_pane{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1em;
+
+    height: 100%;
+}
+.right_pane .content{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.right_pane .content .slogan{
+    font-size: 1.5em;
+    font-style: italic;
+}
+.right_pane .content .login_btn{
+    width: 100%;
 }

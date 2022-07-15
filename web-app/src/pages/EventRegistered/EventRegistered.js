@@ -2,27 +2,27 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Button, Image } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 
-import styles from './EventOrganiser.module.css';
+import styles from './EventRegistered.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
 import EventComponent from './EventComponent';
 
-const EventOrganiser = props => {
+const EventRegistered = props => {
 
     const { user } = useContext(GlobalContext);
 
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        const url = `http://localhost:5000/event/read/organised/?userId=${user.id}`;
+        const url = `http://localhost:5000/event/read/registered/?userId=${user.id}`;
 
         fetch(url)
             .then(res => {
                 res.json()
                     .then(data => {
-                        console.log(data.organisedEvents);
-                        setEvents(data.organisedEvents);
+                        console.log(data.registeredEvents);
+                        setEvents(data.registeredEvents);
                     })
                     .catch(err => {
                         console.log(err);
@@ -39,7 +39,7 @@ const EventOrganiser = props => {
         <PageContainer>
             <div className={styles.wrapper}>
                 
-                <span className={styles.title}>Organised Events</span>
+                <span className={styles.title}>Registered Events</span>
                 <div className={styles.events}>
                 {
                     events ?
@@ -55,4 +55,4 @@ const EventOrganiser = props => {
     )
 }
 
-export default EventOrganiser;
+export default EventRegistered;

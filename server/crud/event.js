@@ -37,7 +37,8 @@ const operations = app => {
         if(!eventToUser){
             const newEventToUser = new EventToUser({
                 user,
-                events: [],
+                registeredEvents: [],
+                organisedEvents: [],
             });
             const result = await newEventToUser.save();
             console.log(result);
@@ -83,9 +84,9 @@ const operations = app => {
         try{
             const eventToUser = await initEventToUser(userId);
             console.log(eventToUser);
-            eventToUser.events.push(newEvent);
+            eventToUser.organisedEvents.push(newEvent);
             const result = await eventToUser.save();
-            console.log(`Saved event ${result._id} to user ${userId}`);
+            console.log(`Saved organised event ${result._id} to user ${userId}`);
         }
         catch(err){
             console.log(err);
@@ -132,6 +133,24 @@ const operations = app => {
             res.send({err});
         }
     });
+    app.get('/event/read/registered', async (req, res) => {
+        const { userId } = req.query;
+
+        try{
+            const eventToUser = await initEventToUser(userId);
+            if(!eventToUser){
+                res.send([]);
+                return;
+            }
+            const eventToUserPopulated = await EventToUser.findOne({userId})
+                .populate({ path: 'registeredEvents', });
+            res.send(eventToUserPopulated);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
+    });
     app.get('/event/read/organised', async (req, res) => {
         const { userId } = req.query;
 
@@ -142,7 +161,7 @@ const operations = app => {
                 return;
             }
             const eventToUserPopulated = await EventToUser.findOne({userId})
-                .populate({ path: 'events', });
+                .populate({ path: 'organisedEvents', });
             res.send(eventToUserPopulated);
         }
         catch(err){
@@ -164,6 +183,18 @@ const operations = app => {
             const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(ui => ui != userId)});
             console.log(`Removed registered user ${userId} for event ${id}`);
             res.send({msg: 'Unregistered from event'});
+
+            // Remove registered event from event-to-user
+            try{
+                const eventToUser = await initEventToUser(userId);
+                console.log(eventToUser);
+                eventToUser.registeredEvents = eventToUser.registeredEvents.filter(evtId => evtId != id);
+                const result = await eventToUser.save();
+                console.log(`Removed registered event ${result._id} from user ${userId}`);
+            }
+            catch(err){
+                console.log(err);
+            }
             return;
         }
 
@@ -173,6 +204,18 @@ const operations = app => {
         const result = await evt.save();
         console.log(`Added registered user ${userId} for event ${id}`);
         res.send({msg: 'Successfully registered for event'});
+
+        // Add registered event to event-to-user
+        try{
+            const eventToUser = await initEventToUser(userId);
+            console.log(eventToUser);
+            eventToUser.registeredEvents.push(evt);
+            const result = await eventToUser.save();
+            console.log(`Saved registered event ${result._id} to user ${userId}`);
+        }
+        catch(err){
+            console.log(err);
+        }
     });
 
     // Delete

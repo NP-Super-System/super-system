@@ -165,6 +165,7 @@ function App() {
 					<Route path='/event/:eventId' element={<Pages.EventExpand />} />
 					<Route path='/event/create' element={<Pages.EventCreate />} />
 					<Route path='/event/organised' element={<Pages.EventOrganiser />} />
+					<Route path='/event/registered' element={<Pages.EventRegistered />} />
 					<Route path='/rewards' element={<Pages.Rewards />}/>
 					<Route path='/game' element={<Pages.Game />} />
 					<Route path='/unauthorized' element={<Pages.Unauthorized />} />

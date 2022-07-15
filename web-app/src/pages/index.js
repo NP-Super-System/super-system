@@ -30,6 +30,7 @@ export {default as Event} from  './Event';
 export {default as EventCreate} from './EventCreate';
 export {default as EventExpand} from './EventExpand';
 export {default as EventOrganiser} from './EventOrganiser';
+export {default as EventRegistered} from './EventRegistered';
 
 export {default as Rewards} from './Rewards';
 
