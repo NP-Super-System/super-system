@@ -8,6 +8,8 @@ const User = require('../models/user/User');
 const Course = require('../models/course/Course');
 const PostReply = require('../models/forum/PostReply');
 
+const { addPointsToUser } = require('./points'); 
+
 const appUrl = 'http://localhost:3000';
 
 // CRUD operations
@@ -72,9 +74,9 @@ const operations = app => {
     
             likedUsers: [],
             dislikedUsers: [],
+            likedPastUsers: [],
 
             tags,
-    
             comments: [],
         };
         console.log(post);
@@ -101,12 +103,16 @@ const operations = app => {
             // const imgKey = await uploadImage(req);
             const { imgKey } = await uploadFiles(req);
             console.log({imgKey});
-            const files = req.files['files[]'].map( (file, i)=>{
-                return {
-                    name: file.originalname,
-                    key: file.filename,
-                }
-            } );
+            const files =
+                req.files['files[]'] ?
+                req.files['files[]'].map( (file, i)=>{
+                    return {
+                        name: file.originalname,
+                        key: file.filename,
+                    }
+                } )
+                :
+                [];
             const {userId, title, body, tags} = req.body;
             await createForumPost(res, userId, title, body, files, imgKey, tags.split(','));
         }
@@ -171,6 +177,11 @@ const operations = app => {
             return;
         }
         element.likedUsers.push(userId);
+
+        if(element.likedPastUsers.includes(userId)) return;
+        element.likedPastUsers.push(userId);
+        console.log(`Add point to poster ${element.user}`);
+        addPointsToUser(element.user, 1);
     }
 
     const addDislikedUser = (element, userId) => {

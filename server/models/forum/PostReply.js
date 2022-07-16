@@ -13,6 +13,7 @@ const postReplySchema = new Schema({
 
     likedUsers: [String],
     dislikedUsers: [String],
+    likedPastUsers: [String],
     
 }, { timestamps: true, });
 

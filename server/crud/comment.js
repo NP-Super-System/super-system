@@ -3,6 +3,8 @@ const PostComment = require('../models/forum/PostComment');
 const PostReply = require('../models/forum/PostReply');
 const User = require('../models/user/User');
 
+const { addPointsToUser } = require('./points'); 
+
 const appUrl = 'http://localhost:3000';
 
 const operations = app => {
@@ -30,8 +32,11 @@ const operations = app => {
         const commentData = {
             user,
             text: commentText,
+
             likedUsers: [],
             dislikedUsers: [],
+            likedPastUsers: [],
+
             replies: [],
         }
         const comment = new PostComment(commentData);
@@ -60,8 +65,10 @@ const operations = app => {
         const replyData = {
             user,
             text: replyText,
+
             likedUsers: [],
             dislikedUsers: [],
+            likedPastUsers: [],
         }
         const reply = new PostReply(replyData);
         await reply.save();
@@ -83,6 +90,11 @@ const operations = app => {
             return;
         }
         element.likedUsers.push(userId);
+
+        if(element.likedPastUsers.includes(userId)) return;
+        element.likedPastUsers.push(userId);
+        console.log(`Add point to commenter ${element.user}`);
+        addPointsToUser(element.user, 1);
     }
 
     const addDislikedUser = (element, userId) => {

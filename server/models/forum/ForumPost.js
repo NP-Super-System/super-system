@@ -20,9 +20,9 @@ const forumPostSchema = new Schema({
 
     likedUsers: [String],
     dislikedUsers: [String],
+    likedPastUsers: [String],
 
     tags: [String],
-
     comments: [{type: Schema.Types.ObjectId, ref: PostComment}],
 
 }, { timestamps: true });

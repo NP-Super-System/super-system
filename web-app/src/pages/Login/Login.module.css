@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
 
 .container{
-    /* display: inline-flex;
-    align-items: center;
-    justify-content: center; */
-
     display: grid;
     grid-template-columns: 2fr 1fr;
 
