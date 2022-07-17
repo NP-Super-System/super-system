@@ -19,12 +19,18 @@
     margin-bottom: 20px;
 }
 
+.question .img_upload_text{
+    font-style: italic;
+}
+
 .options {
     display: flex;
 }
 
 .create_button{
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-left: auto;
     margin: 10px;
     border: none;

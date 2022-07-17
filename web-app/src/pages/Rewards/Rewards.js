@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useState, useEffect, useContext} from 'react';
 import PageContainer from '../../layout/PageContainer'
 import {FormControl} from "react-bootstrap"
@@ -44,3 +45,26 @@ useEffect(() => {
 }
 
 export default Rewards
+=======
+import React, { useState, useEffect, useContext } from 'react';
+
+import styles from './Rewards.module.css';
+
+import PageContainer from '../../layout/PageContainer';
+
+const Rewards = props => {
+    useEffect(()=>{
+
+    }, []);
+
+    return (
+        <PageContainer>
+            <div className='wrapper'>
+                Rewards Page
+            </div>
+        </PageContainer>
+    )
+}
+
+export default Rewards;
+>>>>>>> 2c85f90faaaedd6b7f1f98f2eab31f947896fdcb

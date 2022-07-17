@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Image, Button } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import parse from 'html-react-parser';
 import { BsCalendar4Event } from 'react-icons/bs';
+import dayjs from 'dayjs';
 
 import styles from './EventExpand.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 
 const EventExpand = props => {
 
     const { eventId } = useParams();
+    const { user } = useContext(GlobalContext);
 
     const [eventData, setEventData] = useState(null);
 
-    useEffect(()=>{
+    const fetchEventData = () => {
         fetch(`http://localhost:5000/event/read?id=${eventId}`)
             .then(res => res.json()
                 .then(data => {
@@ -33,13 +36,42 @@ const EventExpand = props => {
                 toast.error('Error retrieving event data');
                 console.log(err);
             });
+    }
+
+    useEffect(()=>{
+        fetchEventData();
     }, []);
 
-    const showTime = date => {
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const output = `${hours.toString().length < 2 ? '0' : ''}${hours % 13 + (hours > 12 ? 1 : 0)}:${minutes.toString().length < 2 ? '0' : ''}${minutes} ${hours > 12 ? 'pm' : 'am'}`;
-        return output;
+    useEffect(()=>{
+        console.log(eventData?.registeredUsers);
+        console.log(eventData?.registeredUsers.map(ru => ru._id).includes(user?.id))
+    }, [eventData]);
+
+    const handleRegister = e => {
+        if(!user) return;
+        const url = 'http://localhost:5000/event/update/register';
+
+        console.log({ id: eventId, userId: user.id });
+        const options = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({ id: eventId, userId: user.id }),
+        }
+
+        fetch(url, options)
+            .then(async res => {
+                const data = JSON.parse(await res.text());
+                toast.success(data.msg);
+                console.log(data.msg);
+                fetchEventData();
+            })
+            .catch(err => {
+                toast.error('Error registering for event');
+                console.log(err);
+            });
     }
 
     return (
@@ -66,23 +98,37 @@ const EventExpand = props => {
                         <>
                             <div className={styles.from}>
                                 <span>From:</span>
-                                <span>{eventData.startDatetime.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span>
-                                <span>{showTime(eventData.startDatetime)}</span>
+                                <span className={styles.date}>{dayjs(eventData.startDatetime).format('MMM D, YYYY | dddd')}</span>
+                                <span className={styles.time}>{dayjs(eventData.startDatetime).format('h:mm a')}</span>
                             </div>
                             <div className={styles.to}>
                                 <span>To:</span>
-                                <span>{eventData.endDatetime.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span>
-                                <span>{showTime(eventData.endDatetime)}</span>
+                                <span className={styles.date}>{dayjs(eventData.endDatetime).format('MMM D, YYYY | dddd')}</span>
+                                <span className={styles.time}>{dayjs(eventData.endDatetime).format('h:mm a')}</span>
                             </div>
                         </>
                     }
+                    {
+                        eventData?.registeredUsers.map(ru => ru._id).includes(user?.id) ? 
+
+                        <Button
+                            type='submit'
+                            variant='secondary'
+                            className={styles.unregister_btn}
+                            onClick={handleRegister}>
+                            Unregister
+                        </Button>
+
+                        :
+
                         <Button
                             type='submit'
                             variant='primary'
                             className={styles.register_btn}
-                            >
+                            onClick={handleRegister}>
                             Register
                         </Button>
+                    }
                     {
                         eventData?.user &&
                         <div className={styles.host}>
@@ -96,7 +142,44 @@ const EventExpand = props => {
                         </div>
                     }
                     </section>
-                    <section className={styles.description}>{eventData?.description && parse(eventData.description)}</section>
+                    <section className={styles.right_pane}>
+                        <div className={styles.description}>
+                            {eventData?.description && parse(eventData.description)}
+                        </div>
+                        <hr></hr>
+                        <div className={styles.registered_users}>
+                        {
+                            eventData?.registeredUsers?.length > 0 ?
+
+                            <>
+                                <ul className={styles.icon_container} style={{width: `${Math.min(eventData.registeredUsers.length, 3) * 20}px`}}>
+                                {
+                                    eventData.registeredUsers.slice(0, 3).map( (ruser, i) => {
+                                        const { userName, userPicture } = ruser;
+                                        
+                                        return <li key={`${i}`} className={styles.icon_wrapper} style={{ left: `${i * 20}px`}}>
+                                            <Image
+                                                src={userPicture}
+                                                className={styles.icon}/>
+                                        </li>
+                                    })
+                                }
+                                </ul>
+                            {
+                                eventData.registeredUsers.length > 1 ?
+
+                                <span>{eventData.registeredUsers[0].userName} and {eventData.registeredUsers.length-1} others are attending</span>
+                                :
+                                <span>{eventData.registeredUsers.length} person is attending</span>
+                            }
+                            </>
+
+                            :
+
+                            <span className={styles.first_text}>Be the first to attend this event!</span>
+                        }
+                        </div>
+                    </section>
                 </div>
             </div>
         </PageContainer>

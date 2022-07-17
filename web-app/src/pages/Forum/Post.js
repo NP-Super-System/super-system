@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, Image, Button } from 'react-bootstrap';
+import { Card, Image, Button, } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { BsChatLeft, BsArrow90DegRight, BsLayers } from 'react-icons/bs';
+import { BsChatLeft, BsShare, BsLayers, BsFillFileEarmarkFill } from 'react-icons/bs';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
+import toast from 'react-hot-toast';
 
 import styles from './Post.module.css';
 
@@ -73,8 +74,9 @@ class Post extends React.Component{
 
                 <div className={styles.tags}>
                     {
-                        this.props.tags.map( (tag, i) =>
-                            <div key={`${i}`} className={styles.tag}>
+                        this.props.tags &&
+                        this.props.tags.map( (tag, i) => 
+                            tag && <div key={`${i}`} className={styles.tag}>
                                 <span>{tag}</span>
                             </div>
                         )
@@ -91,6 +93,16 @@ class Post extends React.Component{
                     style={{textDecoration: 'none', color: 'black'}}>
                     {this.props.imgKey && <Image src={`http://localhost:5000/s3/image/?key=${this.props.imgKey}`} className={styles.image} loading='lazy'/>}
                 </Link>
+                
+                {
+                    this.props.files?.length > 0 &&
+                    <Link to={`/forum/${this.props.postId}`}  className={styles.file_content}>
+                        <div className={styles.icon}>
+                            <BsFillFileEarmarkFill />
+                        </div>
+                        <span className={styles.text}>{this.props.files.length} files included</span>
+                    </Link>
+                }
 
                 <div className={styles.actions}>
                     <LikePostWrapper
@@ -133,8 +145,15 @@ class Post extends React.Component{
                             <span>Comments ({this.commentCount})</span>
                         </Button>
                     </Link>
-                    <Button variant='primary' className={styles.action_button}>
-                        <BsArrow90DegRight className={styles.action_icon}/>
+                    <Button 
+                        variant='primary' 
+                        className={styles.action_button}
+                        onClick={() => {
+                            navigator.clipboard.writeText(`${window.location.href}/${this.props.postId}`)
+                            toast.success(`Copied post URL to clipboard`);
+                        }}>
+                        <BsShare 
+                            className={styles.action_icon}/>
                         <span>Share</span>
                     </Button>
                     <Button variant='primary' className={styles.action_button}>

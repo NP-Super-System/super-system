@@ -1,0 +1,28 @@
+.header{
+    position: fixed;
+    top: 0;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: flex-start; */
+    justify-content: space-between;
+    width: 100%;
+
+    margin-bottom: 0.5em;
+    padding: 0.5em calc(200px + 1em) 0.5em 1em;
+    background-color: rgb(33, 37, 41);
+}
+.header.add_top{
+    top: 56px;
+}
+
+.header .searchbar{
+
+}
+
+.header .actions{
+    display: flex;
+    flex-direction: row;
+}

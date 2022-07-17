@@ -14,6 +14,7 @@ const postCommentSchema = new Schema({
 
     likedUsers: [String],
     dislikedUsers: [String],
+    likedPastUsers: [String],
 
     replies: [{type: Schema.Types.ObjectId, ref: PostReply}],
 

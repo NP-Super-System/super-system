@@ -58,6 +58,44 @@
     margin-bottom: 1em;
 }
 
+.files{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    margin-bottom: 1.5em;
+    overflow-x: auto;
+}
+.files > .file{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: calc(800px / 3);
+    overflow-x: auto;
+}
+.files > .file:hover{
+    background-color: rgb(175, 175, 175);
+}
+.files > .file .fileicon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 30px;
+    height: 100%;
+    max-height: 30px;
+
+    margin-right: 1em;
+}
+.files > .file .filename{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .actions{
     display: flex;
     flex-direction: row;

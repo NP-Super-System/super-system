@@ -1,5 +1,5 @@
 .header{
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 10;
 
@@ -7,12 +7,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     margin-bottom: 0.5em;
     padding: 0.5em;
     background-color: rgb(33, 37, 41);
 }
-.header_add_top{
+.header.add_top{
     top: 56px;
 }
 
@@ -23,8 +24,25 @@
     border: none;
 }
 
+.action_btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.2em 0.5em;
+    margin-left: 1em;
+}
+.action_btn.create_link{
+    padding-left: 0.2em;
+}
+.action_btn.create_link .icon{
+    width: 25px;
+    height: 25px;
+}
+
 .wrapper{
-    padding: 1em;
+    padding: 56px 1em 1em 1em;
 }
 
 .challenge{
@@ -67,38 +85,46 @@
     height: 28px;
 }
 
-.edit_btn{
-    background-color: transparent;
-    align-items: right;
-    border: none;
-    margin-right: 5px;
-}
-.edit_btn:hover{
-    background-color: greenyellow;
-}
-.edit_btn .icon{
-    color: greenyellow;
-    font-size: 1.25em;
-}
-.edit_btn:hover .icon{
-    color: white;
-}
+.answer_link .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-.delete_btn{
-    background-color: transparent;
-    border: none;
+    margin-right: 0.5em;
 }
-.delete_btn:hover{
-    background-color: red;
+.answer_link .button .icon{
+    margin-right: 0.5em;
+}
+.edit_link .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 0.5em;
+}
+.edit_link .button .icon{
+    margin-right: 0.5em;
+}
+.delete_btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 0.5em;
 }
 .delete_btn .icon{
-    color: red;
-    font-size: 1.25em;
+    margin-right: 0.5em;
 }
-.delete_btn:hover .icon{
-    color: white;
-}
+
+
 .buttons {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-top: 1em;
 }

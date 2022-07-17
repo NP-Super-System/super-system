@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Button, Image } from 'react-bootstrap';
+import { BsSearch, BsPlus } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 import parse from 'html-react-parser';
 
@@ -8,6 +9,8 @@ import styles from './Event.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import EventComponent from './EventComponent';
+import PageHeader from '../../components/PageHeader';
+import SearchBar from '../../components/SearchBar';
 import { useScreenType } from '../../hooks/useScreenType';
 
 const Event = props=>{
@@ -32,35 +35,38 @@ const Event = props=>{
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.add_top}`}>
-                <div className={styles.filter}>
-                    <input
-                        className={styles.input} 
-                        type='text'
-                        placeholder='Search'
-                        value={searchFilter}
-                        onChange={e => setSearchFilter(e.target.value)}/>
+            <PageHeader
+                searchBarElement={
+                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} />
+                }
+                screenType={screenType}>
+                <Link to='/event/organised'>
                     <Button
-                        variant='primary'
-                        type='submit'
-                        className={styles.button}
-                        >
-                        <span>Search</span>
-                    </Button>
-                </div>
-                <Link to='/event/create'>
-                    <Button
-                        className={styles.create_link}
+                        className={`${styles.action_btn} ${styles.organised_link}`}
                         variant='primary'>
-                        Create
+                        View Organised Events
                     </Button>
                 </Link>
-            </header>
+                <Link to='/event/registered'>
+                    <Button
+                        className={`${styles.action_btn} ${styles.registered_link}`}
+                        variant='primary'>
+                        View Registered Events
+                    </Button>
+                </Link>
+                <Link to='/event/create'>
+                    <Button
+                        className={`${styles.action_btn} ${styles.create_link}`}
+                        variant='primary'>
+                        <BsPlus className={styles.icon}/> Event
+                    </Button>
+                </Link>
+            </PageHeader>
             <div className={styles.events}>
             {   
                 events &&
-                events.map( (event, i) =>
-                    <EventComponent key={`${i}`} {...event}/>
+                events.map( (evt, i) =>
+                    <EventComponent key={`${i}`} {...evt}/>
                 )
             }
             </div>

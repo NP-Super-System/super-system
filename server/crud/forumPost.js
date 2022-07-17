@@ -8,6 +8,8 @@ const User = require('../models/user/User');
 const Course = require('../models/course/Course');
 const PostReply = require('../models/forum/PostReply');
 
+const { addPointsToUser } = require('./points'); 
+
 const appUrl = 'http://localhost:3000';
 
 // CRUD operations
@@ -21,40 +23,60 @@ const operations = app => {
     }
 
     // Create - add forum post
-    const uploadImage = async req => {
+
+    const uploadFiles = async req => {
+        let fileKeyList = [];
+        if(req.files['files[]']){
+            const {'files[]': files} = req.files;
+
+            for (var file of files){
+                let fileKey = '';
+                try{
+                    const uploadFileRes = await uploadFile(file, 'file');
+                    console.log(uploadFileRes);
+                    fileKey = uploadFileRes.key || '';
+                }
+                catch(err){
+                    console.log(err);
+                }
+                fileKeyList.push(fileKey);
+            }
+        }
+        
         let imgKey = '';
-        try{
-            const uploadFileRes = await uploadFile(req.file, 'image');
-            console.log(uploadFileRes);
-            imgKey = uploadFileRes.key || '';
-    
-            //Remove file from server
-            fs.unlinkSync(__dirname + `/../uploads/${imgKey}`);
-        }
-        catch(err){
-            console.log('Image does not exist or upload to s3 failed');
-        }
-        finally{
-            imgKey = imgKey || '';
+        if(req.files.img){
+            let img = req.files.img[0];
+
+            try{
+                const uploadImgRes = await uploadFile(img, 'image');
+                console.log(uploadImgRes);
+                imgKey = uploadImgRes.key || '';
+            }
+            catch(err){
+                console.log(err);
+            }
         }
 
-        return imgKey;
+        return { fileKeyList, imgKey };
     }
 
-    const createForumPost = async (res, userId, title, body, imgKey, tags) => {
+
+    const createForumPost = async (res, userId, title, body, files, imgKey, tags) => {
         const user = await getUser(userId);
         const post = {
             user,
     
             title, 
             body, 
+
+            files,
             imgKey,
     
             likedUsers: [],
             dislikedUsers: [],
+            likedPastUsers: [],
 
             tags,
-    
             comments: [],
         };
         console.log(post);
@@ -67,13 +89,34 @@ const operations = app => {
                 res.send(result);
             })
             .catch(err => console.log(err));
+        // res.send('debug');
     }
 
-    app.post('/forum/create', uploadLocal.single('file'), async (req, res)=>{
-        const imgKey = await uploadImage(req);
-        const {userId, title, body, tags} = req.body;
-        await createForumPost(res, userId, title, body, imgKey, tags.split(','));
-    });
+    app.post(
+        '/forum/create', 
+        uploadLocal.fields([
+            { name: 'files[]', maxCount: 4, },
+            { name: 'img', maxCount: 1, },
+        ]), 
+        async (req, res)=>{
+            console.log(req.body);
+            // const imgKey = await uploadImage(req);
+            const { imgKey } = await uploadFiles(req);
+            console.log({imgKey});
+            const files =
+                req.files['files[]'] ?
+                req.files['files[]'].map( (file, i)=>{
+                    return {
+                        name: file.originalname,
+                        key: file.filename,
+                    }
+                } )
+                :
+                [];
+            const {userId, title, body, tags} = req.body;
+            await createForumPost(res, userId, title, body, files, imgKey, tags.split(','));
+        }
+    );
 
     // Read - get forum posts
 
@@ -134,6 +177,11 @@ const operations = app => {
             return;
         }
         element.likedUsers.push(userId);
+
+        if(element.likedPastUsers.includes(userId)) return;
+        element.likedPastUsers.push(userId);
+        console.log(`Add point to poster ${element.user}`);
+        addPointsToUser(element.user, 1);
     }
 
     const addDislikedUser = (element, userId) => {

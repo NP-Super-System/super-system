@@ -11,13 +11,18 @@ const forumPostSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: User, required: true},
     title: { type: String, required: true, },
     body: String,
+
+    files: [{
+        name: String,
+        key: String,
+    }],
     imgKey: String,
 
     likedUsers: [String],
     dislikedUsers: [String],
+    likedPastUsers: [String],
 
     tags: [String],
-
     comments: [{type: Schema.Types.ObjectId, ref: PostComment}],
 
 }, { timestamps: true });

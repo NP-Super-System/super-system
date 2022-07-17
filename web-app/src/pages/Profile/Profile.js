@@ -55,8 +55,8 @@ const Profile = props=>{
                             })}/>
                     </div>
                     <div className={styles.coins}>
-                        <Image src='./media/coin.png'/>
-                        <span>{user.coinCount}</span>
+                        <Image src='./media/coin.png' className={styles.icon}/>
+                        <span className={styles.count}>{user.coinCount}</span>
                     </div>
                 </div>
                 <Card className={`${styles.card} ${styles.user_info}`}>

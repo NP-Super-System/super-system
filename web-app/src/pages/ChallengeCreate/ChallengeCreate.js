@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
@@ -17,15 +18,39 @@ const ChallengeCreate = props => {
 
     const { user } = useContext(GlobalContext);
 
+    const { challengeId } = useParams();
+
     const navigate = useNavigate();
     const goBack = () => navigate(-1);
 
     const [title, setTitle] = useState('');
     const [points, setPoints] = useState(0);
-    const [questionList, setQuestionList] = useState([{ text: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }]);
+    const [questionList, setQuestionList] = useState([]);
+    const [imgList, setImgList] = useState([]);
+
+    const getChallenge = () => {
+        // Get challenge from server
+        fetch(`http://localhost:5000/challenge/read/${challengeId}`)
+            .then(
+                res => res.json()
+                    .then(data => {
+                        // Set challenge
+                        console.log(data);
+                        setTitle(`${data.title} (updated)`);
+                        setPoints(data.pointCount);
+                        setQuestionList(data.questions);
+                    })
+                    .catch(err => console.log(err))
+            )
+            .catch(err => console.log(err));
+    }
 
     useEffect(() => {
-
+        if(challengeId){
+            getChallenge();
+            return;
+        }
+        questionList.length <= 0 && handleQuestionAdd();
     }, []);
 
     const backBtn = () => {
@@ -45,27 +70,35 @@ const ChallengeCreate = props => {
     }
 
     const handleQuestionAdd = e => {
-        setQuestionList([...questionList, { text: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }])
+        setQuestionList([...questionList, { text: '', fileInputKey: '0', points: 0, type: 'single-answer', options: [{ text: '', isCorrect: false }] }])
+        let newImgList = [...imgList, null];
+        setImgList(newImgList);
     }
 
     const handleQuestionChange = (e, index) => {
         const { name, value } = e.target;
-        const list = [...questionList];
+        let list = [...questionList];
         list[index].text = value;
         setQuestionList(list);
     }
 
     const handleQuestionTypeChange = (e, index) => {
         let newQuestionList = [...questionList];
-        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
-        newQuestionList[index].isImageUpload = e.target.value === 'I';
+        // newQuestionList[index].isMultipleAns = e.target.value === 'M';
+        // newQuestionList[index].isImageUpload = e.target.value === 'I';
+        newQuestionList[index].type = e.target.value;
         setQuestionList(newQuestionList);
+        console.log(newQuestionList);
     }
 
     const handleQuestionRemove = (index) => {
         const newQuestionList = [...questionList];
         newQuestionList.splice(index, 1);
         setQuestionList(newQuestionList);
+
+        let newImgList = [...imgList];
+        newImgList.splice(index, 1);
+        setImgList(newImgList);
     }
 
     const handleOptionAdd = (index) => {
@@ -94,7 +127,7 @@ const ChallengeCreate = props => {
         const newQuestionList = [...questionList];
         const option = newQuestionList[qindex].options[oindex];
 
-        if (newQuestionList[qindex].isMultipleAns) {
+        if (newQuestionList[qindex].type === 'multiple-answer') {
             option.isCorrect = !option.isCorrect;
         }
         else {
@@ -115,11 +148,31 @@ const ChallengeCreate = props => {
         setPoints(questionList.reduce((a, v) => a = a + v.points, 0));
     }
 
+    const handleImageChange = (e, qindex) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+        const img = e.target.files[0];
+
+        let newImgList = [...imgList];
+        newImgList[qindex] = img;
+        setImgList(newImgList);
+        console.log(newImgList);
+    }
+    const cancelImageUpload = (e, qindex) => {
+        let list = [...questionList];
+        list[qindex].fileInputKey = Math.random().toString(36);
+        setQuestionList(list);
+        let newImgList = [...imgList];
+        newImgList[qindex] = null;
+        setImgList(newImgList);
+        console.log(newImgList);
+    }
+
     const onSubmit = async e => {
+        e.preventDefault();
         for (var i = 0; i < questionList.length; i++) {
             var hasAnswer = false;
             for (var j = 0; j < questionList[i].options.length; j++) {
-                if (questionList[i].options[j].isCorrect || questionList[i].isImageUpload) {
+                if (questionList[i].options[j].isCorrect || questionList[i].type === 'image-upload') {
                     hasAnswer = true;
                 }
             }
@@ -132,27 +185,45 @@ const ChallengeCreate = props => {
                 return;
             }
         }
-        e.preventDefault();
-        createChallenge(user.id, title, points, questionList);
+        if(challengeId){
+            updateChallenge(user.id, title, points, questionList);
+        }
+        else{
+            createChallenge(user.id, title, points, questionList);
+        }
     }
 
-    const createChallenge = (userId, title, points, content) => {
-        const rating = 0 , numberOfRatings = 0;
+    const createChallenge = async (userId, title, points, content) => {
+
+        let formData = new FormData();
+        formData.append('userId', userId);
+        formData.append('title', title);
+        formData.append('points', points);
+        formData.append('rating', 0);
+        formData.append('numberOfRatings', 0);
+        formData.append('content', JSON.stringify(content));
+        for (var index in imgList){
+            formData.append('imgList[]', imgList[index]);
+            if(imgList[index]){
+                formData.append('imgIndexList[]', index);
+            }
+        }
+
+        for (var pair of formData) {
+            console.log(pair);
+        }
+        console.log(imgList);
 
         const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
             method: 'POST',
-            body: JSON.stringify({ userId, title, points, rating, numberOfRatings, content }),
+            body: formData,
         }
 
         console.log(`Creating new challenge`);
 
-        const createChallengeUrl = 'http://localhost:5000/challenge/create';
+        const url = 'http://localhost:5000/challenge/create';
 
-        fetch(createChallengeUrl, options)
+        fetch(url, options)
             .then(res => {
                 console.log('Added new challenge');
                 toast.success('Successfully created challenge!');
@@ -160,6 +231,48 @@ const ChallengeCreate = props => {
             })
             .catch(err => {
                 toast.error('Error creating challenge');
+                console.log(err);
+            });
+    }
+    const updateChallenge = async (userId, title, points, content) => {
+
+        let formData = new FormData();
+        formData.append('userId', userId);
+        formData.append('updated', true);
+        formData.append('title', title);
+        formData.append('points', points);
+        formData.append('rating', 0);
+        formData.append('numberOfRatings', 0);
+        formData.append('content', JSON.stringify(content));
+        for (var index in imgList){
+            formData.append('imgList[]', imgList[index]);
+            if(imgList[index]){
+                formData.append('imgIndexList[]', index);
+            }
+        }
+
+        for (var pair of formData) {
+            console.log(pair);
+        }
+        console.log(imgList);
+
+        const options = {
+            method: 'POST',
+            body: formData,
+        }
+
+        console.log(`Updating challenge ${challengeId}`);
+
+        const url = 'http://localhost:5000/challenge/create';
+
+        fetch(url, options)
+            .then(res => {
+                console.log('Updated challenge');
+                toast.success('Successfully updated challenge!');
+                navigate('/challenges');
+            })
+            .catch(err => {
+                toast.error('Error updating challenge');
                 console.log(err);
             });
     }
@@ -187,7 +300,7 @@ const ChallengeCreate = props => {
                 </Form.Group>
                 {
                     questionList.map((question, qindex) => (
-                        <div key={`${qindex}`}>
+                        <div key={`${qindex}`} className={styles.question}>
                             <span>Question {qindex + 1}:</span>
                             {
                                 questionList.length - 1 === qindex &&
@@ -196,7 +309,7 @@ const ChallengeCreate = props => {
                                     variant='primary'
                                     className={styles.create_button}
                                     onClick={handleQuestionAdd}>
-                                    <IoAddSharp className={styles.icon} />
+                                    <IoAddSharp className={styles.icon} /> Add Question Below
                                 </Button>
                             }
                             {
@@ -212,9 +325,9 @@ const ChallengeCreate = props => {
                                 <Form.Select
                                     name='questionType'
                                     onChange={e => handleQuestionTypeChange(e, qindex)}>
-                                    <option value='S'>Single Answer Question</option>
-                                    <option value='M'>Multiple Answer Question</option>
-                                    <option value='I'>Image Upload</option>
+                                    <option value='single-answer'>Single Answer Question</option>
+                                    <option value='multiple-answer'>Multiple Answer Question</option>
+                                    <option value='image-upload'>Image Upload</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
@@ -223,25 +336,47 @@ const ChallengeCreate = props => {
                                     type='number'
                                     placeholder='Points'
                                     value={question.points}
-                                    onChange={(e) => handlePointsChange(qindex, e.target.value)}
+                                    onChange={e => handlePointsChange(qindex, e.target.value)}
                                     required />
+                            </Form.Group>
+                            <Form.Group className={`mb-3`}>
+                                <span>Image (optional)</span>
+                                <Form.Control
+                                    key={question.fileInputKey}
+                                    name='file'
+                                    type='file'
+                                    accept='image/png, image/jpeg'
+                                    size='sm'
+                                    onChange={e => handleImageChange(e, qindex)} />
+                                {
+                                    imgList[qindex] &&
+                                    <Button
+                                        variant='danger'
+                                        onClick={e => cancelImageUpload(e, qindex)}>
+                                        Cancel
+                                    </Button>
+                                }
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
                                 <Form.Control
                                     name='question'
                                     placeholder={`Question ${qindex + 1}`}
                                     value={question.text}
-                                    onChange={(e) => handleQuestionChange(e, qindex)}
+                                    onChange={e => handleQuestionChange(e, qindex)}
                                     required />
                             </Form.Group>
                             {
-                                question.isImageUpload ?
-                                <span></span>
+                                question.type === 'image-upload' ?
+                                    
+                                <span className={styles.img_upload_text}>This type of question collects responses from the user in the form of images.</span>
+                                    
                                 :
+
                                 question.options.map((option, oindex) => {
+                                    // console.log(questionList[qindex].type);
                                     return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
                                         <Form.Check
-                                            type={questionList[qindex].isMultipleAns ? 'checkbox' : 'radio'}
+                                            type={questionList[qindex].type === 'multiple-answer' ? 'checkbox' : 'radio'}
                                             name={`Question ${qindex + 1}`}
                                             className={styles.checkbox}
                                             onChange={() => updateOption(qindex, oindex)}
@@ -275,13 +410,14 @@ const ChallengeCreate = props => {
                                     </Form.Group>
                                 })
                             }
+                            <hr></hr>
                         </div>
                     ))
                 }
                 <Button
                     variant='primary'
                     onClick={(e) => onSubmit(e)}>
-                    Create
+                    Publish Challenge
                 </Button>
             </form>
         </PageContainer>

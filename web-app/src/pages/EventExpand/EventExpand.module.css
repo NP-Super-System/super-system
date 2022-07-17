@@ -26,7 +26,7 @@
     object-fit: cover;
     z-index: -1;
 
-    transform: translateY(-6.5em) translateZ(-6.5px) scale(1.66);
+    transform: translateY(-16em) translateZ(-9.5px) scale(2);
 }
 .parallax .icon{
     position: absolute;
@@ -64,18 +64,36 @@
     flex-direction: column;
     padding-right: 1em;
 }
+
 .content .left_pane .from{
     display: flex;
     flex-direction: column;
     text-align: left;
     margin-bottom: 0.5em;
 }
+.content .left_pane .from .date{
+    font-weight: 600;
+}
+.content .left_pane .from .time{
+    font-weight: 600;
+}
 .content .left_pane .to{
     display: flex;
     flex-direction: column;
     text-align: left;
 }
+.content .left_pane .to .date{
+    font-weight: 600;
+}
+.content .left_pane .to .time{
+    font-weight: 600;
+}
+
 .content .left_pane .register_btn{
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+.content .left_pane .unregister_btn{
     margin-top: 1em;
     margin-bottom: 2em;
 }
@@ -102,6 +120,42 @@
 
 }
 
-.content .description{
+.content .right_pane{
+    display: flex;
+    flex-direction: column;
+}
+.content .right_pane .description{
     text-align: left;
+    padding-top: 1em;
+}
+.content .right_pane .registered_users{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.content .right_pane .registered_users .icon_container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    list-style-type: none;
+    margin-right: 2em;
+    margin-bottom: 0;
+    height: 40px;
+}
+.content .right_pane .registered_users .icon_container > .icon_wrapper{
+    position: absolute;
+
+    width: 40px;
+    height: 40px;
+}
+.content .right_pane .registered_users .icon_container > .icon_wrapper .icon{
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+}
+.content .right_pane .registered_users .first_text{
+    margin-top: 1em;
+    font-style: italic;
 }

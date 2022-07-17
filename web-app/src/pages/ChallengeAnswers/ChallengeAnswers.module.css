@@ -1,0 +1,31 @@
+.correct {
+    color: limegreen;
+    margin: 10px;
+}
+
+.wrong {
+    color: red;
+    margin: 10px;
+}
+
+.option {
+    display: flex;
+    font-size: 1.25em;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.form {
+    padding: 1em;
+    text-align: left;
+    align-self: center;
+
+    width: 100%;
+    max-width: 800px;
+}
+
+.backBtn {
+    display: flex;
+    padding: 0.5em;
+    margin-bottom: 20px;
+}

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Image } from 'react-bootstrap';
 import styles from './Challenge.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import { Link } from "react-router-dom";
 import BeautyStars from 'beauty-stars';
+import GlobalContext from '../../context/GlobalContext';
 
 import Swal from 'sweetalert2';
 
@@ -14,6 +15,7 @@ import Swal from 'sweetalert2';
 const Challenge = props => {
 
 	const { challengeId } = useParams();
+	const { user } = useContext(GlobalContext);
 
 	const [challenge, setChallenge] = useState([]);
 
@@ -27,6 +29,19 @@ const Challenge = props => {
 	const [rating, setRating] = useState(0);
 	const [challengeRating, setChallengeRating] = useState(0);
 	const [numberOfRatings, setNumberOfRatings] = useState(0);
+	const [points, setPoints] = useState(0);
+	const [usersCompleted, setUsersCompleted] = useState([]);
+
+	const [imgList, setImgList] = useState({});
+	const handleImageChange = (e, qindex) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+        const img = e.target.files[0];
+
+        let newImgList = {...imgList};
+        newImgList[qindex] = img;
+        setImgList(newImgList);
+        console.log(newImgList);
+    }
 
 	var ans = []
 
@@ -53,7 +68,7 @@ const Challenge = props => {
 	}
 
 	const ansSelected = () => {
-		if (challenge[currentQuestion].isMultipleAns) {
+		if (challenge[currentQuestion].type === 'multiple-answer') {
 			const correct = [];
 			for (var i = 0; i < challenge[currentQuestion].options.length; i++) {
 				if (challenge[currentQuestion].options[i].isCorrect) {
@@ -89,7 +104,7 @@ const Challenge = props => {
 
 	const handleAnswerOptionClick = () => {
 		{
-			challenge[currentQuestion].isMultipleAns ?
+			challenge[currentQuestion].type === 'multiple-answer' ?
 				isChosen?.length !== 0 ?
 					ansSelected()
 					:
@@ -98,38 +113,36 @@ const Challenge = props => {
 						title: 'Oops...',
 						text: 'Please select an answer!',
 					})
-				: challenge[currentQuestion].isImageUpload ?
-				ansSelected()
-				:
-				isClicked ?
+				: challenge[currentQuestion].type === 'image-upload'  ?
 					ansSelected()
 					:
-					Swal.fire({
-						icon: 'error',
-						title: 'Oops...',
-						text: 'Please select an answer!',
-					})
-				
+					isClicked ?
+						ansSelected()
+						:
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Please select an answer!',
+						})
+
 		}
 	};
 
 	const submitRating = () => {
-		var newRating = challengeRating + rating;
 		if (rating !== 0) {
-			var ratings = numberOfRatings + 1;
 			const options = {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
 				method: 'POST',
-				body: JSON.stringify({ newRating, ratings }),
+				body: JSON.stringify({ rating }),
 			}
-	
+
 			console.log(`Submitting rating`);
-	
+
 			const submitRating = `http://localhost:5000/challenge/rating/${challengeId}`;
-	
+
 			fetch(submitRating, options)
 				.then(res => {
 					console.log('Submitted rating');
@@ -138,16 +151,65 @@ const Challenge = props => {
 					console.log('Error submitting rating');
 					console.log(err);
 				});
-		}	
+		}
 	}
 
 	const restartChallenge = () => {
+		getChallenge();
 		setIsChosen([]);
 		setIsClicked(false);
 		setScore(0);
 		setCurrentQuestion(0);
 		setShowScore(false);
 		setRating(0);
+	}
+
+	const incrementPoints = () => {
+		if (!usersCompleted.includes(user._id)) {
+			const options = {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({ points }),
+			}
+
+			console.log(`Incrementing points`);
+
+			const submitRating = `http://localhost:5000/increase/points/${user._id}`;
+
+			fetch(submitRating, options)
+				.then(res => {
+					console.log('Incremented points');
+				})
+				.catch(err => {
+					console.log('Error incrementing points');
+					console.log(err);
+				});
+
+			const option = {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({ challengeId }),
+			}
+
+			console.log(`Adding user to list`);
+
+			const submitUser = `http://localhost:5000/challenge/completed/${user._id}`;
+
+			fetch(submitUser, option)
+				.then(res => {
+					console.log('Added user to list');
+				})
+				.catch(err => {
+					console.log('Error adding user to list');
+					console.log(err);
+				});
+		}
 	}
 
 	const getChallenge = () => {
@@ -161,6 +223,8 @@ const Challenge = props => {
 						setNumberOfRatings(data.numberOfRatings);
 						setChallengeRating(data.rating);
 						setChallenge(data.questions);
+						setPoints(data.pointCount);
+						setUsersCompleted(data.usersCompleted);
 					})
 					.catch(err => console.log(err))
 			)
@@ -179,11 +243,11 @@ const Challenge = props => {
 						<div>
 							You scored
 							{
-								score === challenge.length ? 
-								' full marks!'
-								:
-								` ${score} out of ${challenge.length}`
-							}							
+								score === challenge.length ?
+									' full marks!'
+									:
+									` ${score} out of ${challenge.length}`
+							}
 							<br />
 							<br />
 							<div>Please rate the challenge:</div>
@@ -197,11 +261,11 @@ const Challenge = props => {
 							</div>
 							<br />
 							<br />
-							<Button variant='outline-primary' onClick={() => { restartChallenge(); submitRating()}}>Redo Challenge</Button>
+							<Button variant='outline-primary' onClick={() => { restartChallenge(); submitRating(); incrementPoints() }}>Redo Challenge</Button>
 							<br />
 							<br />
 							<Link to='/challenges'>
-								<Button variant='outline-primary' onClick={() => submitRating()}>Back To Challenges</Button>
+								<Button variant='outline-primary' onClick={() => { submitRating(); incrementPoints() }}>Back To Challenges</Button>
 							</Link>
 						</div>
 						:
@@ -212,28 +276,50 @@ const Challenge = props => {
 									<div>
 										<span>Challenge {currentQuestion + 1}</span>/{challenge.length}
 									</div>
+								{
+									challenge[currentQuestion].imgKey &&
+									<Image
+										className={styles.img}
+										src={`http://localhost:5000/s3/image/?key=${challenge[currentQuestion].imgKey}`} />
+								}
 									<div>{challenge[currentQuestion].text}</div>
 									<div className={styles.answersection}>
-										{
-											challenge[currentQuestion].isMultipleAns ?
-												challenge[currentQuestion].options.map((answerOption, i) => (
-													<div key={i + currentQuestion * 10} className={styles.button}>
-														<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
-														<label className="btn btn-outline-primary" htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
-													</div>
-												))
-												: challenge[currentQuestion].isImageUpload ?
-												'image upload'
-												:
-												challenge[currentQuestion].options.map((answerOption, i) => (
-													<div key={i + currentQuestion * 10} className={styles.button}>
-														<input type="radio" className="btn-check" name="options" id={answerOption._id} />
-														<label className="btn btn-outline-primary" htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
-													</div>
-												))
-										}
+									{
+										challenge[currentQuestion].type === 'multiple-answer' ?
+										challenge[currentQuestion].options.map((answerOption, i) => (
+											<div key={i + currentQuestion * 10} className={styles.button}>
+												<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
+												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
+											</div>
+										))
+
+										: challenge[currentQuestion].type === 'image-upload' ?
+										<>
+											<Form.Group>
+												<Form.Control
+													key=''
+													name='image'
+													type='file'
+													accept='image/png, image/jpeg'
+													size='sm'
+													onChange={e => handleImageChange(e, currentQuestion)}/>
+											</Form.Group>
+										</>
+												
+										: challenge[currentQuestion].type === 'single-answer' ?
+										challenge[currentQuestion].options.map((answerOption, i) => (
+											<div key={i + currentQuestion * 10} className={styles.button}>
+												<input type="radio" className="btn-check" name="options" id={answerOption._id} />
+												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
+											</div>
+										))
+
+										: 
+
+										<span style={{fontStyle: 'italic'}}>Error identifying question type</span>
+									}
 									</div>
-									<label className="btn btn-outline-success" onClick={() => handleAnswerOptionClick()}>Next</label>
+									<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
 								</div>
 							}
 						</>

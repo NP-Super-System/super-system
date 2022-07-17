@@ -7,6 +7,8 @@ import { IoAddSharp } from 'react-icons/io5';
 import styles from './Forum.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import PageHeader from '../../components/PageHeader';
+import SearchBar from '../../components/SearchBar';
 import GlobalContext from '../../context/GlobalContext';
 import Post from './Post';
 import { Card } from 'react-bootstrap';
@@ -55,31 +57,20 @@ const Forum = props=>{
 
     return (
         <PageContainer>
-            <header className={`${styles.header} ${screenType !== 'show-sidebar' && styles.header_add_top}`}>
-                <form className={styles.filter} onSubmit={handleSearch}>
-                    <input 
-                        type='text' 
-                        value={searchFilter}
-                        onChange={e => setSearchFilter(e.target.value)}
-                        placeholder='Search filters' 
-                        className={styles.input}/>
-                    <Button
-                        variant='primary'
-                        type='submit'
-                        className={styles.button}
-                        >
-                        <span>Search</span>
-                    </Button>
-                </form>
+            <PageHeader
+                searchBarElement={
+                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} handleSearch={handleSearch}/>
+                }
+                screenType={screenType}>
                 <Link to='/forum/create'>
                     <Button 
                         variant='primary'
-                        className={styles.create_button}>
-                        <IoAddSharp className={styles.icon}/>
+                        className={`${styles.action_btn} ${styles.create_link}`}>
+                        <IoAddSharp className={styles.icon}/> Post
                     </Button>
                 </Link>
-            </header>
-            <div className={styles.wrapper}>
+            </PageHeader>
+            <div className={`${styles.wrapper} ${screenType !== 'show-sidebar' && styles.add_top}`}>
                 <Col className={screenType === 'phone' || styles.post_list}>
                 {
                     visiblePosts.map( (post, i) => 

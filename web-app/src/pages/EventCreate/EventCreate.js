@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { Card, Form, Button, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import DatePicker from 'react-datepicker';
 
 import styles from './EventCreate.module.css';
 
@@ -16,8 +17,8 @@ const EventCreate = props => {
 
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
-    const [startDt, setStartDt] = useState(''); // convert using new Date(startDt);
-    const [endDt, setEndDt] = useState('');
+    const [startDt, setStartDt] = useState(new Date());
+    const [endDt, setEndDt] = useState(new Date());
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [preview, setPreview] = useState('');
@@ -83,15 +84,23 @@ const EventCreate = props => {
                 </Form.Group>
                 <Form.Group className='mb-3'>
                     <Form.Label>Start Date And Time</Form.Label>
-                    <Form.Control 
-                        type='datetime-local'
-                        onChange={e => setStartDt(e.target.value)}/>
+                    <DatePicker
+                        todayButton="Today"
+                        selected={startDt}
+                        onChange={date => setStartDt(date)}
+                        showTimeInput
+                        minDate={new Date()}
+                        />
                 </Form.Group>
                 <Form.Group className='mb-3'>
                     <Form.Label>End Date And Time</Form.Label>
-                    <Form.Control 
-                        type='datetime-local'
-                        onChange={e => setEndDt(e.target.value)}/>
+                    <DatePicker
+                        todayButton="Today"
+                        selected={endDt}
+                        onChange={date => setEndDt(date)}
+                        showTimeInput
+                        minDate={startDt.getTime() > new Date().getTime() ? startDt : new Date()}
+                        />
                 </Form.Group>
                 <Form.Group className='mb-3'>
                     <Form.Label>Image</Form.Label>

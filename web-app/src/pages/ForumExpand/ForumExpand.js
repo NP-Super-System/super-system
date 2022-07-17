@@ -1,15 +1,17 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Image, Form, Button } from 'react-bootstrap';
-import { BsArrow90DegRight, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
+import { BsShare, BsLayers, BsFillTrash2Fill } from 'react-icons/bs';
 import { IoIosSend } from 'react-icons/io';
 import { getPostAge } from '../../hooks/getPostAge';
 import parse from 'html-react-parser';
+import toast from 'react-hot-toast';
 
 import styles from './ForumExpand.module.css';
 
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
+import File from './File';
 import LikePostWrapper from '../../components/LikePostWrapper/LikePostWrapper';
 import DislikePostWrapper from '../../components/DislikePostWrapper/DislikePostWrapper';
 import Comment from './Comment';
@@ -92,17 +94,16 @@ const ForumExpand = props => {
 
                     <div className={styles.tags}>
                     {
-                        postData.tags &&
-
-                        postData.tags.map( (tag, i) =>
-                            <div key={`${i}`} className={styles.tag}>
+                        postData?.tags &&
+                        postData?.tags.map( (tag, i) =>
+                            tag && <div key={`${i}`} className={styles.tag}>
                                 <span>{tag}</span>
                             </div>
                         )
                     }
                     </div>
 
-                    <Card.Title className={styles.title}>{postData.title}</Card.Title>
+                    <Card.Title className={styles.title}>{postData?.title}</Card.Title>
                     <div className={styles.body}>{postData?.body && parse(postData.body)}</div>
                     {   
                         imageSrc &&
@@ -112,6 +113,18 @@ const ForumExpand = props => {
                             onClick={() => { window.open(imageSrc, 'post-image') }}
                             />
                     }
+                    <div className={styles.files}>
+                    {
+                        postData?.files &&
+                        postData.files.map( (file, i) => {
+                            const { name, key } = file;
+                            const list = name.split('.');
+                            const fileExt = list[list.length - 1];
+
+                            return <File key={`${i}`} fileName={name} fileKey={key} fileExt={fileExt}/>
+                        })
+                    }
+                    </div>
 
                     <div className={styles.actions}>
                         <LikePostWrapper
@@ -143,8 +156,14 @@ const ForumExpand = props => {
                                     className={styles.dislike_icon}/>
                             </Button>
                         </DislikePostWrapper>
-                        <Button variant='primary' className={styles.action_button}>
-                            <BsArrow90DegRight className={styles.action_icon}/>
+                        <Button 
+                            variant='primary' 
+                            className={styles.action_button}
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${window.location.href}/${postId}`)
+                                toast.success(`Copied post URL to clipboard`);
+                            }}>
+                            <BsShare className={styles.action_icon}/>
                             <span>Share</span>
                         </Button>
                         <Button variant='primary' className={styles.action_button}>

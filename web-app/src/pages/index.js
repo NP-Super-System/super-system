@@ -24,10 +24,15 @@ export {default as ChallengeList} from  './ChallengeList/ChallengeList';
 export {default as Challenge} from  './Challenge/Challenge';
 export {default as ChallengeCreate} from  './ChallengeCreate/ChallengeCreate';
 export {default as ChallengeUpdate} from  './ChallengeUpdate/ChallengeUpdate';
+export {default as ChallengeAnswers} from  './ChallengeAnswers/ChallengeAnswers';
 
 export {default as Event} from  './Event';
 export {default as EventCreate} from './EventCreate';
 export {default as EventExpand} from './EventExpand';
+export {default as EventOrganiser} from './EventOrganiser';
+export {default as EventRegistered} from './EventRegistered';
+
+export {default as Rewards} from './Rewards';
 
 export {default as Game} from  './Game/Game';
 

@@ -18,8 +18,13 @@ import {
     BsCalendarEvent,
     BsCalendarEventFill,
 
+<<<<<<< HEAD
     BsTrophy,
     BsTrophyFill,
+=======
+    BsAward,
+    BsAwardFill,
+>>>>>>> 2c85f90faaaedd6b7f1f98f2eab31f947896fdcb
 } from 'react-icons/bs';
 
 export const NavData = [
@@ -73,8 +78,13 @@ export const NavData = [
     },
     {
         title: 'Rewards',
+<<<<<<< HEAD
         icon: <BsTrophy />,
         iconActive: <BsTrophyFill />,
+=======
+        icon: <BsAward />,
+        iconActive: <BsAwardFill />,
+>>>>>>> 2c85f90faaaedd6b7f1f98f2eab31f947896fdcb
         to: '/rewards',
         section: 'rewards',
         show: true,

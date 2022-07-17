@@ -158,11 +158,15 @@ function App() {
 					<Route path='/forum/:postId' element={<Pages.ForumExpand />} />
 					<Route path='/challenges' element={<Pages.ChallengeList />} />
 					<Route path='/challenges/:challengeId' element={<Pages.Challenge />} />
-					<Route path='/challenges/update/:challengeId' element={<Pages.ChallengeUpdate />} />
 					<Route path='/challenges/create' element={<Pages.ChallengeCreate />} />
+					<Route path='/challenges/update/:challengeId' element={<Pages.ChallengeCreate />} />
+					<Route path='/challenges/answers/:challengeId' element={<Pages.ChallengeAnswers />} />
 					<Route path='/event' element={<Pages.Event />} />
 					<Route path='/event/:eventId' element={<Pages.EventExpand />} />
 					<Route path='/event/create' element={<Pages.EventCreate />} />
+					<Route path='/event/organised' element={<Pages.EventOrganiser />} />
+					<Route path='/event/registered' element={<Pages.EventRegistered />} />
+					<Route path='/rewards' element={<Pages.Rewards />}/>
 					<Route path='/game' element={<Pages.Game />} />
 					<Route path='/rewards' element={<Pages.Rewards />} />
 					<Route path='/unauthorized' element={<Pages.Unauthorized />} />

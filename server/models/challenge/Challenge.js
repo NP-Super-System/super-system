@@ -11,12 +11,14 @@ const challengeSchema = new Schema({
 
     user: { type: Schema.Types.ObjectId, ref: User, required: true,  },
     title: { type: String, required: true, },
+    updated: Boolean,
 
     pointCount: { type: Number, required: true, },
     rating: { type: Number, required: true, },
     numberOfRatings: { type: Number, required: true, },
 
     questions: [QuestionSchema],
+    usersCompleted: [Schema.Types.ObjectId]
 
 }, { timestamps: true });
 

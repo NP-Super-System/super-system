@@ -177,7 +177,7 @@ const CourseSection = props => {
                     <span style={{
                         fontStyle: 'italic',
                     }}>
-                        This section does not have a challenge
+                        This section does not have relevant challenges
                     </span>
                 }
                 </Card>
