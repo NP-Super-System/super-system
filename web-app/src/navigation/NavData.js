@@ -17,6 +17,9 @@ import {
 
     BsCalendarEvent,
     BsCalendarEventFill,
+
+    BsTrophy,
+    BsTrophyFill,
 } from 'react-icons/bs';
 
 export const NavData = [
@@ -66,6 +69,14 @@ export const NavData = [
         iconActive: <BsCalendarEventFill />,
         to: '/event',
         section: 'event',
+        show: true,
+    },
+    {
+        title: 'Rewards',
+        icon: <BsTrophy />,
+        iconActive: <BsTrophyFill />,
+        to: '/rewards',
+        section: 'rewards',
         show: true,
     },
 ];

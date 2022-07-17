@@ -31,6 +31,8 @@ export {default as EventExpand} from './EventExpand';
 
 export {default as Game} from  './Game/Game';
 
+export {default as Rewards} from  './Rewards/Rewards';
+
 export {default as Unauthorized} from './Unauthorized/Unauthorized';
 
 export {default as Roles} from './Roles/Roles';

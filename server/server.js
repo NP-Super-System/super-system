@@ -57,7 +57,10 @@ require('./crud/role')(app);
 // Calendar
 require('./crud/calendar')(app);
 
+require('./crud/reward')(app);
+
 
 // require('./preset-data/courses');
 // require('./preset-data/challenges');
 // require('./preset-data/roles');
+// require('./preset-data/rewards');
