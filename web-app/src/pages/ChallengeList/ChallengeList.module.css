@@ -85,54 +85,46 @@
     height: 28px;
 }
 
-.edit_btn{
-    background-color: transparent;
-    align-items: right;
-    border: none;
-    margin-right: 5px;
-}
-.edit_btn:hover{
-    background-color: greenyellow;
-}
-.edit_btn .icon{
-    color: greenyellow;
-    font-size: 1.25em;
-}
-.edit_btn:hover .icon{
-    color: white;
-}
+.answer_link .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-.delete_btn{
-    background-color: transparent;
-    border: none;
+    margin-right: 0.5em;
 }
-.delete_btn:hover{
-    background-color: red;
+.answer_link .button .icon{
+    margin-right: 0.5em;
+}
+.edit_link .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 0.5em;
+}
+.edit_link .button .icon{
+    margin-right: 0.5em;
+}
+.delete_btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 0.5em;
 }
 .delete_btn .icon{
-    color: red;
-    font-size: 1.25em;
-}
-.delete_btn:hover .icon{
-    color: white;
+    margin-right: 0.5em;
 }
 
-.answer_btn{
-    background-color: transparent;
-    border: none;
-}
-.answer_btn:hover{
-    background-color: blue;
-}
-.answer_btn .icon{
-    color: blue;
-    font-size: 1.25em;
-}
-.answer_btn:hover .icon{
-    color: white;
-}
 
 .buttons {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-top: 1em;
 }

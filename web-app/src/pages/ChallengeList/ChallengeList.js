@@ -20,6 +20,9 @@ const ChallengeList = props => {
     const { user } = useContext(GlobalContext);
 
     const [searchFilter, setSearchFilter] = useState('');
+    const handleSearch = e => {
+        e.preventDefault();
+    }
 
     const [userRoles, setUserRoles] = useState(false);
     const [challenges, setChallenges] = useState([]);
@@ -142,19 +145,9 @@ const ChallengeList = props => {
 
     return (
         <PageContainer>
-            {/* <header className={`${styles.header} ${screenType != 'show-sidebar' && styles.add_top}`}>
-                <input type='text' placeholder='Search filters' className={styles.filter} />
-                <Link to='/challenges/create'>
-                    <Button
-                        variant='primary'
-                        className={`${styles.action_btn} ${styles.create_link}`}>
-                        <IoAddSharp className={styles.icon} />
-                    </Button>
-                </Link>
-            </header> */}
             <PageHeader
                 searchBarElement={
-                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} />
+                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} handleSearch={handleSearch}/>
                 }
                 screenType={screenType}>
                 <Link to='/challenges/create'>
@@ -174,8 +167,33 @@ const ChallengeList = props => {
                                 <Row>
                                     <Col className={styles.challenge_details}>
                                         <h5>{item.title}</h5>
+                                    {
+                                        item.updated &&
+                                        <span style={{fontStyle: 'italic'}}>Updated</span>
+                                    }
                                         <span>By: {item.user.userName}</span>
-                                        <span>Rating: {rating(item.rating, item.numberOfRatings)}</span>
+                                        <span 
+                                            style={{
+                                                display: 'flex', 
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                            }}>
+                                            <span style={{marginRight: '0.5em'}}>Rating:</span>
+                                            <span style={{
+                                                display: 'flex', 
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                                marginRight: '0.5em',
+                                            }}>{rating(item.rating, item.numberOfRatings)}</span>
+                                            <span style={{
+                                                display: 'flex', 
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                            }}>({item.numberOfRatings})</span>
+                                        </span>
                                     </Col>
                                     <Col>
                                         <div className={styles.challenge_points}>
@@ -188,12 +206,12 @@ const ChallengeList = props => {
                             <div className={styles.buttons}>
                                 {
                                     isCompleted(i) ?
-                                        <Link to={`/challenges/answers/${item._id}`}>
+                                        <Link to={`/challenges/answers/${item._id}`} className={styles.answer_link}>
                                             <Button
                                                 variant='primary'
-                                                className={styles.answer_btn}>
+                                                className={styles.button}>
                                                 <BsFillFileEarmarkFontFill
-                                                    className={styles.icon} />
+                                                    className={styles.icon} /> View Answers
                                             </Button>
                                         </Link>
                                         :
@@ -201,23 +219,23 @@ const ChallengeList = props => {
                                 }
                                 {
                                     isOwner(i) ?
-                                        <div>
-                                            <Link to={`/challenges/update/${item._id}`}>
+                                        <>
+                                            <Link to={`/challenges/update/${item._id}`} className={styles.edit_link}>
                                                 <Button
                                                     variant='primary'
-                                                    className={styles.edit_btn}>
+                                                    className={styles.button}>
                                                     <BsPencilFill
-                                                        className={styles.icon} />
+                                                        className={styles.icon} /> Edit
                                                 </Button>
                                             </Link>
                                             <Button
-                                                variant='primary'
+                                                variant='danger'
                                                 onClick={e => deleteBtn(item.user.userId, item._id)}
                                                 className={styles.delete_btn}>
                                                 <BsFillTrash2Fill
-                                                    className={styles.icon} />
+                                                    className={styles.icon} /> Delete
                                             </Button>
-                                        </div>
+                                        </>
                                         :
                                         <span></span>
                                 }

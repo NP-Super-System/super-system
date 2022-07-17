@@ -32,6 +32,17 @@ const Challenge = props => {
 	const [points, setPoints] = useState(0);
 	const [usersCompleted, setUsersCompleted] = useState([]);
 
+	const [imgList, setImgList] = useState({});
+	const handleImageChange = (e, qindex) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+        const img = e.target.files[0];
+
+        let newImgList = {...imgList};
+        newImgList[qindex] = img;
+        setImgList(newImgList);
+        console.log(newImgList);
+    }
+
 	var ans = []
 
 	const singleAnswer = (id) => {
@@ -57,7 +68,7 @@ const Challenge = props => {
 	}
 
 	const ansSelected = () => {
-		if (challenge[currentQuestion].isMultipleAns) {
+		if (challenge[currentQuestion].type === 'multiple-answer') {
 			const correct = [];
 			for (var i = 0; i < challenge[currentQuestion].options.length; i++) {
 				if (challenge[currentQuestion].options[i].isCorrect) {
@@ -93,7 +104,7 @@ const Challenge = props => {
 
 	const handleAnswerOptionClick = () => {
 		{
-			challenge[currentQuestion].isMultipleAns ?
+			challenge[currentQuestion].type === 'multiple-answer' ?
 				isChosen?.length !== 0 ?
 					ansSelected()
 					:
@@ -102,7 +113,7 @@ const Challenge = props => {
 						title: 'Oops...',
 						text: 'Please select an answer!',
 					})
-				: challenge[currentQuestion].isImageUpload ?
+				: challenge[currentQuestion].type === 'image-upload'  ?
 					ansSelected()
 					:
 					isClicked ?
@@ -265,32 +276,48 @@ const Challenge = props => {
 									<div>
 										<span>Challenge {currentQuestion + 1}</span>/{challenge.length}
 									</div>
-									{
-										challenge[currentQuestion].imgKey &&
-										<Image
-											className={styles.img}
-											src={`http://localhost:5000/s3/image/?key=${challenge[currentQuestion].imgKey}`} />
-									}
+								{
+									challenge[currentQuestion].imgKey &&
+									<Image
+										className={styles.img}
+										src={`http://localhost:5000/s3/image/?key=${challenge[currentQuestion].imgKey}`} />
+								}
 									<div>{challenge[currentQuestion].text}</div>
 									<div className={styles.answersection}>
-										{
-											challenge[currentQuestion].isMultipleAns ?
-												challenge[currentQuestion].options.map((answerOption, i) => (
-													<div key={i + currentQuestion * 10} className={styles.button}>
-														<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
-														<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
-													</div>
-												))
-												: challenge[currentQuestion].isImageUpload ?
-													'image upload'
-													:
-													challenge[currentQuestion].options.map((answerOption, i) => (
-														<div key={i + currentQuestion * 10} className={styles.button}>
-															<input type="radio" className="btn-check" name="options" id={answerOption._id} />
-															<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
-														</div>
-													))
-										}
+									{
+										challenge[currentQuestion].type === 'multiple-answer' ?
+										challenge[currentQuestion].options.map((answerOption, i) => (
+											<div key={i + currentQuestion * 10} className={styles.button}>
+												<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
+												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
+											</div>
+										))
+
+										: challenge[currentQuestion].type === 'image-upload' ?
+										<>
+											<Form.Group>
+												<Form.Control
+													key=''
+													name='image'
+													type='file'
+													accept='image/png, image/jpeg'
+													size='sm'
+													onChange={e => handleImageChange(e, currentQuestion)}/>
+											</Form.Group>
+										</>
+												
+										: challenge[currentQuestion].type === 'single-answer' ?
+										challenge[currentQuestion].options.map((answerOption, i) => (
+											<div key={i + currentQuestion * 10} className={styles.button}>
+												<input type="radio" className="btn-check" name="options" id={answerOption._id} />
+												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
+											</div>
+										))
+
+										: 
+
+										<span style={{fontStyle: 'italic'}}>Error identifying question type</span>
+									}
 									</div>
 									<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
 								</div>

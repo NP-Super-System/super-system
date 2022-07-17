@@ -62,7 +62,7 @@ const ChallengeAnswers = props => {
                             {
                                 challenge.options.map((option, oindex) =>
                                 (
-                                    <div className={styles.option}>
+                                    <div key={`${oindex}`} className={styles.option}>
                                         {
                                             option.isCorrect ?
                                                 <BsCheckLg className={styles.correct} />

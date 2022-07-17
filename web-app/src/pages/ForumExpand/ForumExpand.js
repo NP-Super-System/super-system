@@ -95,9 +95,8 @@ const ForumExpand = props => {
                     <div className={styles.tags}>
                     {
                         postData?.tags &&
-
                         postData?.tags.map( (tag, i) =>
-                            <div key={`${i}`} className={styles.tag}>
+                            tag && <div key={`${i}`} className={styles.tag}>
                                 <span>{tag}</span>
                             </div>
                         )

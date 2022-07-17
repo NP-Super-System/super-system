@@ -44,7 +44,7 @@ const operations = app => {
     }
 
     // Create challenge
-    const createChallenge = async (res, userId, title, points, rating, numberOfRatings, content, imgKeyObj) => {
+    const createChallenge = async (res, userId, updated=false, title, points, rating, numberOfRatings, content, imgKeyObj) => {
         const questionList = [];
         for (var i = 0; i < content.length; i++) {
             const optionsList = [];
@@ -57,8 +57,7 @@ const operations = app => {
             }
             const newQuestion = new Question({
                 text: content[i].text,
-                isMultipleAns: content[i].isMultipleAns,
-                isImageUpload: content[i].isImageUpload,
+                type: content[i].type,
                 points: content[i].points,
                 options: optionsList,
                 imgKey: imgKeyObj[i.toString()] || '',
@@ -68,7 +67,8 @@ const operations = app => {
 
         const user = await User.findOne({_id: userId});
         const challengeData = {
-            user, 
+            user,
+            updated,
             title,
             pointCount: points,
             rating,
@@ -88,7 +88,7 @@ const operations = app => {
     }
 
     app.post('/challenge/create', uploadLocal.any('imgList'), async (req, res) => {
-        const { userId, title, points, rating, numberOfRatings, content, imgIndexList } = req.body;
+        const { userId, updated, title, points, rating, numberOfRatings, content, imgIndexList } = req.body;
         // console.log(req.body);
         const imgKeyList = await uploadImages(req);
         let imgKeyObj = {}
@@ -96,7 +96,7 @@ const operations = app => {
             imgKeyObj[imgIndexList[index]] = imgKeyList[index];
         }
         console.log(imgKeyObj);
-        await createChallenge(res, userId, title, points, rating, numberOfRatings, JSON.parse(content), imgKeyObj);
+        await createChallenge(res, userId, updated, title, points, rating, numberOfRatings, JSON.parse(content), imgKeyObj);
     });
 
     // Read challenges

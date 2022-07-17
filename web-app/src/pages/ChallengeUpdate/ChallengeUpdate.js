@@ -69,7 +69,7 @@ const ChallengeUpdate = props => {
     }
 
     const handleQuestionAdd = e => {
-        setQuestionList([...questionList, { question: '', points: null, isMultipleAns: false, isImageUpload: false, options: [{ option: '', isCorrect: false }] }])
+        setQuestionList([...questionList, { question: '', points: null, type: 'single-answer', options: [{ option: '', isCorrect: false }] }])
     }
 
     const handleQuestionRemove = (index) => {
@@ -80,8 +80,9 @@ const ChallengeUpdate = props => {
 
     const handleQuestionTypeChange = (e, index) => {
         let newQuestionList = [...questionList];
-        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
-        newQuestionList[index].isImageUpload = e.target.value === 'I';
+        // newQuestionList[index].isMultipleAns = e.target.value === 'M';
+        // newQuestionList[index].isImageUpload = e.target.value === 'I';
+        newQuestionList[index].type = e.target.value;
         setQuestionList(newQuestionList);
         console.log(questionList);
     }
@@ -253,9 +254,9 @@ const ChallengeUpdate = props => {
                                     name='questionType'
                                     onChange={e => handleQuestionTypeChange(e, qindex)}
                                     defaultValue={question.isMultipleAns ? 'M' : question.isImageUpload ? 'I' : 'S'}>
-                                    <option value='S'>Single Answer Question</option>
-                                    <option value='M'>Multiple Answer Question</option>
-                                    <option value='I'>Image Upload</option>
+                                    <option value='single-answer'>Single Answer Question</option>
+                                    <option value='multiple-answer'>Multiple Answer Question</option>
+                                    <option value='image-upload'>Image Upload</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className={`mb-3`}>

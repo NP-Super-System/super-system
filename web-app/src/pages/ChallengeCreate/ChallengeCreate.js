@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
@@ -17,16 +18,39 @@ const ChallengeCreate = props => {
 
     const { user } = useContext(GlobalContext);
 
+    const { challengeId } = useParams();
+
     const navigate = useNavigate();
     const goBack = () => navigate(-1);
 
     const [title, setTitle] = useState('');
     const [points, setPoints] = useState(0);
-    const [questionList, setQuestionList] = useState([{ text: '', fileInputKey: '0', points: 0, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }]);
+    const [questionList, setQuestionList] = useState([]);
     const [imgList, setImgList] = useState([]);
 
-    useEffect(() => {
+    const getChallenge = () => {
+        // Get challenge from server
+        fetch(`http://localhost:5000/challenge/read/${challengeId}`)
+            .then(
+                res => res.json()
+                    .then(data => {
+                        // Set challenge
+                        console.log(data);
+                        setTitle(`${data.title} (updated)`);
+                        setPoints(data.pointCount);
+                        setQuestionList(data.questions);
+                    })
+                    .catch(err => console.log(err))
+            )
+            .catch(err => console.log(err));
+    }
 
+    useEffect(() => {
+        if(challengeId){
+            getChallenge();
+            return;
+        }
+        questionList.length <= 0 && handleQuestionAdd();
     }, []);
 
     const backBtn = () => {
@@ -46,7 +70,7 @@ const ChallengeCreate = props => {
     }
 
     const handleQuestionAdd = e => {
-        setQuestionList([...questionList, { text: '', fileInputKey: '0', points: 0, isMultipleAns: false, isImageUpload: false, options: [{ text: '', isCorrect: false }] }])
+        setQuestionList([...questionList, { text: '', fileInputKey: '0', points: 0, type: 'single-answer', options: [{ text: '', isCorrect: false }] }])
         let newImgList = [...imgList, null];
         setImgList(newImgList);
     }
@@ -56,14 +80,15 @@ const ChallengeCreate = props => {
         let list = [...questionList];
         list[index].text = value;
         setQuestionList(list);
-        console.log(list);
     }
 
     const handleQuestionTypeChange = (e, index) => {
         let newQuestionList = [...questionList];
-        newQuestionList[index].isMultipleAns = e.target.value === 'M'; // 'S' == false, 'M' == true
-        newQuestionList[index].isImageUpload = e.target.value === 'I';
+        // newQuestionList[index].isMultipleAns = e.target.value === 'M';
+        // newQuestionList[index].isImageUpload = e.target.value === 'I';
+        newQuestionList[index].type = e.target.value;
         setQuestionList(newQuestionList);
+        console.log(newQuestionList);
     }
 
     const handleQuestionRemove = (index) => {
@@ -102,7 +127,7 @@ const ChallengeCreate = props => {
         const newQuestionList = [...questionList];
         const option = newQuestionList[qindex].options[oindex];
 
-        if (newQuestionList[qindex].isMultipleAns) {
+        if (newQuestionList[qindex].type === 'multiple-answer') {
             option.isCorrect = !option.isCorrect;
         }
         else {
@@ -147,7 +172,7 @@ const ChallengeCreate = props => {
         for (var i = 0; i < questionList.length; i++) {
             var hasAnswer = false;
             for (var j = 0; j < questionList[i].options.length; j++) {
-                if (questionList[i].options[j].isCorrect || questionList[i].isImageUpload) {
+                if (questionList[i].options[j].isCorrect || questionList[i].type === 'image-upload') {
                     hasAnswer = true;
                 }
             }
@@ -160,20 +185,15 @@ const ChallengeCreate = props => {
                 return;
             }
         }
-        createChallenge(user.id, title, points, questionList);
+        if(challengeId){
+            updateChallenge(user.id, title, points, questionList);
+        }
+        else{
+            createChallenge(user.id, title, points, questionList);
+        }
     }
 
     const createChallenge = async (userId, title, points, content) => {
-        // const rating = 0 , numberOfRatings = 0;
-
-        // const options = {
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     method: 'POST',
-        //     body: JSON.stringify({ userId, title, points, rating, numberOfRatings, content }),
-        // }
 
         let formData = new FormData();
         formData.append('userId', userId);
@@ -207,10 +227,52 @@ const ChallengeCreate = props => {
             .then(res => {
                 console.log('Added new challenge');
                 toast.success('Successfully created challenge!');
-                // navigate('/challenges');
+                navigate('/challenges');
             })
             .catch(err => {
                 toast.error('Error creating challenge');
+                console.log(err);
+            });
+    }
+    const updateChallenge = async (userId, title, points, content) => {
+
+        let formData = new FormData();
+        formData.append('userId', userId);
+        formData.append('updated', true);
+        formData.append('title', title);
+        formData.append('points', points);
+        formData.append('rating', 0);
+        formData.append('numberOfRatings', 0);
+        formData.append('content', JSON.stringify(content));
+        for (var index in imgList){
+            formData.append('imgList[]', imgList[index]);
+            if(imgList[index]){
+                formData.append('imgIndexList[]', index);
+            }
+        }
+
+        for (var pair of formData) {
+            console.log(pair);
+        }
+        console.log(imgList);
+
+        const options = {
+            method: 'POST',
+            body: formData,
+        }
+
+        console.log(`Updating challenge ${challengeId}`);
+
+        const url = 'http://localhost:5000/challenge/create';
+
+        fetch(url, options)
+            .then(res => {
+                console.log('Updated challenge');
+                toast.success('Successfully updated challenge!');
+                navigate('/challenges');
+            })
+            .catch(err => {
+                toast.error('Error updating challenge');
                 console.log(err);
             });
     }
@@ -238,7 +300,7 @@ const ChallengeCreate = props => {
                 </Form.Group>
                 {
                     questionList.map((question, qindex) => (
-                        <div key={`${qindex}`}>
+                        <div key={`${qindex}`} className={styles.question}>
                             <span>Question {qindex + 1}:</span>
                             {
                                 questionList.length - 1 === qindex &&
@@ -247,7 +309,7 @@ const ChallengeCreate = props => {
                                     variant='primary'
                                     className={styles.create_button}
                                     onClick={handleQuestionAdd}>
-                                    <IoAddSharp className={styles.icon} />
+                                    <IoAddSharp className={styles.icon} /> Add Question Below
                                 </Button>
                             }
                             {
@@ -263,9 +325,9 @@ const ChallengeCreate = props => {
                                 <Form.Select
                                     name='questionType'
                                     onChange={e => handleQuestionTypeChange(e, qindex)}>
-                                    <option value='S'>Single Answer Question</option>
-                                    <option value='M'>Multiple Answer Question</option>
-                                    <option value='I'>Image Upload</option>
+                                    <option value='single-answer'>Single Answer Question</option>
+                                    <option value='multiple-answer'>Multiple Answer Question</option>
+                                    <option value='image-upload'>Image Upload</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className={`mb-3`}>
@@ -304,53 +366,58 @@ const ChallengeCreate = props => {
                                     required />
                             </Form.Group>
                             {
-                                question.isImageUpload ?
-                                    <span></span>
-                                    :
-                                    question.options.map((option, oindex) => {
-                                        return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
-                                            <Form.Check
-                                                type={questionList[qindex].isMultipleAns ? 'checkbox' : 'radio'}
-                                                name={`Question ${qindex + 1}`}
-                                                className={styles.checkbox}
-                                                onChange={() => updateOption(qindex, oindex)}
-                                                checked={option.isCorrect} />
+                                question.type === 'image-upload' ?
+                                    
+                                <span className={styles.img_upload_text}>This type of question collects responses from the user in the form of images.</span>
+                                    
+                                :
 
-                                            <Form.Control
-                                                name='option'
-                                                placeholder={`Option ${oindex + 1}`}
-                                                value={option.text}
-                                                onChange={(e) => handleOptionChange(e, qindex, oindex)}
-                                                required />
-                                            {
-                                                questionList[qindex].options.length - 1 === oindex &&
+                                question.options.map((option, oindex) => {
+                                    // console.log(questionList[qindex].type);
+                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
+                                        <Form.Check
+                                            type={questionList[qindex].type === 'multiple-answer' ? 'checkbox' : 'radio'}
+                                            name={`Question ${qindex + 1}`}
+                                            className={styles.checkbox}
+                                            onChange={() => updateOption(qindex, oindex)}
+                                            checked={option.isCorrect} />
 
-                                                <Button
-                                                    variant='primary'
-                                                    className={styles.create_button}
-                                                    onClick={() => handleOptionAdd(qindex)}>
-                                                    <IoAddSharp className={styles.icon} />
-                                                </Button>
-                                            }
-                                            {
-                                                questionList[qindex].options.length > 1 &&
+                                        <Form.Control
+                                            name='option'
+                                            placeholder={`Option ${oindex + 1}`}
+                                            value={option.text}
+                                            onChange={(e) => handleOptionChange(e, qindex, oindex)}
+                                            required />
+                                        {
+                                            questionList[qindex].options.length - 1 === oindex &&
 
-                                                <Button
-                                                    className={styles.delete_button}
-                                                    onClick={() => handleOptionRemove(qindex, oindex)}>
-                                                    <BsFillTrash2Fill className={styles.icon} />
-                                                </Button>
-                                            }
-                                        </Form.Group>
-                                    })
+                                            <Button
+                                                variant='primary'
+                                                className={styles.create_button}
+                                                onClick={() => handleOptionAdd(qindex)}>
+                                                <IoAddSharp className={styles.icon} />
+                                            </Button>
+                                        }
+                                        {
+                                            questionList[qindex].options.length > 1 &&
+
+                                            <Button
+                                                className={styles.delete_button}
+                                                onClick={() => handleOptionRemove(qindex, oindex)}>
+                                                <BsFillTrash2Fill className={styles.icon} />
+                                            </Button>
+                                        }
+                                    </Form.Group>
+                                })
                             }
+                            <hr></hr>
                         </div>
                     ))
                 }
                 <Button
                     variant='primary'
                     onClick={(e) => onSubmit(e)}>
-                    Create
+                    Publish Challenge
                 </Button>
             </form>
         </PageContainer>

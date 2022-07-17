@@ -74,8 +74,9 @@ class Post extends React.Component{
 
                 <div className={styles.tags}>
                     {
-                        this.props.tags.map( (tag, i) =>
-                            <div key={`${i}`} className={styles.tag}>
+                        this.props.tags &&
+                        this.props.tags.map( (tag, i) => 
+                            tag && <div key={`${i}`} className={styles.tag}>
                                 <span>{tag}</span>
                             </div>
                         )
