@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 
 const rewardSchema = new Schema({
 
-    name: String,
-    description: String,
-    cost: Number,
-    quantity: Number,
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    cost: { type: Number, required: true },
+    quantity: { type: Number, required: true },
 
 }, { timestamps: true });
 

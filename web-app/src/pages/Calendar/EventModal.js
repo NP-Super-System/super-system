@@ -39,12 +39,11 @@ const EventModal = props => {
     }
 
     return (
-        <Modal
-            show={show}>
+        <Modal show={show} centered>
             <div className={styles.modal}>
                 <Modal.Header>{text}</Modal.Header>
-                <Modal.Body>{dayjs(new Date(date)).format('ddd, MMM D, YYYY')}</Modal.Body>
-                <Modal.Body>{dayjs(new Date(date)).format('h:mm A')}</Modal.Body>
+                <Modal.Body>Date: {dayjs(new Date(date)).format('ddd, MMM D, YYYY')}</Modal.Body>
+                <Modal.Body>Time: {dayjs(new Date(date)).format('h:mm A')}</Modal.Body>
                 <Button
                     variant='danger'
                     onClick={e => deleteEvent(e)}>

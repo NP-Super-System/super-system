@@ -1,0 +1,43 @@
+.modal{
+    padding: 1em;
+}
+.modal .name{
+    font-weight: 600;
+    font-size: 1.5em;
+}
+.modal .body{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.modal .body .description{
+    margin-bottom: 2em;
+}
+.modal .body .cost{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 1em;
+}
+.modal .body .cost .img{
+    width: 100%;
+	max-width: 26px;
+	height: 100%;
+	max-height: 26px;
+
+	margin-right: 0.25em;
+}
+.modal .body .cost .text{
+
+}
+.modal .body .quantity{
+    margin-bottom: 1em;
+    font-style: italic;
+    font-size: small;
+}
+
+.modal .close_btn{
+    margin-left: 1em;
+}

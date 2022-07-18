@@ -1,0 +1,24 @@
+.action_btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.2em 0.5em;
+    margin-left: 1em;
+}
+.action_btn.redeemed_link{
+    
+}
+
+.wrapper{
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+
+    padding: 56px 1em 0 1em;
+}
+.wrapper .title {
+	align-self: flex-start;
+	padding: 0.5em 0 0 0;
+}

@@ -33,10 +33,9 @@ export {default as EventOrganiser} from './EventOrganiser';
 export {default as EventRegistered} from './EventRegistered';
 
 export {default as Rewards} from './Rewards';
+export {default as RewardsRedeemed} from './RewardsRedeemed';
 
 export {default as Game} from  './Game/Game';
-
-export {default as Rewards} from  './Rewards/Rewards';
 
 export {default as Unauthorized} from './Unauthorized/Unauthorized';
 

@@ -169,6 +169,7 @@ function App() {
 					<Route path='/rewards' element={<Pages.Rewards />}/>
 					<Route path='/game' element={<Pages.Game />} />
 					<Route path='/rewards' element={<Pages.Rewards />} />
+					<Route path='/rewards/redeemed' element={<Pages.RewardsRedeemed />} />
 					<Route path='/unauthorized' element={<Pages.Unauthorized />} />
 					<Route element={<RequireRole allowedRoles={['Admin']} />} >
 						<Route path='/roles' element={<Pages.Roles />} />

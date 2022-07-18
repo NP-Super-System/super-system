@@ -1,53 +1,44 @@
-const express = require("express");
-const rewardModel = require("../models/reward/Reward");
-const app = express();
+const Reward = require('../models/reward/Reward');
 
-// Read rewards
-app.get("/rewards", async (request, response) => {
-  const rewards = await rewardModel.find({});
+const operations = app => {
+    // Create
+    app.post('/reward/create', async (req, res) => {
+        const { name, description, cost, quantity } = req.body;
+        try{
+            const newReward = new Reward({name, description, cost, quantity});
+            const result = await newReward.save();
+            res.send({msg: 'Successfully created new reward!'});
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
+    });
+    // Read
+    app.get('/reward/read', async(req, res) => {
+        const { id } = req.query;
+        try{
+            if(id){
+                const reward = await Reward.findOne({ _id: id });
+                res.send(reward);
+            }
 
-  try {
-    response.send(rewards);
-  } catch (error) {
-    response.status(500).send(error);
-  }
-});
+            const rewards = await Reward.find({});
+            res.send(rewards);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
+    });
+    // Update
+    app.post('/reward/update', async (req, res) => {
 
-// Create rewards
-app.post("/reward", async (request, response) => {
-    const reward = new rewardModel(request.body);
-  
-    try {
-      await reward.save();
-      response.send(reward);
-    } catch (error) {
-      response.status(500).send(error);
-    }
-  });
+    });
+    // Delete
+    app.post('/reward/delete', async (req, res) => {
 
-// Update rewards
-app.patch("/reward/:id", async (request, response) => {
-    try {
-      await rewardModel.findByIdAndUpdate(request.params.id, request.body);
-      await rewardModel.save();
-      response.send(reward);
-    } catch (error) {
-      response.status(500).send(error);
-    }
-  });
-  
-// Delete rewards
-app.delete("/reward/:id", async (request, response) => {
-    try {
-      const reward = await rewardModel.findByIdAndDelete(request.params.id);
-  
-      if (!reward) response.status(404).send("No item found");
-      response.status(200).send();
-    } catch (error) {
-      response.status(500).send(error);
-    }
-  });
-  
+    });
+}
 
-
-module.exports = app;
+module.exports = operations;
