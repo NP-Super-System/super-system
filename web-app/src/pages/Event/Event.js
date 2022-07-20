@@ -44,14 +44,14 @@ const Event = props=>{
                     <Button
                         className={`${styles.action_btn} ${styles.organised_link}`}
                         variant='primary'>
-                        View Organised Events
+                        Organised
                     </Button>
                 </Link>
                 <Link to='/event/registered'>
                     <Button
                         className={`${styles.action_btn} ${styles.registered_link}`}
                         variant='primary'>
-                        View Registered Events
+                        Registered
                     </Button>
                 </Link>
                 <Link to='/event/create'>

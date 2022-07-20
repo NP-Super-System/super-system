@@ -1,21 +1,8 @@
-.correct {
-    color: limegreen;
-    margin: 10px;
-}
-
-.wrong {
-    color: red;
-    margin: 10px;
-}
-
-.option {
+.form{
     display: flex;
-    font-size: 1.25em;
-    text-align: center;
-    margin-bottom: 5px;
-}
+    flex-direction: column;
 
-.form {
+
     padding: 1em;
     text-align: left;
     align-self: center;
@@ -23,9 +10,56 @@
     width: 100%;
     max-width: 800px;
 }
-
 .backBtn {
-    display: flex;
+    display: inline-flex;
     padding: 0.5em;
     margin-bottom: 20px;
+    max-width: 34px;
+    width: 100%;
 }
+.form .test_title{
+    font-weight: bold;
+}
+.form .answers_text{
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+.question{
+    margin-bottom: 1.5em;
+}
+.question .header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.question .text{
+    margin-bottom: 0.5em;
+}
+
+.question .img_submissions{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}
+.question .img_submissions .img{
+    width: 100%;
+}
+
+.question .option {
+    display: flex;
+    font-size: 1.25em;
+    text-align: center;
+    margin-bottom: 0.25em;
+}
+.question .option .correct {
+    color: limegreen;
+    margin: 10px;
+}
+.question .option .wrong {
+    color: red;
+    margin: 10px;
+}
+

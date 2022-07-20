@@ -163,7 +163,7 @@ const ChallengeList = props => {
                     challenges.sort((a, b) => getRating(a.rating, a.numberOfRatings) > getRating(b.rating, b.numberOfRatings) ? -1 : 1).map((item, i) =>
                     (
                         <div key={`${i}`} className={styles.challenge}>
-                            <Link to={`/challenges/${item._id}`} className={styles.challenge_info}>
+                            <div className={styles.challenge_info}>
                                 <Row>
                                     <Col className={styles.challenge_details}>
                                         <h5>{item.title}</h5>
@@ -202,6 +202,13 @@ const ChallengeList = props => {
                                         </div>
                                     </Col>
                                 </Row>
+                            </div>
+                            <Link to={`/challenges/${item._id}`} className={styles.attempt_link}>
+                                <Button
+                                    variant='success'
+                                    className={styles.button}>
+                                    Attempt
+                                </Button>
                             </Link>
                             <div className={styles.buttons}>
                                 {

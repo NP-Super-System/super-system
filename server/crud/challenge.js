@@ -42,27 +42,46 @@ const operations = app => {
         console.log(imgKeyList);
         return imgKeyList;
     }
+    // Upload Single Image
+    const uploadImage = async req => {
+        let imgKey = '';
+
+        let img = req.file;
+        try{
+            const uploadImgRes = await uploadFile(img, 'image');
+            console.log(uploadImgRes);
+            imgKey = uploadImgRes.key || '';
+        }
+        catch(err){
+            console.log(err);
+        }
+
+        return imgKey;
+    }
 
     // Create challenge
     const createChallenge = async (res, userId, updated=false, title, points, rating, numberOfRatings, content, imgKeyObj) => {
-        const questionList = [];
-        for (var i = 0; i < content.length; i++) {
-            const optionsList = [];
-            for (var j = 0; j < content[i].options.length; j++) {
-                const newOption = new Option({
-                    text: content[i].options[j].text,
-                    isCorrect: content[i].options[j].isCorrect,
-                });
-                optionsList.push(newOption);
+        let questions = [];
+
+        for (var question of content){
+            const { text, type, points } = question;
+
+            let options = [];
+            for (var i in question.options){
+                const option = question.options[i];
+                const { text, isCorrect } = option;
+                const newOption = new Option({ text, isCorrect });
+                options.push(newOption);
             }
             const newQuestion = new Question({
-                text: content[i].text,
-                type: content[i].type,
-                points: content[i].points,
-                options: optionsList,
+                text,
+                type,
+                points,
                 imgKey: imgKeyObj[i.toString()] || '',
-            })
-            questionList.push(newQuestion);
+                options,
+                submissions: [],
+            });
+            questions.push(newQuestion);
         }
 
         const user = await User.findOne({_id: userId});
@@ -72,7 +91,7 @@ const operations = app => {
             title,
             pointCount: points,
             rating,
-            questions: questionList,
+            questions,
             numberOfRatings,
         }
 
@@ -81,10 +100,13 @@ const operations = app => {
         newChallenge.save()
             .then(result => {
                 console.log('Created new challenge. Redirect');
-                res.send(result);
+                res.send({msg: 'Successfully published new challenge'});
             })
-            .catch(err => console.log(`Error: ${err}`));
-        res.send('debug');
+            .catch(err => {
+                console.log(`Error: ${err}`);
+                res.send({err});
+            });
+        // res.send('debug');
     }
 
     app.post('/challenge/create', uploadLocal.any('imgList'), async (req, res) => {
@@ -156,6 +178,25 @@ const operations = app => {
         const challenge = await Challenge.findOne({_id: challengeId});
         challenge.usersCompleted.push(userId);
         challenge.save();
+    });
+
+    app.post('/challenge/post', uploadLocal.single('img'), async (req, res) => {
+        const { challengeId, qindex } = req.body;
+
+        try{
+            const imgKey = await uploadImage(req);
+            const challenge = await Challenge.findOne({_id: challengeId});
+            const submissions = challenge.questions[qindex].submissions;
+            submissions.push(imgKey);
+
+            const result = await challenge.save();
+            console.log(result);
+            res.send({msg: 'Image submssion successful'});
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
     });
 
     // Delete challenge

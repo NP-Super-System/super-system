@@ -7,34 +7,95 @@
     max-width: 800px;
 }
 
-.preview{
-    margin-top: 0.5em;
-    width: 100%;
-    max-width: 600px;
-}
-
-.backBtn {
+.form .backBtn {
     display: flex;
     padding: 0.5em;
     margin-bottom: 20px;
 }
 
-.question .img_upload_text{
-    font-style: italic;
+.form .total_points{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-bottom: 2em;
+}
+.form .total_points .img{
+    max-width: 34px;
+    width: 100%;
+    max-height: 34px;
+    height: 100%;
+
+    margin-left: 1em;
+    margin-right: 0.25em;
+}
+.form .total_points .count{
+    font-weight: 600;
 }
 
-.options {
+
+
+.option {
     display: flex;
 }
 
-.create_button{
+.question{
+    margin-bottom: 2em;
+}
+.question .header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    margin-bottom: 0.75em;
+}
+.question .header .title{
+    font-weight: 600;
+}
+.question .header .create_button{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-left: auto;
-    margin: 10px;
-    border: none;
-    padding: 0.1em;
+    padding: 0.1em 0.5em 0.1em 0.1em;
+
+    margin-left: 1em;
+}
+.question .header .create_button .icon{
+    margin-right: 0.25em;
+}
+
+.question .settings{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.question .settings .image{
+    
+}
+.question .settings .image .label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.question .settings .image .label .img_text{
+    margin-right: 0.5em;
+}
+.question .settings .image .label .optional_text{
+    font-size: small;
+    font-style: italic;
+}
+.question .settings .image .input{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.question .img_upload_text{
+    font-style: italic;
 }
 
 .checkbox {
@@ -52,12 +113,12 @@
 
 .delete_button{
     display: inline-flex;
-    margin: 10px;
     align-items: center;
     justify-content: center;
     background-color: red;
     border: none;
 
+    margin-left: 1em;
     padding: 0.1em;
 }
 
@@ -67,4 +128,8 @@
 .icon{
     width: 20px;
     height: 20px;
+}
+
+.publish_btn{
+    margin-top: 1em;
 }

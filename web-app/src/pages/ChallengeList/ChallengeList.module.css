@@ -46,8 +46,13 @@
 }
 
 .challenge{
+    display: flex;
+    flex-direction: column;
+    
     border: 1px solid rgb(215, 215, 215);
     border-radius: 5px;
+
+    background-color: #fff;
     
     margin-bottom: 1em;
     padding: 1em;
@@ -61,6 +66,8 @@
     color: black;
 
     text-align: left;
+
+    margin-bottom: 1em;
 }
 
 .challenge_details{
@@ -71,6 +78,18 @@
 .challenge_points{
     text-align: center;
     float: right;
+}
+
+.challenge .attempt_link{
+    display: inline-flex;
+    align-items: flex-start;
+
+    width: fit-content;
+    text-decoration: none;
+    color: black;
+}
+.challenge .attempt_link .button{
+    
 }
 
 .create_button{

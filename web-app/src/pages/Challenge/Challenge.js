@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import { Link } from "react-router-dom";
 import { Button, Form, Image } from 'react-bootstrap';
+
 import styles from './Challenge.module.css';
 
 import PageContainer from '../../layout/PageContainer';
-import { Link } from "react-router-dom";
 import BeautyStars from 'beauty-stars';
 import GlobalContext from '../../context/GlobalContext';
-
-import Swal from 'sweetalert2';
 
 
 const Challenge = props => {
@@ -17,9 +17,9 @@ const Challenge = props => {
 	const { challengeId } = useParams();
 	const { user } = useContext(GlobalContext);
 
-	const [challenge, setChallenge] = useState([]);
+	const [questions, setQuestions] = useState([]);
 
-	const [currentQuestion, setCurrentQuestion] = useState(0);
+	const [questionIndex, setQuestionIndex] = useState(0);
 	const [showScore, setShowScore] = useState(false);
 	const [score, setScore] = useState(0);
 	const [isClicked, setIsClicked] = useState(false);
@@ -32,21 +32,50 @@ const Challenge = props => {
 	const [points, setPoints] = useState(0);
 	const [usersCompleted, setUsersCompleted] = useState([]);
 
-	const [imgList, setImgList] = useState({});
+	const [imgSubmission, setImgSubmission] = useState(null);
 	const handleImageChange = (e, qindex) => {
         if (!e.target.files || e.target.files.length === 0) return;
-        const img = e.target.files[0];
 
-        let newImgList = {...imgList};
-        newImgList[qindex] = img;
-        setImgList(newImgList);
-        console.log(newImgList);
+        setImgSubmission({
+			img: e.target.files[0],
+			qindex,
+		});
     }
 
-	var ans = []
+	useEffect(()=>{
+		console.log(imgSubmission);
+	}, [imgSubmission]);
+
+	const handleSubmitImage = e => {
+		const {img, qindex} = imgSubmission;
+
+		let formData = new FormData();
+		formData.append('img', img);
+		formData.append('challengeId', challengeId);
+		formData.append('qindex', qindex);
+
+		const url = 'http://localhost:5000/challenge/post';
+        const options = {
+            method: 'POST',
+            body: formData,
+        }
+
+        fetch(url, options)
+            .then(async res => {
+				const data = JSON.parse(await res.text());
+                console.log(data.msg);
+                toast.success('Posted image submission!');
+            })
+            .catch(err => {
+                toast.error(err);
+                console.log(err);
+            });
+	}
+
+	var ans = [];
 
 	const singleAnswer = (id) => {
-		setIsCorrect(challenge[currentQuestion].options[id].isCorrect);
+		setIsCorrect(questions[questionIndex].options[id].isCorrect);
 		setIsClicked(true);
 	}
 
@@ -62,22 +91,21 @@ const Challenge = props => {
 		if (isCorrectCounter.includes(id)) {
 			isCorrectCounter.splice(isCorrectCounter.findIndex(answer => answer === id), 1);
 		}
-		else if (challenge[currentQuestion].options[id].isCorrect) {
+		else if (questions[questionIndex].options[id].isCorrect) {
 			isCorrectCounter.push(id);
 		}
 	}
 
 	const ansSelected = () => {
-		if (challenge[currentQuestion].type === 'multiple-answer') {
+		if (questions[questionIndex].type === 'multiple-answer') {
 			const correct = [];
-			for (var i = 0; i < challenge[currentQuestion].options.length; i++) {
-				if (challenge[currentQuestion].options[i].isCorrect) {
+			for (var i = 0; i < questions[questionIndex].options.length; i++) {
+				if (questions[questionIndex].options[i].isCorrect) {
 					correct.push(i);
 				}
 			}
 
-			let numBerComparator = (a, B) => a - B
-			isCorrectCounter.sort(numBerComparator)
+			isCorrectCounter.sort((a, B) => a - B);
 
 			if (JSON.stringify(isCorrectCounter) == JSON.stringify(correct)) {
 				setScore(score + 1);
@@ -91,12 +119,12 @@ const Challenge = props => {
 		setIsCorrectCounter([]);
 		setIsCorrect(false);
 
-		const nextQuestion = currentQuestion + 1;
-		if (nextQuestion < challenge.length) {
+		const nextQuestion = questionIndex + 1;
+		if (nextQuestion < questions.length) {
 			setIsClicked(false);
 			setIsChosen([]);
-			setCurrentQuestion(nextQuestion);
-			ans = []
+			setQuestionIndex(nextQuestion);
+			ans = [];
 		} else {
 			setShowScore(true);
 		}
@@ -104,7 +132,7 @@ const Challenge = props => {
 
 	const handleAnswerOptionClick = () => {
 		{
-			challenge[currentQuestion].type === 'multiple-answer' ?
+			questions[questionIndex].type === 'multiple-answer' ?
 				isChosen?.length !== 0 ?
 					ansSelected()
 					:
@@ -113,7 +141,7 @@ const Challenge = props => {
 						title: 'Oops...',
 						text: 'Please select an answer!',
 					})
-				: challenge[currentQuestion].type === 'image-upload'  ?
+				: questions[questionIndex].type === 'image-upload'  ?
 					ansSelected()
 					:
 					isClicked ?
@@ -159,7 +187,7 @@ const Challenge = props => {
 		setIsChosen([]);
 		setIsClicked(false);
 		setScore(0);
-		setCurrentQuestion(0);
+		setQuestionIndex(0);
 		setShowScore(false);
 		setRating(0);
 	}
@@ -220,11 +248,13 @@ const Challenge = props => {
 					.then(data => {
 						// Set challenges
 						console.log(data);
-						setNumberOfRatings(data.numberOfRatings);
-						setChallengeRating(data.rating);
-						setChallenge(data.questions);
-						setPoints(data.pointCount);
-						setUsersCompleted(data.usersCompleted);
+						const {pointCount, rating, numberOfRatings, questions, usersCompleted} = data;
+						setPoints(pointCount);
+						setChallengeRating(rating);
+						setNumberOfRatings(numberOfRatings);
+
+						setQuestions(questions);
+						setUsersCompleted(usersCompleted);
 					})
 					.catch(err => console.log(err))
 			)
@@ -239,90 +269,99 @@ const Challenge = props => {
 		<PageContainer>
 			<div className={styles.challenge}>
 				{
-					showScore ?
-						<div>
-							You scored
-							{
-								score === challenge.length ?
-									' full marks!'
-									:
-									` ${score} out of ${challenge.length}`
-							}
-							<br />
-							<br />
-							<div>Please rate the challenge:</div>
-							<br />
-							<div className={styles.rater}>
-								<BeautyStars
-									value={rating}
-									activeColor="blue"
-									onChange={value => setRating(value)}
-								/>
-							</div>
-							<br />
-							<br />
-							<Button variant='outline-primary' onClick={() => { restartChallenge(); submitRating(); incrementPoints() }}>Redo Challenge</Button>
-							<br />
-							<br />
-							<Link to='/challenges'>
-								<Button variant='outline-primary' onClick={() => { submitRating(); incrementPoints() }}>Back To Challenges</Button>
-							</Link>
-						</div>
+					showScore ? // Show final score
+					<div>
+						You scored
+					{
+						score === questions.length ?
+						` full marks! (${score} out of ${questions.length})`
+
 						:
-						<>
+						` ${score} out of ${questions.length}`
+					}
+						<br />
+						<br />
+						<div>Please rate the challenge:</div>
+						<br />
+						<div className={styles.rater}>
+							<BeautyStars
+								value={rating}
+								activeColor="blue"
+								onChange={value => setRating(value)}
+							/>
+						</div>
+						<br />
+						<br />
+						<Button variant='outline-primary' onClick={() => { restartChallenge(); submitRating(); incrementPoints() }}>Redo Challenge</Button>
+						<br />
+						<br />
+						<Link to='/challenges'>
+							<Button variant='outline-primary' onClick={() => { submitRating(); incrementPoints() }}>Back To Challenges</Button>
+						</Link>
+					</div>
+
+					: // Show question
+					<>
+					{
+						questions[questionIndex] &&
+						<div className={styles.question}>
+							<span>Challenge {questionIndex + 1}/{questions.length}</span>
+						{
+							questions[questionIndex].imgKey &&
+							<Image
+								className={styles.img}
+								src={`http://localhost:5000/s3/image/?key=${questions[questionIndex].imgKey}`} />
+						}
+							<div>{questions[questionIndex].text}</div>
+							<div className={styles.answersection}>
 							{
-								challenge[currentQuestion] &&
-								<div>
-									<div>
-										<span>Challenge {currentQuestion + 1}</span>/{challenge.length}
+								questions[questionIndex].type === 'multiple-answer' ?
+								questions[questionIndex].options.map((answerOption, i) => (
+									<div key={i + questionIndex * 10} className={styles.button}>
+										<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
+										<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
 									</div>
+								))
+
+								: questions[questionIndex].type === 'image-upload' ?
+								<>
+									<Form.Group>
+										<Form.Control
+											key=''
+											name='image'
+											type='file'
+											accept='image/png, image/jpeg'
+											size='sm'
+											onChange={e => handleImageChange(e, questionIndex)}/>
+									</Form.Group>
 								{
-									challenge[currentQuestion].imgKey &&
-									<Image
-										className={styles.img}
-										src={`http://localhost:5000/s3/image/?key=${challenge[currentQuestion].imgKey}`} />
+									imgSubmission?.img &&
+									<Button
+										variant='primary'
+										onClick={handleSubmitImage}>
+										Submit Image
+									</Button>
 								}
-									<div>{challenge[currentQuestion].text}</div>
-									<div className={styles.answersection}>
-									{
-										challenge[currentQuestion].type === 'multiple-answer' ?
-										challenge[currentQuestion].options.map((answerOption, i) => (
-											<div key={i + currentQuestion * 10} className={styles.button}>
-												<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
-												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
-											</div>
-										))
-
-										: challenge[currentQuestion].type === 'image-upload' ?
-										<>
-											<Form.Group>
-												<Form.Control
-													key=''
-													name='image'
-													type='file'
-													accept='image/png, image/jpeg'
-													size='sm'
-													onChange={e => handleImageChange(e, currentQuestion)}/>
-											</Form.Group>
-										</>
-												
-										: challenge[currentQuestion].type === 'single-answer' ?
-										challenge[currentQuestion].options.map((answerOption, i) => (
-											<div key={i + currentQuestion * 10} className={styles.button}>
-												<input type="radio" className="btn-check" name="options" id={answerOption._id} />
-												<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
-											</div>
-										))
-
-										: 
-
-										<span style={{fontStyle: 'italic'}}>Error identifying question type</span>
-									}
+									<span>Submissions ({questions[questionIndex].submissions.length})</span>
+								</>
+										
+								: questions[questionIndex].type === 'single-answer' ?
+								questions[questionIndex].options.map((answerOption, i) => (
+									<div key={i + questionIndex * 10} className={styles.button}>
+										<input type="radio" className="btn-check" name="options" id={answerOption._id} />
+										<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
 									</div>
-									<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
-								</div>
+								))
+
+								: 
+
+								<span style={{fontStyle: 'italic'}}>Error identifying question type</span>
 							}
-						</>
+							</div>
+							<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
+						</div>
+					}
+					</>
 				}
 			</div>
 		</PageContainer>

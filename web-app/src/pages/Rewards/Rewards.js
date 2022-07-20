@@ -71,7 +71,7 @@ const Rewards = props => {
                     <Button
                         variant='primary'
                         className={`${styles.action_btn} ${styles.redeemed_link}`}>
-                        View Redeemed
+                        Redeemed
                     </Button>
                 </Link>
             </PageHeader>

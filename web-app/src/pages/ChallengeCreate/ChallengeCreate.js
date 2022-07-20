@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
@@ -12,6 +12,7 @@ import styles from './ChallengeCreate.module.css';
 import PageContainer from '../../layout/PageContainer';
 import GlobalContext from '../../context/GlobalContext';
 import Swal from 'sweetalert2'
+import Preview from './Preview';
 
 
 const ChallengeCreate = props => {
@@ -26,7 +27,9 @@ const ChallengeCreate = props => {
     const [title, setTitle] = useState('');
     const [points, setPoints] = useState(0);
     const [questionList, setQuestionList] = useState([]);
+
     const [imgList, setImgList] = useState([]);
+    const [previews, setPreviews] = useState([]);
 
     const getChallenge = () => {
         // Get challenge from server
@@ -143,7 +146,7 @@ const ChallengeCreate = props => {
 
     const handlePointsChange = (index, newPoints) => {
         const newQuestionList = [...questionList];
-        newQuestionList[index].points = Number(newPoints);
+        newQuestionList[index].points = Math.min(Number(newPoints), 10);
         setQuestionList(newQuestionList);
         setPoints(questionList.reduce((a, v) => a = a + v.points, 0));
     }
@@ -166,6 +169,33 @@ const ChallengeCreate = props => {
         setImgList(newImgList);
         console.log(newImgList);
     }
+
+    useEffect(()=>{
+        if(imgList.length <= 0) return;
+
+        const newPreviews = imgList.map((img, i) => {
+            if(!img) return null;
+            const objectUrl = URL.createObjectURL(img);
+            return {
+                qindex: i,
+                objectUrl,
+            };
+        });
+        setPreviews(newPreviews);
+
+        console.log(newPreviews);
+
+        return () => {
+            // free memory when ever this component is unmounted
+            for (var preview of previews){
+                if(!preview) continue
+                const { objectUrl } = preview;
+                
+                if(!objectUrl) continue;
+                URL.revokeObjectURL(objectUrl);
+            }
+        }
+    }, [imgList]);
 
     const onSubmit = async e => {
         e.preventDefault();
@@ -286,22 +316,28 @@ const ChallengeCreate = props => {
                     onClick={() => backBtn()}>
                     <BsFillArrowLeftCircleFill />
                 </Button>
-                <div>
-                    Total Points: {points}
-                </div>
+                <h5>Title</h5>
                 <Form.Group className={`mb-3`}>
                     <Form.Control
                         name='title'
                         type='input'
-                        placeholder='Title'
+                        placeholder='e.g. Ethical Hacking Test, Network Security Week 3 Test'
                         value={title}
                         onChange={e => setTitle(e.target.value)}
                         required />
                 </Form.Group>
+                <div className={styles.total_points}>
+                    <span>Total Points:</span>
+                    <Image src={'/media/coin.png'} className={styles.img}/>
+                    <span className={styles.count}>{points}</span>
+                </div>
+                <h5>Questions ({questionList.length})</h5>
+                <hr></hr>
                 {
                     questionList.map((question, qindex) => (
                         <div key={`${qindex}`} className={styles.question}>
-                            <span>Question {qindex + 1}:</span>
+                            <div className={styles.header}>
+                                <span className={styles.title}>Question {qindex + 1}:</span>
                             {
                                 questionList.length - 1 === qindex &&
 
@@ -309,54 +345,71 @@ const ChallengeCreate = props => {
                                     variant='primary'
                                     className={styles.create_button}
                                     onClick={handleQuestionAdd}>
-                                    <IoAddSharp className={styles.icon} /> Add Question Below
+                                    <IoAddSharp className={styles.icon} /> Add Question
                                 </Button>
                             }
                             {
                                 questionList.length > 1 &&
-
+                                
                                 <Button
                                     className={styles.delete_button}
                                     onClick={() => handleQuestionRemove(qindex)}>
                                     <BsFillTrash2Fill className={styles.icon} />
                                 </Button>
                             }
-                            <Form.Group className={`mb-3`}>
-                                <Form.Select
-                                    name='questionType'
-                                    onChange={e => handleQuestionTypeChange(e, qindex)}>
-                                    <option value='single-answer'>Single Answer Question</option>
-                                    <option value='multiple-answer'>Multiple Answer Question</option>
-                                    <option value='image-upload'>Image Upload</option>
-                                </Form.Select>
-                            </Form.Group>
-                            <Form.Group className={`mb-3`}>
-                                <Form.Control
-                                    name='points'
-                                    type='number'
-                                    placeholder='Points'
-                                    value={question.points}
-                                    onChange={e => handlePointsChange(qindex, e.target.value)}
-                                    required />
-                            </Form.Group>
-                            <Form.Group className={`mb-3`}>
-                                <span>Image (optional)</span>
-                                <Form.Control
-                                    key={question.fileInputKey}
-                                    name='file'
-                                    type='file'
-                                    accept='image/png, image/jpeg'
-                                    size='sm'
-                                    onChange={e => handleImageChange(e, qindex)} />
-                                {
-                                    imgList[qindex] &&
-                                    <Button
-                                        variant='danger'
-                                        onClick={e => cancelImageUpload(e, qindex)}>
-                                        Cancel
-                                    </Button>
-                                }
-                            </Form.Group>
+                            </div>
+                            <div className={styles.settings}>
+                                <div className={styles.type}>
+                                    <span>Type</span>
+                                    <Form.Group className={`mb-3`}>
+                                        <Form.Select
+                                            name='questionType'
+                                            onChange={e => handleQuestionTypeChange(e, qindex)}>
+                                            <option value='single-answer'>Single Answer</option>
+                                            <option value='multiple-answer'>Multiple Answer</option>
+                                            <option value='image-upload'>Image Upload</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </div>
+                                <div className={styles.points}>
+                                    <span>Points (max: 10)</span>
+                                    <Form.Group className={`mb-3`}>
+                                        <Form.Control
+                                            name='points'
+                                            type='number'
+                                            placeholder='Points'
+                                            value={question.points}
+                                            onChange={e => handlePointsChange(qindex, e.target.value)}
+                                            step='any'
+                                            required />
+                                    </Form.Group>
+                                </div>
+                                <div className={styles.image}>
+                                    <div className={styles.label}>
+                                        <span className={styles.img_text}>Image</span>
+                                        <span className={styles.optional_text}>(optional)</span>
+                                    </div>
+                                    <Form.Group className={`mb-3 ${styles.input}`}>
+                                        <Form.Control
+                                            key={question.fileInputKey}
+                                            name='file'
+                                            type='file'
+                                            accept='image/png, image/jpeg'
+                                            size='sm'
+                                            onChange={e => handleImageChange(e, qindex)} />
+                                        {
+                                            imgList[qindex] &&
+                                            <Button
+                                                variant='danger'
+                                                onClick={e => cancelImageUpload(e, qindex)}>
+                                                Cancel
+                                            </Button>
+                                        }
+                                    </Form.Group>
+                                </div>
+                            </div>
+                            <Preview qindex={qindex} previews={previews}/>
+                            <span>Text</span>
                             <Form.Group className={`mb-3`}>
                                 <Form.Control
                                     name='question'
@@ -368,47 +421,51 @@ const ChallengeCreate = props => {
                             {
                                 question.type === 'image-upload' ?
                                     
-                                <span className={styles.img_upload_text}>This type of question collects responses from the user in the form of images.</span>
+                                <span className={styles.img_upload_text}>This type of question collects image responses from users.</span>
                                     
                                 :
+                                <>
+                                    <span>Options <i style={{fontSize: 'smaller', marginLeft: '0.5em'}}>(select the right answers)</i></span>
+                                {
+                                    question.options.map((option, oindex) => {
+                                        return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.option}`}>
+                                            <Form.Check
+                                                type={questionList[qindex].type === 'multiple-answer' ? 'checkbox' : 'radio'}
+                                                name={`Question ${qindex + 1}`}
+                                                className={styles.checkbox}
+                                                onChange={() => updateOption(qindex, oindex)}
+                                                checked={option.isCorrect} />
 
-                                question.options.map((option, oindex) => {
-                                    // console.log(questionList[qindex].type);
-                                    return <Form.Group key={`${oindex}`} className={`mb-3 ${styles.options}`}>
-                                        <Form.Check
-                                            type={questionList[qindex].type === 'multiple-answer' ? 'checkbox' : 'radio'}
-                                            name={`Question ${qindex + 1}`}
-                                            className={styles.checkbox}
-                                            onChange={() => updateOption(qindex, oindex)}
-                                            checked={option.isCorrect} />
+                                            <Form.Control
+                                                name='option'
+                                                placeholder={`Option ${oindex + 1}`}
+                                                value={option.text}
+                                                onChange={(e) => handleOptionChange(e, qindex, oindex)}
+                                                required />
+                                            {
+                                                questionList[qindex].options.length - 1 === oindex &&
 
-                                        <Form.Control
-                                            name='option'
-                                            placeholder={`Option ${oindex + 1}`}
-                                            value={option.text}
-                                            onChange={(e) => handleOptionChange(e, qindex, oindex)}
-                                            required />
-                                        {
-                                            questionList[qindex].options.length - 1 === oindex &&
+                                                <Button
+                                                    variant='none'
+                                                    className={styles.create_button}
+                                                    onClick={() => handleOptionAdd(qindex)}
+                                                    title='Add Option'>
+                                                    <IoAddSharp className={styles.icon} />
+                                                </Button>
+                                            }
+                                            {
+                                                questionList[qindex].options.length > 1 &&
 
-                                            <Button
-                                                variant='primary'
-                                                className={styles.create_button}
-                                                onClick={() => handleOptionAdd(qindex)}>
-                                                <IoAddSharp className={styles.icon} />
-                                            </Button>
-                                        }
-                                        {
-                                            questionList[qindex].options.length > 1 &&
-
-                                            <Button
-                                                className={styles.delete_button}
-                                                onClick={() => handleOptionRemove(qindex, oindex)}>
-                                                <BsFillTrash2Fill className={styles.icon} />
-                                            </Button>
-                                        }
-                                    </Form.Group>
-                                })
+                                                <Button
+                                                    className={styles.delete_button}
+                                                    onClick={() => handleOptionRemove(qindex, oindex)}>
+                                                    <BsFillTrash2Fill className={styles.icon} />
+                                                </Button>
+                                            }
+                                        </Form.Group>
+                                    })
+                                }
+                                </>
                             }
                             <hr></hr>
                         </div>
@@ -416,7 +473,8 @@ const ChallengeCreate = props => {
                 }
                 <Button
                     variant='primary'
-                    onClick={(e) => onSubmit(e)}>
+                    onClick={(e) => onSubmit(e)}
+                    className={styles.publish_btn}>
                     Publish Challenge
                 </Button>
             </form>

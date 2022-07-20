@@ -7,19 +7,16 @@ const OptionSchema = require('./Option').schema;
 
 const questionSchema = new Schema({
 
-    // isMultipleAns: { type: Boolean, required: true, },
-    // isImageUpload: { type: Boolean, required: true, },
     type: { type: String, required: true, },
-    /*
-        single-answer, multiple-answer, image-upload
-    */
+    // type: single-answer, multiple-answer, image-upload
+
     points: { type: Number, required: true, },
 
     text: { type: String, required: true, },
     imgKey: String,
 
     options: [OptionSchema],
-
+    submissions: [String],
 });
 
 // Create model for question collection
