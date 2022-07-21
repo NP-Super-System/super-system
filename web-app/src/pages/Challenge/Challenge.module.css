@@ -1,15 +1,3 @@
-.answersection {
-    padding: 10px;
-}
-
-.button {
-    margin-bottom: 10px;
-}
-
-.label {
-    width: 100%;
-}
-
 .rater {
     display: flex;
     margin: auto;
@@ -27,16 +15,80 @@
     justify-content: center;
 }
 
+.challenge .rate{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    margin-top: 1em;
+    padding: 2em 1em;
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+}
+.challenge .rate .pls_text{
+    padding: 1em;
+}
+.challenge .rate .rater{
+    margin-bottom: 1em;
+}
+.challenge .rate .actions{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.challenge .rate .actions > *{
+    width: 100%;
+}
+.challenge .rate .actions .button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: fit-content;
+    margin-bottom: 1em;
+}
+.challenge .rate .actions .icon{
+    margin-right: 0.5em;
+}
+
 .question{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 
     width: 100%;
     max-width: 800px;
+    
+    padding: 1em;
+    margin: 1em 0 0 0;
+}
+.question .title{
+    
 }
 .question .img{
     max-height: 450px;
     height: 100%;
+}
+.question .text{
+    padding: 1em 0;
+}
+
+.question .answersection {
+    padding: 1em 0;
+    width: 100%;
+}
+.question .answersection .button{
+    text-align: left;
+    margin-bottom: 0.5em;
+}
+.question .answersection .label{
+    text-align: left;
+    width: 100%;
+
+    padding: 0.5em 1em;
+    color: black;
+    border: none;
 }

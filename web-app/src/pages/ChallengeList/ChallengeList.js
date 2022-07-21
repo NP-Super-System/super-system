@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
-import { Card, Row, Col, Button } from 'react-bootstrap';
+import { Card, Row, Col, Button, Image } from 'react-bootstrap';
 import { useScreenType } from '../../hooks/useScreenType';
 import { BsFillTrash2Fill, BsPencilFill, BsFillFileEarmarkFontFill, BsPlus } from 'react-icons/bs';
 import Swal from 'sweetalert2'
@@ -46,11 +46,11 @@ const ChallengeList = props => {
         const items = [];
 
         for (var i = 0; i < rating; i++) {
-            items.push(<BsStarFill key={`${i}`} />);
+            items.push(<BsStarFill key={`${i}`} color='#a89532'/>);
         }
 
         for (var j = i; j < 5 - rating + i; j++) {
-            items.push(<BsStar key={`${j}`} />);
+            items.push(<BsStar key={`${j}`} color='#a89532'/>);
         }
 
         return items;
@@ -171,7 +171,21 @@ const ChallengeList = props => {
                                         item.updated &&
                                         <span style={{fontStyle: 'italic'}}>Updated</span>
                                     }
-                                        <span>By: {item.user.userName}</span>
+                                        <div className={styles.poster}>
+                                            <span className={styles.by_text}>Published By:</span>
+                                        {
+                                            item.user ?
+                                            <>
+                                                <Image 
+                                                    src={item.user.userPicture}
+                                                    className={styles.user_img}/>
+                                                <span className={styles.user_name}>{item.user.userName}</span>
+                                            </>
+
+                                            :
+                                            <span>[deleted]</span>
+                                        }
+                                        </div>
                                         <span 
                                             style={{
                                                 display: 'flex', 
@@ -179,7 +193,6 @@ const ChallengeList = props => {
                                                 alignItems: 'center',
                                                 justifyContent: 'flex-start',
                                             }}>
-                                            <span style={{marginRight: '0.5em'}}>Rating:</span>
                                             <span style={{
                                                 display: 'flex', 
                                                 flexDirection: 'row',
@@ -203,14 +216,14 @@ const ChallengeList = props => {
                                     </Col>
                                 </Row>
                             </div>
-                            <Link to={`/challenges/${item._id}`} className={styles.attempt_link}>
-                                <Button
-                                    variant='success'
-                                    className={styles.button}>
-                                    Attempt
-                                </Button>
-                            </Link>
                             <div className={styles.buttons}>
+                                <Link to={`/challenges/${item._id}`} className={styles.attempt_link}>
+                                    <Button
+                                        variant='success'
+                                        className={styles.button}>
+                                        Attempt
+                                    </Button>
+                                </Link>
                                 {
                                     isCompleted(i) ?
                                         <Link to={`/challenges/answers/${item._id}`} className={styles.answer_link}>

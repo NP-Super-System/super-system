@@ -55,7 +55,7 @@
     background-color: #fff;
     
     margin-bottom: 1em;
-    padding: 1em;
+    padding: 1.5em 1em;
 }
 
 .challenge_info{
@@ -74,9 +74,32 @@
     display: flex;
     flex-direction: column;
 }
+.challenge_details .poster{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 1em;
+}
+.challenge_details .poster .by_text{
+    margin-right: 1em;
+}
+.challenge_details .poster .user_img{
+    width: 100%;
+    max-width: 30px;
+    height: 100%;
+    max-height: 30px;
+    
+    border-radius: 50%;
+    margin-right: 0.5em;
+}
 
 .challenge_points{
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    text-align: left;
     float: right;
 }
 
@@ -89,7 +112,7 @@
     color: black;
 }
 .challenge .attempt_link .button{
-    
+    margin-right: 1em;
 }
 
 .create_button{

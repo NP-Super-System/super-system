@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
-import { Button, Form, Image } from 'react-bootstrap';
+import { Button, Form, Image, Card } from 'react-bootstrap';
+import { BsArrowClockwise, BsFillFileEarmarkFontFill, BsArrowLeft } from 'react-icons/bs';
 
 import styles from './Challenge.module.css';
 
@@ -270,56 +271,69 @@ const Challenge = props => {
 			<div className={styles.challenge}>
 				{
 					showScore ? // Show final score
-					<div>
-						You scored
-					{
-						score === questions.length ?
-						` full marks! (${score} out of ${questions.length})`
+					<Card className={styles.rate}>
+						<div className={styles.left_pane}>
+							<Card.Title>
+								You scored
+							{
+								score === questions.length ?
+								` full marks! (${score} out of ${questions.length})`
 
-						:
-						` ${score} out of ${questions.length}`
-					}
-						<br />
-						<br />
-						<div>Please rate the challenge:</div>
-						<br />
-						<div className={styles.rater}>
-							<BeautyStars
-								value={rating}
-								activeColor="blue"
-								onChange={value => setRating(value)}
-							/>
+								:
+								` ${score} out of ${questions.length}`
+							}
+							</Card.Title>
+							<div className={styles.pls_text}>Please rate the challenge:</div>
+							<div className={styles.rater}>
+								<BeautyStars
+									value={rating}
+									activeColor="blue"
+									onChange={value => setRating(value)}
+								/>
+							</div>
 						</div>
-						<br />
-						<br />
-						<Button variant='outline-primary' onClick={() => { restartChallenge(); submitRating(); incrementPoints() }}>Redo Challenge</Button>
-						<br />
-						<br />
-						<Link to='/challenges'>
-							<Button variant='outline-primary' onClick={() => { submitRating(); incrementPoints() }}>Back To Challenges</Button>
-						</Link>
-					</div>
+						<div className={styles.actions}>
+							{/* BsArrowClockwise, BsFillFileEarmarkFontFill, BsArrowLeft */}
+							<Button className={styles.button} variant='primary' onClick={() => { restartChallenge(); submitRating(); incrementPoints() }}>
+								<BsArrowClockwise className={styles.icon}/>
+								Redo Challenge
+							</Button>
+							<Link to={`/challenges/answers/${challengeId}`}>
+								<Button className={styles.button} variant='primary' onClick={() => { submitRating(); incrementPoints() }}>
+									<BsFillFileEarmarkFontFill className={styles.icon}/>
+									View Answers
+								</Button>
+							</Link>
+							<Link to='/challenges'>
+								<Button className={styles.button} variant='primary' onClick={() => { submitRating(); incrementPoints() }}>
+									<BsArrowLeft className={styles.icon}/>
+									Back To All Challenges
+								</Button>
+							</Link>
+						</div>
+					</Card>
 
 					: // Show question
 					<>
 					{
 						questions[questionIndex] &&
-						<div className={styles.question}>
-							<span>Challenge {questionIndex + 1}/{questions.length}</span>
+						<Card className={styles.question}>
+							<Card.Title className={styles.title}>Question {questionIndex + 1}/{questions.length}</Card.Title>
 						{
 							questions[questionIndex].imgKey &&
 							<Image
 								className={styles.img}
 								src={`http://localhost:5000/s3/image/?key=${questions[questionIndex].imgKey}`} />
 						}
-							<div>{questions[questionIndex].text}</div>
+							<div className={styles.text}>{questions[questionIndex].text}</div>
 							<div className={styles.answersection}>
 							{
 								questions[questionIndex].type === 'multiple-answer' ?
 								questions[questionIndex].options.map((answerOption, i) => (
-									<div key={i + questionIndex * 10} className={styles.button}>
+									<div key={`${i + questionIndex * 10}`} className={styles.button}>
 										<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
 										<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
+										<hr></hr>
 									</div>
 								))
 
@@ -347,9 +361,10 @@ const Challenge = props => {
 										
 								: questions[questionIndex].type === 'single-answer' ?
 								questions[questionIndex].options.map((answerOption, i) => (
-									<div key={i + questionIndex * 10} className={styles.button}>
+									<div key={`${i + questionIndex * 10}`} className={styles.button}>
 										<input type="radio" className="btn-check" name="options" id={answerOption._id} />
 										<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => singleAnswer(i)}>{answerOption.text}</label>
+										<hr></hr>
 									</div>
 								))
 
@@ -359,7 +374,7 @@ const Challenge = props => {
 							}
 							</div>
 							<label className={`${styles.label} btn btn-outline-success`} onClick={() => handleAnswerOptionClick()}>Next</label>
-						</div>
+						</Card>
 					}
 					</>
 				}
