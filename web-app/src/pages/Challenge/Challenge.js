@@ -34,27 +34,29 @@ const Challenge = props => {
 	const [usersCompleted, setUsersCompleted] = useState([]);
 
 	const [imgSubmission, setImgSubmission] = useState(null);
-	const handleImageChange = (e, qindex) => {
+	const handleImageChange = e => {
         if (!e.target.files || e.target.files.length === 0) return;
 
-        setImgSubmission({
-			img: e.target.files[0],
-			qindex,
-		});
+        setImgSubmission(e.target.files[0]);
     }
+
+	const [textSubmission, setTextSubmission] = useState('');
+	const handleTextChange = e => {
+		setTextSubmission(e.target.value);
+	}
 
 	useEffect(()=>{
 		console.log(imgSubmission);
 	}, [imgSubmission]);
 
-	const handleSubmitImage = e => {
-		const {img, qindex} = imgSubmission;
-
+	const handleSubmission = e => {
 		let formData = new FormData();
-		formData.append('img', img);
 		formData.append('challengeId', challengeId);
-		formData.append('qindex', qindex);
-
+		formData.append('questionIndex', questionIndex);
+		formData.append('img', imgSubmission);
+		formData.append('text', textSubmission);
+		formData.append('userId', user.id);
+		
 		const url = 'http://localhost:5000/challenge/post';
         const options = {
             method: 'POST',
@@ -72,8 +74,6 @@ const Challenge = props => {
                 console.log(err);
             });
 	}
-
-	var ans = [];
 
 	const singleAnswer = (id) => {
 		setIsCorrect(questions[questionIndex].options[id].isCorrect);
@@ -125,7 +125,6 @@ const Challenge = props => {
 			setIsClicked(false);
 			setIsChosen([]);
 			setQuestionIndex(nextQuestion);
-			ans = [];
 		} else {
 			setShowScore(true);
 		}
@@ -241,6 +240,23 @@ const Challenge = props => {
 		}
 	}
 
+	const [pastSubmissions, setPastSubmissions] = useState([]);
+	const getPastSubmissions = questions => {
+		// const userSubmissionQuestions = questions.filter(qn => qn.submissions.some(sub => sub.user._id === user.id));
+		// console.log(userSubmissionQuestions);
+		setPastSubmissions(
+			questions.map((qn, i) => {
+					return {
+						questionIndex: i,
+						submissions: qn.submissions.filter(sub => sub.user._id == user.id),
+					};
+				})
+		);
+	}
+	useEffect(()=>{
+		console.log(pastSubmissions);
+	}, [pastSubmissions]);
+
 	const getChallenge = () => {
 		// Get all challenges from server
 		fetch(`http://localhost:5000/challenge/read/${challengeId}`)
@@ -256,6 +272,8 @@ const Challenge = props => {
 
 						setQuestions(questions);
 						setUsersCompleted(usersCompleted);
+
+						getPastSubmissions(questions);
 					})
 					.catch(err => console.log(err))
 			)
@@ -339,24 +357,47 @@ const Challenge = props => {
 
 								: questions[questionIndex].type === 'image-upload' ?
 								<>
-									<Form.Group>
-										<Form.Control
-											key=''
-											name='image'
-											type='file'
-											accept='image/png, image/jpeg'
-											size='sm'
-											onChange={e => handleImageChange(e, questionIndex)}/>
-									</Form.Group>
+									<span className={styles.submission_text}>{questions[questionIndex].submissions.length} submissions</span>
+									<hr style={{width: '100%'}}></hr>
 								{
-									imgSubmission?.img &&
+									pastSubmissions[questionIndex]?.submissions &&
+									<>
+										<span className={styles.user_submissions_text}>Your submissions ({pastSubmissions[questionIndex].submissions.length})</span>
+									{
+										pastSubmissions[questionIndex].submissions.map(submission => {
+											const {imgKey, text, user, likedUser, pastLikedUsers} = submission;
+											return <div className={styles.submissions}>
+												<Image 
+													src={`http://localhost:5000/s3/image/?key=${imgKey}`}
+													className={styles.img}/>
+												<span className={styles.text}>{text}</span>
+											</div>
+										})
+									}
+										<hr></hr>
+									</>
+								}
+									<Form.Control
+										key=''
+										name='image'
+										type='file'
+										accept='image/png, image/jpeg'
+										size='sm'
+										onChange={handleImageChange}/>
+									<Form.Control
+										name='text'
+										type='text'
+										placeholder='Text'
+										value={textSubmission}
+										onChange={handleTextChange}/>
+								{
+									user && imgSubmission &&
 									<Button
 										variant='primary'
-										onClick={handleSubmitImage}>
-										Submit Image
+										onClick={handleSubmission}>
+										Submit
 									</Button>
 								}
-									<span>Submissions ({questions[questionIndex].submissions.length})</span>
 								</>
 										
 								: questions[questionIndex].type === 'single-answer' ?

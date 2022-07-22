@@ -77,12 +77,18 @@
 }
 
 .question .answersection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
     padding: 1em 0;
     width: 100%;
 }
 .question .answersection .button{
     text-align: left;
     margin-bottom: 0.5em;
+
+    width: 100%;
 }
 .question .answersection .label{
     text-align: left;
@@ -91,4 +97,8 @@
     padding: 0.5em 1em;
     color: black;
     border: none;
+}
+.question .answersection .submission_text{
+    font-style: italic;
+    text-align: left;
 }

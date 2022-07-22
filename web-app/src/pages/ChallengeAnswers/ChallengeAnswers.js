@@ -62,14 +62,20 @@ const ChallengeAnswers = props => {
                             {
                                 type === 'image-upload' ?
                                 <>
-                                    <span>Submissions</span>
-                                    <div className={styles.img_submissions}>
+                                    <span className={styles.submission_title}>Submissions</span>
+                                    <div className={styles.submissions}>
                                     {
-                                        question.submissions.map((imgKey, i) => {
-                                            return <Image
-                                                key={`${i}`}
-                                                src={`http://localhost:5000/s3/image/?key=${imgKey}`}
-                                                className={styles.img}/>
+                                        question.submissions.map((submission, i) => {
+                                            const { imgKey, text, user, likedUsers, pastLikedUsers } = submission;
+                                            return (
+                                                <div className={styles.submission}>
+                                                    <Image
+                                                        key={`${i}`}
+                                                        src={`http://localhost:5000/s3/image/?key=${imgKey}`}
+                                                        className={styles.img}/>
+                                                    <span className={styles.text}>{text}</span>
+                                                </div>
+                                            )
                                         })
                                     }
                                     </div>

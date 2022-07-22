@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const OptionSchema = require('./Option').schema;
+const SubmissionSchema = require('./Submission').schema;
 
 // Schema for questions
 
@@ -16,7 +17,7 @@ const questionSchema = new Schema({
     imgKey: String,
 
     options: [OptionSchema],
-    submissions: [String],
+    submissions: [SubmissionSchema],
 });
 
 // Create model for question collection

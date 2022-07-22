@@ -39,12 +39,19 @@
     margin-bottom: 0.5em;
 }
 
-.question .img_submissions{
+.question .submission_title{
+    font-style: italic;
+}
+.question .submissions{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1em;
+    margin-top: 1em;
 }
-.question .img_submissions .img{
+.question .submissions .submission{
+    width: 100%;
+}
+.question .submissions .submission .img{
     width: 100%;
 }
 
