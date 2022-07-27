@@ -37,10 +37,13 @@ const operations = app => {
         const { _id } = req.body;
         console.log(_id);
         const reward = await Reward.findOne({_id});
-        for (let property in req.body){
-            if(!property) continue;
-            reward[property] = req.body[property];
-        }
+        reward
+        .updateOne({quantity: reward.quantity - 1})
+        .then(result => {
+            console.log('Updated reward quantity');
+            res.send();
+        })
+        .catch(err => console.log(err));
         console.log(reward.quantity);
         const result = await reward.save();
         res.send(result);
