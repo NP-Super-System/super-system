@@ -21,6 +21,7 @@ const operations = app => {
             if(id){
                 const reward = await Reward.findOne({ _id: id });
                 res.send(reward);
+                return;
             }
 
             const rewards = await Reward.find({});
@@ -28,12 +29,21 @@ const operations = app => {
         }
         catch(err){
             console.log(err);
-            res.send({err});
+            res.send(err);
         }
     });
     // Update
     app.post('/reward/update', async (req, res) => {
-
+        const { _id } = req.body;
+        console.log(_id);
+        const reward = await Reward.findOne({_id});
+        for (let property in req.body){
+            if(!property) continue;
+            reward[property] = req.body[property];
+        }
+        console.log(reward.quantity);
+        const result = await reward.save();
+        res.send(result);
     });
     // Delete
     app.post('/reward/delete', async (req, res) => {

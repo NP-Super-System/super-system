@@ -8,11 +8,12 @@ import GlobalContext from '../../context/GlobalContext';
 
 const RewardModal = props => {
     
-    const { show, setShow, handleRedeem, name, description, cost, quantity } = props;
+    const { show, setShow, handleRedeem, name, description, cost, quantity} = props;
     const { user } = useContext(GlobalContext);
 
     useEffect(()=>{
         console.log(show);
+
     }, [show]);
 
     return (
