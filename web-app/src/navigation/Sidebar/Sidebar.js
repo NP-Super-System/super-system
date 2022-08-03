@@ -26,7 +26,7 @@ const Sidebar = props=>{
     return (
         <div className={styles.sidebar}>
             <div className={styles.logo}>
-                Super-System
+                Super-Learn
             </div>
             <Link to='/profile' className={`${styles.profile} ${activeIndex === 0 && styles.active}`}>
                 <div className={styles.icon}>

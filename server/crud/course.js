@@ -7,6 +7,9 @@ const Section = require('../models/course/Section');
 const File = require('../models/course/File');
 const Text = require('../models/course/Text');
 
+const User = require('../models/user/User');
+const { CourseToUser, getCourseToUser } = require('../models/course/CourseToUser');
+
 const appUrl = 'http://localhost:3000';
 
 // CRUD operations
@@ -58,6 +61,37 @@ const operations = app => {
     app.get('/course/read/:courseCode/:sectionId', async (req, res) => {
         const { courseCode, sectionId } = req.params;
         await readSection(res, courseCode, sectionId);
+    });
+
+    // Get indiv user progress for course
+    app.get('/course/progress/read', async(req, res) => {
+        const { userId } = req.query;
+
+        console.log('get course to user');
+        const courseToUser = await getCourseToUser(userId);
+
+        let courseProgress = [];
+        for (var course of courseToUser.courses){
+            const { code, completedSections } = course;
+            console.log(`get progress for ${code}`);
+
+            const completedCount = completedSections.length;
+            console.log({completedCount});
+
+            const { sections } = await Course.findOne({code});
+            const totalCount = sections.filter(sec => sec.hasChallenge).length;
+            console.log({totalCount});
+
+            const progress = 
+                totalCount ?
+                Math.floor((completedCount / totalCount) * 100) :
+                100;
+
+            console.log({code, progress});
+            courseProgress.push({code, progress});
+        }
+
+        res.send(courseProgress);
     });
 
     // Update

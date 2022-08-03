@@ -5,10 +5,11 @@ import toast from 'react-hot-toast';
 import styles from './RewardComponent.module.css';
 
 import RewardModal from './RewardModal';
-
 import GlobalContext from '../../context/GlobalContext';
 
 const RewardComponent = props => {
+    const {user} = useContext(GlobalContext);
+
     const { _id, name, description, cost } = props;
     const [quantity, setQuantity] = useState(0);
 
@@ -32,6 +33,7 @@ const RewardComponent = props => {
     }, [showModal])
 
     const handleRedeem = e => {
+        if(!user) return;
         console.log('redeem reward');
         
         const options = {
@@ -42,6 +44,7 @@ const RewardComponent = props => {
             },
             body: JSON.stringify({
                 _id,
+                userId: user.id,
                 quantity: quantity - 1,
             }),
         }
@@ -49,7 +52,12 @@ const RewardComponent = props => {
             .then(res => {
                 res.json()
                     .then(data => {
-                        toast.success(`Redeemed ${name}`);
+                        console.log(data, data.msg);
+                        if(data.msg != ''){
+                            toast(data.msg);
+                            return;
+                        } 
+                        toast.success(`Redeemed ${data.name}`);
                         setQuantity(data.quantity);
                     })
                     .catch(err => console.log(err));

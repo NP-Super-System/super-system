@@ -20,5 +20,12 @@
 }
 .wrapper .title {
 	align-self: flex-start;
-	padding: 0.5em 0 0 0;
+	padding: 0.5em 0 0.5em 0;
+}
+.wrapper .rewards{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
 }

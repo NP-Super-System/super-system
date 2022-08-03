@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { Link, useLocation } from "react-router-dom";
 import { BsStarFill, BsStar } from 'react-icons/bs';
 import { Card, Row, Col, Button, Image } from 'react-bootstrap';
 import { useScreenType } from '../../hooks/useScreenType';
 import { BsFillTrash2Fill, BsPencilFill, BsFillFileEarmarkFontFill, BsPlus } from 'react-icons/bs';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './ChallengeList.module.css';
@@ -16,10 +16,17 @@ import SearchBar from '../../components/SearchBar';
 
 const ChallengeList = props => {
 
+    function useQuery() {
+        const { search } = useLocation();
+        
+        return useMemo(() => new URLSearchParams(search), [search]);
+    }
+    const query = useQuery();
+
     const screenType = useScreenType();
     const { user } = useContext(GlobalContext);
 
-    const [searchFilter, setSearchFilter] = useState('');
+    const [searchFilter, setSearchFilter] = useState(query.get('s') || '');
     const handleSearch = e => {
         e.preventDefault();
     }

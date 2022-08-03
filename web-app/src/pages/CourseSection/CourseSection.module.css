@@ -19,10 +19,9 @@
 }
 
 .file_section .header{
-    padding: 1em;
+    /* padding: 0.5em 0.5em 0 0.5em; */
+    padding-top: 0.5em;
     margin-right: 1em;
-    
-    margin-bottom: 0.5em;
 }
 
 .file_section .header .add_file_form{
@@ -89,10 +88,7 @@
     justify-content: flex-start;
 }
 .text_section .header{
-    padding: 1em;
     margin-right: 1em;
-
-    margin-bottom: 0.5em;
 }
 .text_section .text_list{
     display: flex;

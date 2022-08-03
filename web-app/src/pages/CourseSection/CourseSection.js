@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useState, useEffect, useContext} from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { Button, Card, Form } from 'react-bootstrap';
 import { saveAs } from 'file-saver';
 import { FileIcon, defaultStyles } from 'react-file-icon';
@@ -9,31 +9,47 @@ import parse from 'html-react-parser';
 import styles from './CourseSection.module.css';
 
 import PageContainer from '../../layout/PageContainer';
+import GlobalContext from '../../context/GlobalContext';
 import TextModal from './TextModal';
 
 const CourseSection = props => {
 
+    const { user } = useContext(GlobalContext);
+
     const { courseCode, sectionId } = useParams();
+    const [courseData, setCourseData] = useState(null);
     const [sectionData, setSectionData] = useState(null);
     const [filesToBeAdded, setFilesToBeAdded] = useState([]);
     const [showTextModal, setShowTextModal] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
+    
+    const fetchSectionData = async () => {
         fetch(`http://localhost:5000/course/read/${courseCode}/${sectionId}`)
             .then(res => {
                 res.json()
-                    .then(data => {
-                        console.log(data);
-                        setSectionData(data);
-                    })
-                    .catch(err => console.log(err));
+                .then(data => {
+                    console.log(data);
+                    setSectionData(data);
+                })
+                .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     }
+    const fetchCourseData = async () => {
+        fetch(`http://localhost:5000/course/read/${courseCode}`)
+            .then(res => res.json()
+                .then(data => {
+                    console.log(data);
+                    setCourseData(data);
+                })
+                .catch(err => console.log(err)))
+            .catch(err => console.log(err));
+    }
+    
+    useEffect(() => {
+        fetchSectionData();
+        fetchCourseData();
+    }, []);
 
     const onFileChange = e => {
         setFilesToBeAdded(e.target.files);
@@ -59,6 +75,8 @@ const CourseSection = props => {
                     <Card className={styles.file_section}>
                         <div className={styles.header}>
                             <h4>Files</h4>
+                        {
+                            user?.userRoles?.some(role => role === 'Admin' || role === 'Lecturer') &&
                             <form 
                                 action='http://localhost:5000/course/update/section/file'
                                 method='POST'
@@ -89,6 +107,7 @@ const CourseSection = props => {
                                     Add file
                                 </Button>
                             </form>
+                        }
                         </div>
                         <div className={styles.file_list}>
                         {
@@ -125,11 +144,14 @@ const CourseSection = props => {
                                             name='fileKey' 
                                             value={file.key}
                                             />
+                                    {
+                                        user?.userRoles?.some(role => role === 'Admin' || role === 'Lecturer') &&
                                         <Button
                                             variant='danger'
                                             type='submit'>
                                             <BsFillTrash2Fill />
                                         </Button>
+                                    }
                                     </form>
                                 </div>
                             })
@@ -138,12 +160,16 @@ const CourseSection = props => {
                     </Card>
                     <div className={styles.text_section}>
                         <div className={styles.header}>
-                            <h4>Text</h4>
-                            <Button
-                                onClick={e => setShowTextModal(true)}>
-                                <span>Add Text</span>
-                            </Button>
-                            <TextModal showModal={showTextModal} setShowModal={setShowTextModal} fetchData={fetchData}/>
+                        {
+                            user?.userRoles?.some(role => role === 'Admin' || role === 'Lecturer') &&
+                            <>
+                                <Button
+                                    onClick={e => setShowTextModal(true)}>
+                                    <span>Add Text</span>
+                                </Button>
+                                <TextModal showModal={showTextModal} setShowModal={setShowTextModal} fetchData={fetchSectionData}/>
+                            </>
+                        }
                         </div>
                         <div className={styles.text_list}>
                         {
@@ -158,26 +184,24 @@ const CourseSection = props => {
                 </div>
                 <Card className={styles.challenge_section}>
                 {
-                    sectionData.challengeId ?
+                    sectionData.hasChallenge ?
 
-                    <>
-                        <div className={styles.header}>
-                            <h3>Section Challenge</h3>
-                        </div>
-                        <div className={styles.challenge}>
-                            <Button
-                                variant='primary'>
-                                <span>Attempt Challenge</span>
-                            </Button>
-                        </div>
-                    </>
+                    <Link 
+                        style={{
+                            fontStyle: 'italic',
+                            textDecoration: 'none',
+                            color: 'black',
+                        }}
+                        to={`/challenges?s=${courseCode} ${sectionData?.title}`}>
+                        Search for <b>{courseCode} {sectionData?.title}</b> challenges
+                    </Link>
 
                     :
 
                     <span style={{
                         fontStyle: 'italic',
                     }}>
-                        This section does not have relevant challenges
+                        This section does not have challenges
                     </span>
                 }
                 </Card>
