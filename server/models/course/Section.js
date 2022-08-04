@@ -7,10 +7,8 @@ const TextSchema = require('./Text').schema;
 // Schema for course sections
 const sectionSchema = new Schema({
 
-    title: {
-        type: String,
-        required: true,
-    },
+    title: { type: String, required: true, },
+    tags: [String],
 
     files: [FileSchema],
     textList: [TextSchema],

@@ -13,6 +13,47 @@
     margin-bottom: 20px;
 }
 
+.form .tag_title{
+    margin-bottom: 0.75em;
+}
+.form .tags{
+
+}
+.form .tags > .tag{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    margin-bottom: 0.5em;
+    padding: 0.25em 0.5em 0.25em 1em;
+}
+.form .tags > .tag .name{
+    margin-right: 0.75em;
+}
+.form .tags > .tag .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+.form .tags > .tag .icon:hover{
+    background-color: red;
+    color: white;
+}
+.form .tag_input{
+    margin-top: 0.5em;
+}
+
 .form .total_points{
     display: flex;
     flex-direction: row;
@@ -42,6 +83,7 @@
 
 .question{
     margin-bottom: 2em;
+    padding: 1em;
 }
 .question .header{
     display: flex;

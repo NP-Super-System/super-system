@@ -12,9 +12,11 @@ const courseList = [
         code: '22S1_EH',
         name: 'Ethical Hacking',
         imgKey: 'course/22S1_EH.jpeg',
-        sections: [...Array(18).keys()].map(weekNum => {
+        sections: [...Array(18).keys()].map(i => {
+            const weekNum = i+1;
             return new Section({
-                title: `Week ${weekNum+1}`,
+                title: `Week ${weekNum}`,
+                tags: ['22S1_EH', `Week${weekNum}`],
                 files: [],
                 hasChallenge: true,
             });
@@ -29,9 +31,11 @@ const courseList = [
         code: '22S1_NS',
         name: 'Network Security',
         imgKey: 'course/22S1_NS.jpeg',
-        sections: [...Array(18).keys()].map(weekNum => {
+        sections: [...Array(18).keys()].map(i => {
+            const weekNum = i+1;
             return new Section({
-                title: `Week ${weekNum+1}`,
+                title: `Week ${weekNum}`,
+                tags: ['22S1_NS', `Week${weekNum}`],
                 files: [],
                 hasChallenge: true,
             });

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Image } from 'react-bootstrap';
+import { Form, Button, Image, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { BsFillArrowLeftCircleFill } from 'react-icons/bs';
+import { BsFillArrowLeftCircleFill, BsX } from 'react-icons/bs';
 import { IoAddSharp } from 'react-icons/io5';
 import { BsFillTrash2Fill, BsFillCheckSquareFill } from 'react-icons/bs';
 import toast from 'react-hot-toast';
@@ -25,6 +25,13 @@ const ChallengeCreate = props => {
     const goBack = () => navigate(-1);
 
     const [title, setTitle] = useState('');
+
+    const [currTag, setCurrTag] = useState('');
+    const [tags, setTags] = useState([]);
+    const handleDeleteTag = tagToDelete => {
+        setTags(tags.filter(tag => tag !== tagToDelete));
+    }
+
     const [points, setPoints] = useState(0);
     const [questionList, setQuestionList] = useState([]);
 
@@ -40,6 +47,7 @@ const ChallengeCreate = props => {
                         // Set challenge
                         console.log(data);
                         setTitle(`${data.title} (updated)`);
+                        setTags(data.tags);
                         setPoints(data.pointCount);
                         setQuestionList(data.questions);
                     })
@@ -87,8 +95,6 @@ const ChallengeCreate = props => {
 
     const handleQuestionTypeChange = (e, index) => {
         let newQuestionList = [...questionList];
-        // newQuestionList[index].isMultipleAns = e.target.value === 'M';
-        // newQuestionList[index].isImageUpload = e.target.value === 'I';
         newQuestionList[index].type = e.target.value;
         setQuestionList(newQuestionList);
         console.log(newQuestionList);
@@ -216,18 +222,23 @@ const ChallengeCreate = props => {
             }
         }
         if(challengeId){
-            updateChallenge(user.id, title, points, questionList);
+            updateChallenge(user.id, title, tags, points, questionList);
         }
         else{
-            createChallenge(user.id, title, points, questionList);
+            createChallenge(user.id, title, tags, points, questionList);
         }
     }
 
-    const createChallenge = async (userId, title, points, content) => {
+    const createChallenge = async (userId, title, tags, points, content) => {
 
         let formData = new FormData();
         formData.append('userId', userId);
         formData.append('title', title);
+
+        for (var tag of tags){
+            formData.append('tags[]', tag);
+        }
+
         formData.append('points', points);
         formData.append('rating', 0);
         formData.append('numberOfRatings', 0);
@@ -264,12 +275,17 @@ const ChallengeCreate = props => {
                 console.log(err);
             });
     }
-    const updateChallenge = async (userId, title, points, content) => {
+    const updateChallenge = async (userId, title, tags, points, content) => {
 
         let formData = new FormData();
         formData.append('userId', userId);
         formData.append('updated', true);
         formData.append('title', title);
+
+        for (var tag of tags){
+            formData.apppend('tags[]', tag);
+        }
+
         formData.append('points', points);
         formData.append('rating', 0);
         formData.append('numberOfRatings', 0);
@@ -316,6 +332,7 @@ const ChallengeCreate = props => {
                     onClick={() => backBtn()}>
                     <BsFillArrowLeftCircleFill />
                 </Button>
+
                 <h5>Title</h5>
                 <Form.Group className={`mb-3`}>
                     <Form.Control
@@ -326,16 +343,66 @@ const ChallengeCreate = props => {
                         onChange={e => setTitle(e.target.value)}
                         required />
                 </Form.Group>
+
+                <h6 className={styles.tag_title}>Tags</h6>
+                <Form.Group className={'mb-3'}>
+                    <div className={styles.tags}>
+                    {
+                        tags.map( (tag, i) =>
+                            <React.Fragment key={`${i}`}>
+                                <div className={styles.tag}>
+                                    <span className={styles.name}>{tag}</span>
+                                    <div 
+                                        className={styles.icon}
+                                        onClick={e => handleDeleteTag(tag)}>
+                                        <BsX />
+                                    </div>
+                                </div>
+                                <input 
+                                    type='hidden'
+                                    name={`tags[]`}
+                                    value={tag}
+                                    />
+                            </React.Fragment>
+                        )
+                    }
+                    </div>
+                    <Form.Control 
+                        className={styles.tag_input}
+                        type='input' 
+                        placeholder='Type a tag and press "Enter"'
+                        value={currTag}
+                        onKeyDown={
+                            e => {
+                                if(!['Enter', 'Tab', ','].includes(e.key)) return;
+
+                                e.preventDefault();
+                                const value = currTag.trim();
+
+                                if(!value) return;
+
+                                setTags([
+                                    ...tags,
+                                    value,
+                                ]);
+                                setCurrTag('');
+                            }
+                        }
+                        onChange={e => setCurrTag(e.target.value)}/>
+                </Form.Group>
+
                 <div className={styles.total_points}>
-                    <span>Total Points:</span>
+                    <h6>Total Points:</h6>
                     <Image src={'/media/coin.png'} className={styles.img}/>
                     <span className={styles.count}>{points}</span>
                 </div>
-                <h5>Questions ({questionList.length})</h5>
+
                 <hr></hr>
+
+                <h5 style={{marginBottom: '1em'}}>Questions ({questionList.length})</h5>
                 {
                     questionList.map((question, qindex) => (
-                        <div key={`${qindex}`} className={styles.question}>
+                        <Card key={`${qindex}`} className={styles.question}>
                             <div className={styles.header}>
                                 <span className={styles.title}>Question {qindex + 1}:</span>
                             {
@@ -467,8 +534,7 @@ const ChallengeCreate = props => {
                                 }
                                 </>
                             }
-                            <hr></hr>
-                        </div>
+                        </Card>
                     ))
                 }
                 <Button

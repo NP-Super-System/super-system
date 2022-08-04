@@ -61,27 +61,28 @@ const operations = app => {
     }
 
     // Create challenge
-    const createChallenge = async (res, userId, updated=false, title, points, rating, numberOfRatings, content, imgKeyObj) => {
+    const createChallenge = async (res, userId, updated=false, title, tags, pointCount, rating, numberOfRatings, content, imgKeyObj) => {
         let questions = [];
 
-        for (var question of content){
-            const { text, type, points } = question;
+        for (var qindex in content){
+            const { text, type, points, options } = content[qindex];
 
-            let options = [];
-            for (var i in question.options){
-                const option = question.options[i];
+            let optionList = [];
+            for (var i in options){
+                const option = options[i];
                 const { text, isCorrect } = option;
                 const newOption = new Option({ text, isCorrect });
-                options.push(newOption);
+                optionList.push(newOption);
             }
             const newQuestion = new Question({
                 text,
                 type,
                 points,
-                imgKey: imgKeyObj[i.toString()] || '',
-                options,
+                imgKey: imgKeyObj[qindex.toString()] || '',
+                options: optionList,
                 submissions: [],
             });
+            console.log('ImgKey: ', qindex, imgKeyObj[qindex.toString()]);
             questions.push(newQuestion);
         }
 
@@ -90,7 +91,8 @@ const operations = app => {
             user,
             updated,
             title,
-            pointCount: points,
+            tags,
+            pointCount,
             rating,
             questions,
             numberOfRatings,
@@ -111,7 +113,7 @@ const operations = app => {
     }
 
     app.post('/challenge/create', uploadLocal.any('imgList'), async (req, res) => {
-        const { userId, updated, title, points, rating, numberOfRatings, content, imgIndexList } = req.body;
+        const { userId, updated, title, tags, points, rating, numberOfRatings, content, imgIndexList } = req.body;
         // console.log(req.body);
         const imgKeyList = await uploadImages(req);
         let imgKeyObj = {}
@@ -119,7 +121,7 @@ const operations = app => {
             imgKeyObj[imgIndexList[index]] = imgKeyList[index];
         }
         console.log(imgKeyObj);
-        await createChallenge(res, userId, updated, title, points, rating, numberOfRatings, JSON.parse(content), imgKeyObj);
+        await createChallenge(res, userId, updated, title, tags, points, rating, numberOfRatings, JSON.parse(content), imgKeyObj);
     });
 
     // Read challenges

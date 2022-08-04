@@ -192,8 +192,8 @@ const CourseSection = props => {
                             textDecoration: 'none',
                             color: 'black',
                         }}
-                        to={`/challenges?s=${courseCode} ${sectionData?.title}`}>
-                        Search for <b>{courseCode} {sectionData?.title}</b> challenges
+                        to={`/challenges?s=${sectionData?.tags.join(' ')}`}>
+                        Search for <b>{sectionData?.tags.join(' ')}</b> challenges
                     </Link>
 
                     :

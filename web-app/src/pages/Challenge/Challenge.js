@@ -242,8 +242,6 @@ const Challenge = props => {
 
 	const [pastSubmissions, setPastSubmissions] = useState([]);
 	const getPastSubmissions = questions => {
-		// const userSubmissionQuestions = questions.filter(qn => qn.submissions.some(sub => sub.user._id === user.id));
-		// console.log(userSubmissionQuestions);
 		setPastSubmissions(
 			questions.map((qn, i) => {
 					return {

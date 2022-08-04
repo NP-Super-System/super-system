@@ -27,13 +27,37 @@ const ChallengeList = props => {
     const { user } = useContext(GlobalContext);
 
     const [searchFilter, setSearchFilter] = useState(query.get('s') || '');
-    const handleSearch = e => {
-        e.preventDefault();
-    }
+    const handleSearch = text => {
+        text = text.trim();
+        if(!text){
+            setVisibleChallenges(challenges);
+            return;
+        }
+        const words = text.split(' ');
 
+        const filteredChallenges = challenges.filter(chal => {
+            const matchedTags = chal.tags.filter(tag => {
+                return words.some(word => {
+                    return tag.toLowerCase().startsWith(word.toLowerCase());
+                });
+            });
+            console.log(chal.title, matchedTags, words);
+            return matchedTags.length >= words.length;
+        })
+        console.log(filteredChallenges);
+        setVisibleChallenges(filteredChallenges);
+    }
+    
     const [userRoles, setUserRoles] = useState(false);
     const [challenges, setChallenges] = useState([]);
+    const [visibleChallenges, setVisibleChallenges] = useState([]);
     const [usersCompleted, setUsersCompleted] = useState([]);
+    
+    useEffect(()=>{
+        const searchText = query.get('s');
+        searchText && handleSearch(searchText);
+
+    }, [challenges]);
 
     const getRating = (rate, ratings) => {
         if (rate === 0) {
@@ -76,6 +100,7 @@ const ChallengeList = props => {
                     .then(data => {
                         // Set challenges
                         setChallenges(data);
+                        setVisibleChallenges(data);
                         setUsersCompleted(data.usersCompleted);
                     })
                     .catch(err => console.log(err))
@@ -143,7 +168,7 @@ const ChallengeList = props => {
     }
 
     const isCompleted = (index) => {
-        console.log(challenges[index].usersCompleted)
+        // console.log(challenges[index].usersCompleted)
         if (challenges[index].usersCompleted.includes(user.id)) {
             return true;
         }
@@ -154,7 +179,13 @@ const ChallengeList = props => {
         <PageContainer>
             <PageHeader
                 searchBarElement={
-                    <SearchBar text={searchFilter} handleChange={text => setSearchFilter(text)} handleSearch={handleSearch}/>
+                    <SearchBar 
+                        text={searchFilter} 
+                        handleChange={text => setSearchFilter(text)} 
+                        handleSearch={e => {
+                            e.preventDefault();
+                            handleSearch(searchFilter);
+                        }}/>
                 }
                 screenType={screenType}>
                 <Link to='/challenges/create'>
@@ -167,13 +198,25 @@ const ChallengeList = props => {
             </PageHeader>
             <div className={styles.wrapper}>
                 {
-                    challenges.sort((a, b) => getRating(a.rating, a.numberOfRatings) > getRating(b.rating, b.numberOfRatings) ? -1 : 1).map((item, i) =>
+                    visibleChallenges.sort((a, b) => getRating(a.rating, a.numberOfRatings) > getRating(b.rating, b.numberOfRatings) ? -1 : 1).map((item, i) =>
                     (
                         <div key={`${i}`} className={styles.challenge}>
                             <div className={styles.challenge_info}>
                                 <Row>
                                     <Col className={styles.challenge_details}>
-                                        <h5>{item.title}</h5>
+                                    {
+                                        item?.tags.length > 0 &&
+                                        <div className={styles.tags}>
+                                        {
+                                            item.tags.map((tag, i) => {
+                                                return tag && <div key={`${i}`} className={styles.tag}>
+                                                    <span>{tag}</span>
+                                                </div>
+                                            })
+                                        }
+                                        </div>
+                                    }
+                                        <h5 className={styles.title}>{item.title}</h5>
                                     {
                                         item.updated &&
                                         <span style={{fontStyle: 'italic'}}>Updated</span>
