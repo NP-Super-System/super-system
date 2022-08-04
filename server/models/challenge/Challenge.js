@@ -9,7 +9,7 @@ const User = require('../user/User');
 
 const challengeSchema = new Schema({
 
-    user: { type: Schema.Types.ObjectId, ref: User, required: true,  },
+    user: { type: Schema.Types.ObjectId, ref: User, required: true, },
     title: { type: String, required: true, },
     updated: Boolean,
 

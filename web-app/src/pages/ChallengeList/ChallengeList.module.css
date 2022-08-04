@@ -80,7 +80,7 @@
     flex-direction: row;
     align-items: center;
 
-    margin-bottom: 1em;
+    margin-top: 1em;
 }
 .challenge_details .tags > .tag{
     background-color: rgb(211, 211, 211);
@@ -188,5 +188,5 @@
     align-items: center;
     justify-content: flex-start;
 
-    margin-top: 1em;
+    margin-top: 0.5em;
 }

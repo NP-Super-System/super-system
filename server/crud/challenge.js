@@ -9,6 +9,10 @@ const Option = require('../models/challenge/Option');
 const Submission = require('../models/challenge/Submission');
 const User = require('../models/user/User');
 
+const Course = require('../models/course/Course');
+const Section = require('../models/course/Section');
+const { CourseToUser, getCourseToUser} = require('../models/course/CourseToUser');
+
 const appUrl = 'http://localhost:3000';
 
 // CRUD operations
@@ -125,22 +129,35 @@ const operations = app => {
     });
 
     // Read challenges
-    const readChallenges = async (res) => {
-        Challenge
-            .find({})            
-            .populate('user')
-            .exec((err, result) => {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                // console.log(result);
-                res.send(result);
-            });
-    }
 
     app.get('/challenge/read', async (req, res) => {
-        await readChallenges(res);
+        const { tags } = req.query;
+        const tagList = tags?.split(',');
+
+        try{
+            const challenges = 
+                await Challenge
+                    .find({})
+                    .populate('user');
+            if(!tags){
+                res.send(challenges);
+                return;
+            }
+
+            const filteredChallenges = challenges.filter(chal => {
+                const matchedTags = chal.tags.filter(chalTag => {
+                    return tagList.some(tag => {
+                        return chalTag.toLowerCase().startsWith(tag.toLowerCase());
+                    });
+                });
+                return matchedTags.length >= tagList.length;
+            });
+            res.send(filteredChallenges);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
     })
 
     const readSingleChallenge = async (res, itemId) => {
@@ -163,6 +180,8 @@ const operations = app => {
         await readSingleChallenge(res, challengeId);
     })
 
+    app.get('/challenge/read')
+
     // Update challenge
     const updateChallengeRating = async (res, rating, itemId) => {
         const challenge = await Challenge.findOne({_id: itemId});
@@ -181,12 +200,32 @@ const operations = app => {
     });
 
     app.post('/challenge/completed/:userId', async (req, res) => {
-        const userId = req.params.userId;
+        const { userId } = req.params;
+
         const { challengeId } = req.body;
         console.log(userId, challengeId);        
+
         const challenge = await Challenge.findOne({_id: challengeId});
         challenge.usersCompleted.push(userId);
-        challenge.save();
+
+        await challenge.save();
+
+        // Set section as completed, check if challenge related to course
+        const courseToUser = await getCourseToUser(userId);
+        const userCourseCodes = courseToUser.courses.map(course => course.code);
+        const courseCode = challenge.tags.find(tag => userCourseCodes.includes(tag)) || '';
+        console.log('CourseCode:', courseCode);
+        if(courseCode){
+            const tagsWithoutCode = challenge.tags.filter(tag => tag != courseCode);
+            const course = await Course.findOne({code: courseCode});
+            const section = course.sections.find(section => section.tags.some(tag => tagsWithoutCode.includes(tag)));
+            console.log('Section: ', courseCode, section.title, section._id);
+
+            const { completedSections } = courseToUser.courses.find(c => c.code === courseCode);
+            !completedSections.includes(section._id) && completedSections.push(section._id);
+
+            await courseToUser.save();
+        }
     });
 
     app.post('/challenge/post', uploadLocal.single('img'), async (req, res) => {

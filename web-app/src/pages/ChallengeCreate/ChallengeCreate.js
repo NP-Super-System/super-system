@@ -283,7 +283,7 @@ const ChallengeCreate = props => {
         formData.append('title', title);
 
         for (var tag of tags){
-            formData.apppend('tags[]', tag);
+            formData.append('tags[]', tag);
         }
 
         formData.append('points', points);
@@ -431,10 +431,11 @@ const ChallengeCreate = props => {
                                     <Form.Group className={`mb-3`}>
                                         <Form.Select
                                             name='questionType'
-                                            onChange={e => handleQuestionTypeChange(e, qindex)}>
-                                            <option value='single-answer'>Single Answer</option>
-                                            <option value='multiple-answer'>Multiple Answer</option>
-                                            <option value='image-upload'>Image Upload</option>
+                                            onChange={e => handleQuestionTypeChange(e, qindex)}
+                                            value={question.type}>
+                                            <option value='single-answer' >Single Answer</option>
+                                            <option value='multiple-answer' >Multiple Answer</option>
+                                            <option value='image-upload' >Image Upload</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </div>

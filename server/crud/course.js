@@ -94,6 +94,18 @@ const operations = app => {
         res.send(courseProgress);
     });
 
+    app.get('/course/user/read', async(req, res) => {
+        const { userId } = req.query;
+        try{
+            const courseToUser = await getCourseToUser(userId);
+            res.send(courseToUser);
+        }
+        catch(err){
+            console.log(err);
+            res.send({err});
+        }
+    })
+
     // Update
 
     // Add file to section

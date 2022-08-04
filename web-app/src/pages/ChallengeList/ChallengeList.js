@@ -18,7 +18,7 @@ const ChallengeList = props => {
 
     function useQuery() {
         const { search } = useLocation();
-        
+
         return useMemo(() => new URLSearchParams(search), [search]);
     }
     const query = useQuery();
@@ -29,7 +29,7 @@ const ChallengeList = props => {
     const [searchFilter, setSearchFilter] = useState(query.get('s') || '');
     const handleSearch = text => {
         text = text.trim();
-        if(!text){
+        if (!text) {
             setVisibleChallenges(challenges);
             return;
         }
@@ -47,13 +47,13 @@ const ChallengeList = props => {
         console.log(filteredChallenges);
         setVisibleChallenges(filteredChallenges);
     }
-    
+
     const [userRoles, setUserRoles] = useState(false);
     const [challenges, setChallenges] = useState([]);
     const [visibleChallenges, setVisibleChallenges] = useState([]);
     const [usersCompleted, setUsersCompleted] = useState([]);
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         const searchText = query.get('s');
         searchText && handleSearch(searchText);
 
@@ -77,11 +77,11 @@ const ChallengeList = props => {
         const items = [];
 
         for (var i = 0; i < rating; i++) {
-            items.push(<BsStarFill key={`${i}`} color='#a89532'/>);
+            items.push(<BsStarFill key={`${i}`} color='#a89532' />);
         }
 
         for (var j = i; j < 5 - rating + i; j++) {
-            items.push(<BsStar key={`${j}`} color='#a89532'/>);
+            items.push(<BsStar key={`${j}`} color='#a89532' />);
         }
 
         return items;
@@ -179,13 +179,13 @@ const ChallengeList = props => {
         <PageContainer>
             <PageHeader
                 searchBarElement={
-                    <SearchBar 
-                        text={searchFilter} 
-                        handleChange={text => setSearchFilter(text)} 
+                    <SearchBar
+                        text={searchFilter}
+                        handleChange={text => setSearchFilter(text)}
                         handleSearch={e => {
                             e.preventDefault();
                             handleSearch(searchFilter);
-                        }}/>
+                        }} />
                 }
                 screenType={screenType}>
                 <Link to='/challenges/create'>
@@ -204,59 +204,59 @@ const ChallengeList = props => {
                             <div className={styles.challenge_info}>
                                 <Row>
                                     <Col className={styles.challenge_details}>
-                                    {
-                                        item?.tags.length > 0 &&
-                                        <div className={styles.tags}>
-                                        {
-                                            item.tags.map((tag, i) => {
-                                                return tag && <div key={`${i}`} className={styles.tag}>
-                                                    <span>{tag}</span>
-                                                </div>
-                                            })
-                                        }
-                                        </div>
-                                    }
                                         <h5 className={styles.title}>{item.title}</h5>
-                                    {
-                                        item.updated &&
-                                        <span style={{fontStyle: 'italic'}}>Updated</span>
-                                    }
+                                        {
+                                            item.updated &&
+                                            <span style={{ fontStyle: 'italic' }}>Updated</span>
+                                        }
                                         <div className={styles.poster}>
                                             <span className={styles.by_text}>Published By:</span>
-                                        {
-                                            item.user ?
-                                            <>
-                                                <Image 
-                                                    src={item.user.userPicture}
-                                                    className={styles.user_img}/>
-                                                <span className={styles.user_name}>{item.user.userName}</span>
-                                            </>
+                                            {
+                                                item.user ?
+                                                    <>
+                                                        <Image
+                                                            src={item.user.userPicture}
+                                                            className={styles.user_img} />
+                                                        <span className={styles.user_name}>{item.user.userName}</span>
+                                                    </>
 
-                                            :
-                                            <span>[deleted]</span>
-                                        }
+                                                    :
+                                                    <span>[deleted]</span>
+                                            }
                                         </div>
-                                        <span 
+                                        <span
                                             style={{
-                                                display: 'flex', 
+                                                display: 'flex',
                                                 flexDirection: 'row',
                                                 alignItems: 'center',
                                                 justifyContent: 'flex-start',
                                             }}>
                                             <span style={{
-                                                display: 'flex', 
+                                                display: 'flex',
                                                 flexDirection: 'row',
                                                 alignItems: 'center',
                                                 justifyContent: 'flex-start',
                                                 marginRight: '0.5em',
                                             }}>{rating(item.rating, item.numberOfRatings)}</span>
                                             <span style={{
-                                                display: 'flex', 
+                                                display: 'flex',
                                                 flexDirection: 'row',
                                                 alignItems: 'center',
                                                 justifyContent: 'flex-start',
                                             }}>({item.numberOfRatings})</span>
                                         </span>
+                                        {
+                                            item?.tags.length > 0 &&
+                                            <div className={styles.tags}>
+                                                {
+                                                    item.tags.map((tag, i) => {
+                                                        return tag && <div key={`${i}`} className={styles.tag}>
+                                                            <span>{tag}</span>
+                                                        </div>
+                                                    })
+                                                }
+                                            </div>
+                                        }
                                     </Col>
                                     <Col>
                                         <div className={styles.challenge_points}>

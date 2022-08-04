@@ -68,7 +68,7 @@ const Courses = props => {
                         <div className={styles.course_content}>
                             <Card.Title>{course.name}</Card.Title>
                             <Card.Text>{course.code}</Card.Text>
-                            <ProgressBar now={progress} style={{maxHeight: '10px'}}/>
+                            <ProgressBar animated now={progress} style={{maxHeight: '10px'}}/>
                         </div>
                     </Link>
                 })
