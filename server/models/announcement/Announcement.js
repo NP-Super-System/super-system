@@ -12,6 +12,8 @@ const announcementSchema = new Schema({
     body: { type: String, required: true, },
     userUpdate: { type: String, },
 
+    tags: [String],
+
 }, { timestamps: true });
 
 const Announcement = mongoose.model('announcement', announcementSchema);

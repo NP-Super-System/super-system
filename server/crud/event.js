@@ -179,6 +179,7 @@ const operations = app => {
             await Event.updateOne( {_id: id}, {registeredUsers: []});
         }
 
+        // !!! START OF REMOVED !!!
         if(evt.registeredUsers.includes(userId)){
             const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(ui => ui != userId)});
             console.log(`Removed registered user ${userId} for event ${id}`);
@@ -197,6 +198,7 @@ const operations = app => {
             }
             return;
         }
+        // ### END OF REMOVED ###
 
         const user = await User.findOne({_id: userId});
         evt.registeredUsers.push(user);
@@ -210,8 +212,18 @@ const operations = app => {
             const eventToUser = await initEventToUser(userId);
             console.log(eventToUser);
             eventToUser.registeredEvents.push(evt);
-            const result = await eventToUser.save();
+            await eventToUser.save();
             console.log(`Saved registered event ${result._id} to user ${userId}`);
+        }
+        catch(err){
+            console.log(err);
+        }
+
+        // Award user with coins
+        try{
+            user.coinCount += 20;
+            await user.save();
+            console.log(`Awarded user ${user._id} for registering`);
         }
         catch(err){
             console.log(err);

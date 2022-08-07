@@ -16,6 +16,22 @@
     text-align: left;
 }
 
+.announcement .tags{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0.5em;
+}
+.announcement .tags > .tag{
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    padding: 0.1em 0.75em;
+
+    font-size: small;
+}
+
 .announcement .user_content{
     margin-bottom: 1em;
 }
@@ -27,6 +43,9 @@
 
 .announcement_title{
     margin-bottom: 0.5em;
+}
+.announcement_desc > p{
+    margin-bottom: 0.5em !important;
 }
 
 .announcement_datetime{

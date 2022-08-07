@@ -28,7 +28,6 @@ const EventComponent = props => {
                 className={styles.img}
                 src={`http://localhost:5000/s3/image/?key=${imgKey}`}
                 onLoad={() => setLoaded(true)}
-                
                 height={160}/>
             :
             <div className={styles.no_img}>

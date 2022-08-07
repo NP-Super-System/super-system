@@ -93,7 +93,7 @@
     margin-top: 1em;
     margin-bottom: 2em;
 }
-.content .left_pane .unregister_btn{
+.content .left_pane .registered_btn{
     margin-top: 1em;
     margin-bottom: 2em;
 }
@@ -128,10 +128,11 @@
     text-align: left;
     padding-top: 1em;
 }
+
 .content .right_pane .registered_users{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
 }
 .content .right_pane .registered_users .icon_container{
     display: flex;
@@ -147,8 +148,10 @@
 .content .right_pane .registered_users .icon_container > .icon_wrapper{
     position: absolute;
 
-    width: 40px;
-    height: 40px;
+    max-width: 40px;
+    width: 100%;
+    max-height: 40px;
+    height: 100%;
 }
 .content .right_pane .registered_users .icon_container > .icon_wrapper .icon{
     max-width: 40px;
@@ -158,4 +161,47 @@
 .content .right_pane .registered_users .first_text{
     margin-top: 1em;
     font-style: italic;
+}
+
+.content .right_pane .all_registered_users{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+}
+.content .right_pane .all_registered_users > .user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.content .right_pane .all_registered_users > .user .icon{
+    max-width: 40px;
+    width: 100%;
+    max-height: 40px;
+    height: 100%;
+
+    border-radius: 50%;
+    margin-right: 1em;
+}
+.content .right_pane .all_registered_users > .user .info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.content .right_pane .all_registered_users > .user .info .name{
+    
+}
+.content .right_pane .all_registered_users > .user .info .email{
+    font-size: small;
+    font-style: italic;
+}
+
+.content .right_pane .short_registered_users{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content .right_pane .see_all_btn{
+    margin-top: 1.5em;
 }

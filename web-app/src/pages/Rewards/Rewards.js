@@ -9,8 +9,11 @@ import PageHeader from '../../components/PageHeader';
 import SearchBar from '../../components/SearchBar';
 import { useScreenType } from '../../hooks/useScreenType';
 import RewardComponent from './RewardComponent';
+import GlobalContext from '../../context/GlobalContext';
 
 const Rewards = props => {
+	const { user } = useContext(GlobalContext);
+
 	const [rewards, setRewards] = useState([]);
 	const [visibleRewards, setVisibleRewards] = useState([]);
 
@@ -54,8 +57,26 @@ const Rewards = props => {
 		setVisibleRewards(newRewards);
 	}
 
+	const [coinCount, setCoinCount] = useState(null);
+	const fetchUserCoins = async () => {
+		if(!user) return;
+		console.log('fetch user coins');
+
+		fetch(`http://localhost:5000/user/read?userId=${user._id}`)
+			.then(
+				res => res.json()
+					.then(data => {
+						console.log(`User coins: ${data.coinCount}`);
+						setCoinCount(data.coinCount);
+					})
+					.catch(err => console.log(err))
+			)
+			.catch(err => console.log(err));
+	}
+
 	useEffect(() => {
 		fetchRewardsData();
+		fetchUserCoins();
 	}, []);
 
 	const screenType = useScreenType();
@@ -76,14 +97,27 @@ const Rewards = props => {
                 </Link>
             </PageHeader>
 			<div className={styles.wrapper}>
-				<h3 className={styles.title}>Rewards</h3>
-				<span className={styles.subtitle}>Click a reward to find out more!</span>
+				<div className={styles.header}>
+					<div className={styles.text}>
+						<h3 className={styles.title}>Rewards</h3>
+						<span className={styles.subtitle}>Click a reward to find out more!</span>
+					</div>
+					<div className={styles.user}>
+						<Image
+							className={styles.icon}
+							src={'/media/coin.png'}/>
+						<span className={styles.coins}>{coinCount || '-'}</span>
+					</div>
+				</div>
 			{
 				visibleRewards.length > 0 ?
 				<div className={styles.rewards}>
 				{
 					visibleRewards.map((reward, i) => {
-						return <RewardComponent key={`${i}`} {...reward}/>
+						return <RewardComponent 
+							key={`${i}`} 
+							{...reward} 
+							fetchUserCoins={fetchUserCoins}/>
 					})
 				}
 				</div>

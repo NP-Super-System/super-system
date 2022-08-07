@@ -10,7 +10,7 @@ import GlobalContext from '../../context/GlobalContext';
 const RewardComponent = props => {
     const {user} = useContext(GlobalContext);
 
-    const { _id, name, description, cost } = props;
+    const { _id, name, description, cost, fetchUserCoins } = props;
     const [quantity, setQuantity] = useState(0);
 
 
@@ -53,16 +53,21 @@ const RewardComponent = props => {
                 res.json()
                     .then(data => {
                         console.log(data, data.msg);
-                        if(data.msg != ''){
+                        if(data.msg){
                             toast(data.msg);
                             return;
-                        } 
-                        toast.success(`Redeemed ${data.name}`);
+                        }
+                        toast.success(`Redeemed ${data.name}!`);
+                        toast.success('An email will be sent to you regarding how to claim your reward!')
                         setQuantity(data.quantity);
+                        fetchUserCoins();
                     })
                     .catch(err => console.log(err));
             })
-            .catch(err => console.log(err));   
+            .catch(err => {
+                fetchUserCoins();
+                console.log(err);
+            });   
     }
 
     return (
