@@ -142,11 +142,11 @@ const Announcements = props => {
                                     }
                                     </div>
                                     <div className={styles.announcementText}>
-                                        <div className={styles.user_content}>{displayMessage(item)}</div>
                                         <h5 className={styles.announcement_title}>{item.title}</h5>
                                         <div className={styles.announcement_desc}>
                                             {parse(item.body)}
                                         </div>
+                                        <div className={styles.user_content}>{displayMessage(item)}</div>
                                     </div>
                                     <div className={styles.buttons}>
                                         {

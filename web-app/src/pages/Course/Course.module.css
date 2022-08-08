@@ -1,14 +1,25 @@
 .sections{
-    padding: 1em 0.25em;
+    padding: 1em 0.5em;
 }
 .sections .title{
     margin-bottom: 1em;
 }
 
-.section{
-    padding: 0.5em;
-    margin-bottom: 0.5em;
+.announcements{
+    padding-top: 1em;
 }
-.section .title{
+.announcements .title{
+    margin-bottom: 1em;
+}
+.announcements > .announcement{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
 
+    padding: 1em;
+}
+.announcements > .announcement .age{
+    font-size: smaller;
+    font-style: italic;
 }

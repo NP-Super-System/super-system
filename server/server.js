@@ -2,28 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-// Import MongoDB models
-// User
-const User = require('./models/user/User');
-// TodoList
-const TodoItem = require('./models/todolist/TodoItem');
-// Forum
-const PostReply = require('./models/forum/PostReply');
-const PostComment = require('./models/forum/PostComment');
-const ForumPost  = require('./models/forum/ForumPost');
-
 const app = express();
 const port = process.env.PORT || 5000;
 const server = app.listen(port, ()=>{
     console.log(`Server listening to port ${port}`);
 });
+
 app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true,}));
 app.use(cors());
-
-// Web app Url (will change in the future)
-const appUrl = 'http://localhost:3000';
 
 // Connect to MongoDB super-system database
 require('./mongodb');
@@ -52,13 +40,14 @@ require('./crud/challenge')(app);
 require('./crud/event')(app);
 // Roles
 require('./crud/role')(app);
-// Pet
-// require('./crud/pet')(app);
 // Calendar
 require('./crud/calendar')(app);
-
+// Reward
 require('./crud/reward')(app);
 
+// -------------------
+// -- PRESET DATA --
+// -------------------
 
 // require('./preset-data/courses');
 // require('./preset-data/challenges');

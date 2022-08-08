@@ -1,8 +1,31 @@
 .wrapper{
     padding: 1em 0.5em;
     margin-bottom: 1em;
+
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+
+    transition: 0.1s;
 }
 
 .wrapper:hover{
     color: #0070CC;
+    border-color: #0070CC;
+}
+
+.wrapper .title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 0.15em 1em;
+}
+.wrapper .title .completed_icon{
+    margin-left: 1em;
+    color: rgb(0, 153, 255);
+
+    max-width: 40px;
+    width: 100%;
+    max-height: 40px;
+    height: 100%;
 }
