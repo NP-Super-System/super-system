@@ -21,6 +21,13 @@ const userSchema = new Schema({
         type: Array,
     },
 
+    pet:{
+        level: {type: Number},
+        food: {type: Number},
+        cleanliness: {type: Number},
+        happiness: {type: Number},
+    },
+
     // Other user info
     level: {
         count: {type: Number},

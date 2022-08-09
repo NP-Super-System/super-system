@@ -1,10 +1,11 @@
 const User = require('../models/user/User');
+const {ObjectId} = require("mongodb")
 
 const operations = app => {
-    app.post('/pet/update', async (req, res) => {
+    app.post('/pet/update/', async (req, res) => {
         const { userId, level, food, happiness, cleanliness } = req.body;
         console.log(userId, req.body);
-        const user = await User.findOne({_id: userId});
+        const user = await User.findOne({_id: ObjectId(userId)});
         console.log(user);
         user.pet = { level, food, cleanliness, happiness,}
         console.log(user, user.pet);

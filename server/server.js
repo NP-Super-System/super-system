@@ -53,7 +53,7 @@ require('./crud/event')(app);
 // Roles
 require('./crud/role')(app);
 // Pet
-// require('./crud/pet')(app);
+require('./crud/pet')(app);
 // Calendar
 require('./crud/calendar')(app);
 
