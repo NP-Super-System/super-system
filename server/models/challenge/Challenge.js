@@ -9,7 +9,7 @@ const User = require('../user/User');
 
 const challengeSchema = new Schema({
 
-    user: { type: Schema.Types.ObjectId, ref: User, required: true,  },
+    user: { type: Schema.Types.ObjectId, ref: User, required: true, },
     title: { type: String, required: true, },
     updated: Boolean,
 
@@ -18,7 +18,9 @@ const challengeSchema = new Schema({
     numberOfRatings: { type: Number, required: true, },
 
     questions: [QuestionSchema],
-    usersCompleted: [Schema.Types.ObjectId]
+    usersCompleted: [Schema.Types.ObjectId],
+
+    tags: [String],
 
 }, { timestamps: true });
 

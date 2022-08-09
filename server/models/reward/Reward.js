@@ -13,7 +13,6 @@ const rewardSchema = new Schema({
 }, { timestamps: true });
 
 // Create model for rewards
-
 const Reward = mongoose.model('reward', rewardSchema);
 
 module.exports = Reward;

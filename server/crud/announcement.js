@@ -6,12 +6,13 @@ const User = require('../models/user/User');
 const operations = app => {
 
     // Create - add announcement
-    const createAnnouncement = async (res, userId, title, body) => {
+    const createAnnouncement = async (res, userId, title, body, tags) => {
         const user = await User.findOne({_id: userId});
         const newAnnouncement = new Announcement({
             user,
             title,
             body,
+            tags,
         });
         
         newAnnouncement.save()
@@ -23,9 +24,9 @@ const operations = app => {
     }
 
     app.post('/announcement/create', async (req, res) => {
-        const { userId, title, body } = req.body;
+        const { userId, title, body, tags } = req.body;
         console.log(req.body);
-        await createAnnouncement(res, userId, title, body);
+        await createAnnouncement(res, userId, title, body, tags.split(','));
     });
 
 

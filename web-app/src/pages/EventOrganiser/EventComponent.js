@@ -16,10 +16,6 @@ const EventComponent = props => {
 
     const [loaded, setLoaded] = useState(false);
 
-    useEffect(()=>{
-        console.log(imgKey, loaded);
-    }, [loaded, imgKey]);
-
     return (
         <Card className={styles.wrapper}>
         {   

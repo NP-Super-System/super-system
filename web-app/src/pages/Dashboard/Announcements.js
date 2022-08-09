@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { getPostAge } from '../../hooks/getPostAge';
 import { BsFillTrash2Fill, BsPencilFill, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
+import parse from 'html-react-parser';
 
 import styles from './Announcements.module.css';
 import { Card } from "react-bootstrap";
@@ -94,9 +95,9 @@ const Announcements = props => {
 
     const displayMessage = (item) => {
         if (item.createdAt === item.updatedAt) {
-            return <span className={styles.user_name}>Created By: {item.user.userName} {getPostAge(item.createdAt)}</span>
+            return <span className={styles.user_name}>{getPostAge(item.createdAt)}</span>
         }
-        return <span className={styles.user_name}>Updated By: {item.userUpdate} {getPostAge(item.updatedAt)}</span>
+        return <span className={styles.user_name}>{getPostAge(item.updatedAt)}</span>
     }
 
     const isOwner = (index) => {
@@ -106,158 +107,88 @@ const Announcements = props => {
         return false;
     }
 
-    const showAnnouncements = () => {
-        return (
-            isCollapsed ||
-            announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) =>
-                <div key={`${index}`}>
-                    {
-                        index < (showMore ? 2 : announcements.length) ?
-                            <div className={styles.announcement}>
-                                <Link to={`/home/announcement/${item._id}`} className={styles.announcementText}>
-                                    <div className={styles.user_content}>
-                                        {displayMessage(item)}
-                                    </div>
-                                    <h5 className={styles.announcement_title}>{item.title}</h5>
-                                    <span className={styles.announcement_desc}>{item.body}</span>
-                                </Link>
-                                <div className={styles.buttons}>
+    return (
+        <Card className={styles.wrapper}>
+            <Card.Title>
+                Announcements
+                <Link to='/home/announcement/create'>
+                    <Button
+                        variant='primary'
+                        className={styles.create_button}>
+                        <IoAddSharp className={styles.create_icon} />
+                    </Button>
+                </Link>
+                <Button
+                    variant='outline-secondary'
+                    className={styles.collaspible_button}
+                    onClick={isCollapsed ? () => { setCollapsedState(false); } : () => { setCollapsedState(true); }}>
+                    {isCollapsed ? <BsFillCaretDownFill /> : <BsFillCaretUpFill />}
+                </Button>
+            </Card.Title>
+            {
+                isCollapsed ||
+                announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) =>
+                    <div key={`${index}`}>
+                        {
+                            index < (showMore ? 1 : announcements.length) ?
+                                <div className={styles.announcement}>
+                                    <div className={styles.tags}>
                                     {
-                                        isOwner(index) ?
-                                            <div>
-                                                <Link to={`/home/announcement/update/${item._id}`}>
+                                        item.tags.map((tag, i) => {
+                                            return <div key={`${i}`} className={styles.tag}>
+                                                {tag}
+                                            </div>
+                                        })
+                                    }
+                                    </div>
+                                    <div className={styles.announcementText}>
+                                        <h5 className={styles.announcement_title}>{item.title}</h5>
+                                        <div className={styles.announcement_desc}>
+                                            {parse(item.body)}
+                                        </div>
+                                        <div className={styles.user_content}>{displayMessage(item)}</div>
+                                    </div>
+                                    <div className={styles.buttons}>
+                                        {
+                                            isOwner(index) ?
+                                                <div>
+                                                    <Link to={`/home/announcement/update/${item._id}`}>
+                                                        <Button
+                                                            variant='primary'
+                                                            className={styles.edit_btn}>
+                                                            <BsPencilFill
+                                                                className={styles.icon} />
+                                                        </Button>
+                                                    </Link>
                                                     <Button
                                                         variant='primary'
-                                                        className={styles.edit_btn}>
-                                                        <BsPencilFill
+                                                        onClick={e => deleteBtn(item.user.userId, item._id)}
+                                                        className={styles.delete_btn}>
+                                                        <BsFillTrash2Fill
                                                             className={styles.icon} />
                                                     </Button>
-                                                </Link>
-                                                <Button
-                                                    variant='primary'
-                                                    onClick={e => deleteBtn(item.user.userId, item._id)}
-                                                    className={styles.delete_btn}>
-                                                    <BsFillTrash2Fill
-                                                        className={styles.icon} />
-                                                </Button>
-                                            </div>
-                                            :
-                                            <span></span>
-                                    }
+                                                </div>
+                                                :
+                                                <span></span>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            :
-                            <span></span>
-                    }
-                </div>
-            )
-        )
-    }
-
-    return (
-        <div>
-            <Card className={styles.wrapper}>
-                <Card.Title>
-                    Announcements
-                    <Link to='/home/announcement/create'>
-                        <Button
-                            variant='primary'
-                            className={styles.create_button}>
-                            <IoAddSharp className={styles.create_icon} />
-                        </Button>
-                    </Link>
-                    <Button
-                        variant='outline-secondary'
-                        className={styles.collaspible_button}
-                        onClick={isCollapsed ? () => { setCollapsedState(false); } : () => { setCollapsedState(true); }}>
-                        {isCollapsed ? <BsFillCaretDownFill /> : <BsFillCaretUpFill />}
-                    </Button>
-                </Card.Title>
-                {
-                    showAnnouncements()
-                }
-                {
-                    isCollapsed ?
-                        <span></span>
+                                :
+                                <span></span>
+                        }
+                    </div>
+                )
+            }
+            {
+                isCollapsed ?
+                    <span></span>
+                    :
+                    showMore ?
+                        <span className={styles.show} onClick={() => { setShowMore(false); }}>Show All</span>
                         :
-                        showMore ?
-                            <span className={styles.show} onClick={() => { setShowMore(false); }}>Show All</span>
-                            :
-                            <span className={styles.show} onClick={() => { setShowMore(true); }}>Show Less</span>
-                }
-            </Card>
-
-            {/* {
-        isCollapsed ?
-            <Card className={styles.wrapper}>     
-                <Card.Title>
-                    Announcements
-                    <Link to='/home/announcement/create'>
-                        <Button 
-                            variant='primary'
-                            className={styles.create_button}>
-                            <IoAddSharp className={styles.create_icon}/>
-                        </Button>
-                    </Link>
-                    <Button 
-                        variant='outline-secondary'
-                        className={styles.collaspible_button}
-                        onClick={() => expand()}>
-                        <BsFillCaretDownFill />
-                    </Button>
-                </Card.Title> 
-            </Card>
-            :
-            <Card className={styles.wrapper}>     
-                <Card.Title>
-                    Announcements
-                    <Link to='/home/announcement/create'>
-                        <Button 
-                            variant='primary'
-                            className={styles.create_button}>
-                            <IoAddSharp className={styles.create_icon}/>
-                        </Button>
-                    </Link>
-                    <Button 
-                        variant='outline-secondary'
-                        className={styles.collaspible_button}
-                        onClick={() => collaspe()}>
-                        <BsFillCaretUpFill />
-                    </Button>
-                </Card.Title>       
-                {
-                    announcements.sort((a, b) => a.updatedAt > b.updatedAt ? -1 : 1).map((item, index) => 
-                        <div key={`${index}`} className={styles.announcement}>
-                            <Link to={`/home/announcement/${item._id}`} className={styles.announcementText}>
-                                <div className={styles.user_content}>
-                                    {displayMessage(item.user.userName, item.createdAt, item.updatedAt)}
-                                </div>
-                                <h5 className={styles.announcement_title}>{item.title}</h5>
-                                <span className={styles.announcement_desc}>{item.body}</span>
-                            </Link>
-                            <div className={styles.buttons}>
-                                <Link to={`/home/announcement/update/${item._id}`}>
-                                    <Button
-                                        variant='primary'
-                                        className={styles.edit_btn}>
-                                        <BsPencilFill 
-                                            className={styles.icon}/>
-                                    </Button>
-                                </Link>
-                                <Button
-                                    variant='primary'
-                                    onClick={e => deleteBtn(item.user.userId, item._id)}
-                                    className={styles.delete_btn}>
-                                    <BsFillTrash2Fill 
-                                        className={styles.icon}/>
-                                </Button>
-                            </div>
-                        </div>
-                    )
-                }        
-            </Card>
-        } */}
-        </div>
+                        <span className={styles.show} onClick={() => { setShowMore(true); }}>Show Less</span>
+            }
+        </Card>
     )
 
 }

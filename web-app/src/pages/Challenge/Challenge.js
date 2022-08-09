@@ -194,7 +194,7 @@ const Challenge = props => {
 
 	const incrementPoints = () => {
 		if (!usersCompleted.includes(user._id)) {
-			const options = {
+			const ratingOptions = {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ const Challenge = props => {
 
 			const submitRating = `http://localhost:5000/increase/points/${user._id}`;
 
-			fetch(submitRating, options)
+			fetch(submitRating, ratingOptions)
 				.then(res => {
 					console.log('Incremented points');
 				})
@@ -216,7 +216,7 @@ const Challenge = props => {
 					console.log(err);
 				});
 
-			const option = {
+			const completedOptions = {
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -227,14 +227,14 @@ const Challenge = props => {
 
 			console.log(`Adding user to list`);
 
-			const submitUser = `http://localhost:5000/challenge/completed/${user._id}`;
+			const completedUrl = `http://localhost:5000/challenge/completed/${user._id}`;
 
-			fetch(submitUser, option)
+			fetch(completedUrl, completedOptions)
 				.then(res => {
-					console.log('Added user to list');
+					console.log('Added user to completed list');
 				})
 				.catch(err => {
-					console.log('Error adding user to list');
+					console.log('Error adding user to completed list');
 					console.log(err);
 				});
 		}
@@ -242,8 +242,6 @@ const Challenge = props => {
 
 	const [pastSubmissions, setPastSubmissions] = useState([]);
 	const getPastSubmissions = questions => {
-		// const userSubmissionQuestions = questions.filter(qn => qn.submissions.some(sub => sub.user._id === user.id));
-		// console.log(userSubmissionQuestions);
 		setPastSubmissions(
 			questions.map((qn, i) => {
 					return {

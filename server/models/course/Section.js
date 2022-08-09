@@ -4,26 +4,16 @@ const Schema = mongoose.Schema;
 const FileSchema = require('./File').schema;
 const TextSchema = require('./Text').schema;
 
-// Schema for file
-const fileSchema = new Schema({
-    
-    name: {type: String, required: true},
-    key: {type: String, required: true}
-
-});
-
 // Schema for course sections
 const sectionSchema = new Schema({
 
-    title: {
-        type: String,
-        required: true,
-    },
+    title: { type: String, required: true, },
+    tags: [String],
 
     files: [FileSchema],
     textList: [TextSchema],
     
-    challengeId: String,
+    hasChallenge: Boolean,
 
 }, { timestamps: true });
 

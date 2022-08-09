@@ -12,7 +12,7 @@ const Login = props => {
     return (
         <div className={screenType === 'phone' ? styles.container_phone : styles.container}>
             <div className={styles.left_pane}>
-                <h1 className={styles.title}>Super-System</h1>
+                <h1 className={styles.title}>Super-Learn</h1>
                 <div className={styles.description}>
                     A Gamified Learning Management System
                 </div>

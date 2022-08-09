@@ -33,6 +33,8 @@ const operations = app => {
 
     const initEventToUser = async userId => {
         const eventToUser = await EventToUser.findOne({ user: userId });
+        if(eventToUser) return eventToUser;
+        // console.log(eventToUser);
         const user = await getUser(userId);
         if(!eventToUser){
             const newEventToUser = new EventToUser({
@@ -44,8 +46,6 @@ const operations = app => {
             console.log(result);
             return result;
         }
-
-        return eventToUser;
     }
 
     app.post('/event/create', uploadLocal.single('file'), async (req, res) => {
@@ -142,7 +142,7 @@ const operations = app => {
                 res.send([]);
                 return;
             }
-            const eventToUserPopulated = await EventToUser.findOne({userId})
+            const eventToUserPopulated = await EventToUser.findOne({user: userId})
                 .populate({ path: 'registeredEvents', });
             res.send(eventToUserPopulated);
         }
@@ -160,7 +160,7 @@ const operations = app => {
                 res.send([]);
                 return;
             }
-            const eventToUserPopulated = await EventToUser.findOne({userId})
+            const eventToUserPopulated = await EventToUser.findOne({user: userId})
                 .populate({ path: 'organisedEvents', });
             res.send(eventToUserPopulated);
         }
@@ -179,6 +179,7 @@ const operations = app => {
             await Event.updateOne( {_id: id}, {registeredUsers: []});
         }
 
+        // !!! START OF REMOVED !!!
         if(evt.registeredUsers.includes(userId)){
             const result = await Event.updateOne( {_id: id}, {registeredUsers: evt.registeredUsers.filter(ui => ui != userId)});
             console.log(`Removed registered user ${userId} for event ${id}`);
@@ -197,6 +198,7 @@ const operations = app => {
             }
             return;
         }
+        // ### END OF REMOVED ###
 
         const user = await User.findOne({_id: userId});
         evt.registeredUsers.push(user);
@@ -210,8 +212,18 @@ const operations = app => {
             const eventToUser = await initEventToUser(userId);
             console.log(eventToUser);
             eventToUser.registeredEvents.push(evt);
-            const result = await eventToUser.save();
+            await eventToUser.save();
             console.log(`Saved registered event ${result._id} to user ${userId}`);
+        }
+        catch(err){
+            console.log(err);
+        }
+
+        // Award user with coins
+        try{
+            user.coinCount += 20;
+            await user.save();
+            console.log(`Awarded user ${user._id} for registering`);
         }
         catch(err){
             console.log(err);
@@ -222,10 +234,11 @@ const operations = app => {
     app.get('/event/delete', async (req, res) => {
         const { id } = req.query;
 
+        const [evt] = await getEvents(id);
+
         // Delete image
         try{
-            const [event] = await getEvents(id);
-            const { imgKey } = event;
+            const { imgKey } = evt;
             imgKey && await deleteFile(imgKey, 'image');
             console.log(`Deleted event img: ${imgKey}`);
         }
@@ -233,6 +246,24 @@ const operations = app => {
             console.log(err);
         }
 
+        try{
+            // Delete registeredEvents
+            for (let ruserId of evt.registeredUsers){
+                const evtToUser = await EventToUser.findOne({user: ruserId});
+                evtToUser.registeredEvents = evtToUser.registeredEvents.filter(evtId => evtId != evt._id);
+                await evtToUser.save();
+            }
+
+            // Delete organisedEvents
+            const evtToPoster = await EventToUser.findOne({user: evt.user._id});
+            evtToPoster.organisedEvents = evtToPoster.organisedEvents.filter(evtId => evtId != evt._id);
+            await evtToPoster.save(); 
+
+        }
+        catch(err){
+            console.log(err);
+        }
+        // Delete event
         try{
             const result = await Event.deleteOne({_id: id});
             res.status(200).send(result);

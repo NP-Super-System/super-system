@@ -74,6 +74,26 @@
     display: flex;
     flex-direction: column;
 }
+
+.challenge_details .tags{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-top: 1em;
+}
+.challenge_details .tags > .tag{
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    padding: 0.1em 0.75em;
+}
+
+.challenge_details .title{
+
+}
+
 .challenge_details .poster{
     display: flex;
     flex-direction: row;
@@ -168,5 +188,5 @@
     align-items: center;
     justify-content: flex-start;
 
-    margin-top: 1em;
+    margin-top: 0.5em;
 }

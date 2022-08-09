@@ -1,23 +1,39 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, Image } from 'react-bootstrap';
+import toast from 'react-hot-toast';
 
 import styles from './RewardComponent.module.css';
 
 import RewardModal from './RewardModal';
-
 import GlobalContext from '../../context/GlobalContext';
 
 const RewardComponent = props => {
-    const { _id, name, description, cost, quantity } = props;
-    const [count, setCount] = useState(quantity);
+    const {user} = useContext(GlobalContext);
+
+    const { _id, name, description, cost, fetchUserCoins } = props;
+    const [quantity, setQuantity] = useState(0);
+
 
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => {
+    const getReward = () => {
+        fetch(`http://localhost:5000/reward/read/?id=${props._id}`)
+            .then(res => {
+                res.json()
+                    .then(data => {
+                        setQuantity(data.quantity);
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+    }
 
-    }, [])
+    useEffect(() => {
+        getReward();
+    }, [showModal])
 
     const handleRedeem = e => {
+        if(!user) return;
         console.log('redeem reward');
         
         const options = {
@@ -28,6 +44,7 @@ const RewardComponent = props => {
             },
             body: JSON.stringify({
                 _id,
+                userId: user.id,
                 quantity: quantity - 1,
             }),
         }
@@ -35,25 +52,22 @@ const RewardComponent = props => {
             .then(res => {
                 res.json()
                     .then(data => {
-                        console.log(data, data.quantity);
-                        setCount(data.quantity);
+                        console.log(data, data.msg);
+                        if(data.msg){
+                            toast(data.msg);
+                            return;
+                        }
+                        toast.success(`Redeemed ${data.name}!`);
+                        toast.success('An email will be sent to you regarding how to claim your reward!')
+                        setQuantity(data.quantity);
+                        fetchUserCoins();
                     })
                     .catch(err => console.log(err));
             })
-            .catch(err => console.log(err));
-
-        // fetch(`http://localhost:5000/reward/read/?id=${_id}`)
-        //     .then(res => {
-        //         res.json()
-        //             .then(data => {
-        //                 console.log(data, data.quantity);
-        //                 setCount(data.quantity);
-        //             })
-        //             .catch(err => console.log(err));
-        //     })
-        //     .catch(err => console.log(err));
-        
-        console.log(quantity);
+            .catch(err => {
+                fetchUserCoins();
+                console.log(err);
+            });   
     }
 
     return (
@@ -66,7 +80,7 @@ const RewardComponent = props => {
                 <Image className={styles.img} src='/media/coin.png'/>
                 <span className={styles.text}>{cost}</span>
             </div>
-            <div className={styles.quantity}>Stock left: {count}</div>
+            <div className={styles.quantity}>Stock left: {quantity}</div>
             <RewardModal 
                 show={showModal} 
                 setShow={setShowModal} 

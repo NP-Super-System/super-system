@@ -16,7 +16,7 @@ const EventOrganiser = props => {
 
     useEffect(() => {
         const url = `http://localhost:5000/event/read/organised/?userId=${user.id}`;
-
+        console.log(user.id, user.name);
         fetch(url)
             .then(res => {
                 res.json()

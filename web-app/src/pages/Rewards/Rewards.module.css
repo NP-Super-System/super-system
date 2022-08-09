@@ -14,20 +14,49 @@
 .wrapper {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 
 	padding: 56px 1em 0 1em;
 }
+.wrapper .header{
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
 
-.wrapper .title {
+	width: 100%;
+}
+.wrapper .header .text{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.wrapper .header .text .title {
 	align-self: flex-start;
 	padding: 0.5em 0 0 0;
 }
-
-.wrapper .subtitle {
+.wrapper .header .text .subtitle {
 	align-self: flex-start;
 	font-style: italic;
 	padding: 0 0 1em 0;
+}
+.wrapper .header .user{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.wrapper .header .user .icon{
+	width: 100%;
+	max-width: 32px;
+	height: 100%;
+	max-height: 32px;
+
+	margin-right: 0.5em;
+}
+.wrapper .header .user .coins{
+	font-weight: 600;
+	font-size: larger;
 }
 
 .rewards {

@@ -16,8 +16,26 @@
     text-align: left;
 }
 
-.announcement .user_content{
+.announcement .tags{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-bottom: 1em;
+}
+.announcement .tags > .tag{
+    background-color: rgb(211, 211, 211);
+
+    border-radius: 25px;
+    margin-right: 0.75em;
+    padding: 0.1em 0.75em;
+
+    font-size: small;
+}
+
+.announcement .user_content{
+    margin-top: 2em;
+    font-size: small;
+    font-style: italic;
 }
 
 .announcementText {
@@ -27,6 +45,9 @@
 
 .announcement_title{
     margin-bottom: 0.5em;
+}
+.announcement_desc > p{
+    margin-bottom: 0.5em !important;
 }
 
 .announcement_datetime{
@@ -50,10 +71,6 @@
     justify-content: center;
     padding: 0.1em;
     margin-left: 30px;
-}
-.announcement .user_content {
-    font-size: 65%;
-    color: gray;
 }
 
 .buttons {

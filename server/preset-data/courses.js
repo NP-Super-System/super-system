@@ -12,20 +12,15 @@ const courseList = [
         code: '22S1_EH',
         name: 'Ethical Hacking',
         imgKey: 'course/22S1_EH.jpeg',
-        sections: [
-            new Section({
-                title: 'Week 1',
+        sections: [...Array(18).keys()].map(i => {
+            const weekNum = i+1;
+            return new Section({
+                title: `Week ${weekNum}`,
+                tags: ['22S1_EH', `Week${weekNum}`],
                 files: [],
-            }),
-            new Section({
-                title: 'Week 2',
-                files: [],
-            }),
-            new Section({
-                title: 'Week 3',
-                files: [],
-            }),
-        ],
+                hasChallenge: true,
+            });
+        }),
         annoucements: [
 
         ],
@@ -36,20 +31,15 @@ const courseList = [
         code: '22S1_NS',
         name: 'Network Security',
         imgKey: 'course/22S1_NS.jpeg',
-        sections: [
-            new Section({
-                title: 'Week 1',
+        sections: [...Array(18).keys()].map(i => {
+            const weekNum = i+1;
+            return new Section({
+                title: `Week ${weekNum}`,
+                tags: ['22S1_NS', `Week${weekNum}`],
                 files: [],
-            }),
-            new Section({
-                title: 'Week 2',
-                files: [],
-            }),
-            new Section({
-                title: 'Week 3',
-                files: [],
-            }),
-        ],
+                hasChallenge: true,
+            });
+        }),
         annoucements: [
             
         ],
@@ -62,15 +52,11 @@ const courseList = [
         imgKey: 'course/22S1_CP.jpeg',
         sections: [
             new Section({
-                title: 'Week 1',
+                title: 'Module information',
                 files: [],
             }),
             new Section({
-                title: 'Week 2',
-                files: [],
-            }),
-            new Section({
-                title: 'Week 3',
+                title: 'Helpful Materials',
                 files: [],
             }),
         ],
@@ -86,15 +72,23 @@ const courseList = [
         imgKey: 'course/22S1_PROID.jpeg',
         sections: [
             new Section({
-                title: 'Week 1',
+                title: 'Module Information',
                 files: [],
             }),
             new Section({
-                title: 'Week 2',
+                title: 'Assessment 1',
                 files: [],
             }),
             new Section({
-                title: 'Week 3',
+                title: 'Assessment 2',
+                files: [],
+            }),
+            new Section({
+                title: 'Assessment 3',
+                files: [],
+            }),
+            new Section({
+                title: 'Assessment 4',
                 files: [],
             }),
         ],
@@ -110,15 +104,15 @@ const courseList = [
         imgKey: 'course/22S1_FP.jpeg',
         sections: [
             new Section({
-                title: 'Week 1',
+                title: 'Assessment 1',
                 files: [],
             }),
             new Section({
-                title: 'Week 2',
+                title: 'Assessment 2',
                 files: [],
             }),
             new Section({
-                title: 'Week 3',
+                title: 'Assessment 3',
                 files: [],
             }),
         ],

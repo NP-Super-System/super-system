@@ -19,10 +19,9 @@
 }
 
 .file_section .header{
-    padding: 1em;
+    /* padding: 0.5em 0.5em 0 0.5em; */
+    padding-top: 0.5em;
     margin-right: 1em;
-    
-    margin-bottom: 0.5em;
 }
 
 .file_section .header .add_file_form{
@@ -89,10 +88,7 @@
     justify-content: flex-start;
 }
 .text_section .header{
-    padding: 1em;
     margin-right: 1em;
-
-    margin-bottom: 0.5em;
 }
 .text_section .text_list{
     display: flex;
@@ -118,9 +114,52 @@
     border-radius: 0 0 5px 5px;
 }
 
+.complete_status{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 1em;
+    width: 100%;
+}
+.complete_status .icon{
+    color: rgb(223, 189, 0);
+    margin-right: 1em;
+
+    max-width: 26px;
+    width: 100%;
+    max-height: 26px;
+    height: 100%;
+}
+.complete_status .text{
+
+}
+
 .challenge_section{
     padding: 0.5em 1em;
+    margin-bottom: 1em;
 }
 .challenge_section .header{
     margin-bottom: 0.5em;
+}
+
+.completed_challenges{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: center;
+
+    width: 100%;
+    max-width: 900px;
+    padding: 0 1em;
+}
+.completed_challenges .progress{
+    margin-bottom: 1em;
+}
+.completed_challenges .progress_bar{
+    background-color: white;
+    /* max-height: 10px; */
+    height: 100%;
+    width: 100%;
 }

@@ -26,7 +26,7 @@ const Navbar = props => {
     return (
         <NavbarBS bg='dark' expand='lg' collapseOnSelect={true}>
             <Container>
-                <NavbarBS.Brand>Super-System</NavbarBS.Brand>
+                <NavbarBS.Brand>Super-Learn</NavbarBS.Brand>
                 <NavbarBS.Toggle aria-controls="navbar-pages-nav">
                     <Image src="https://img.icons8.com/material-outlined/24/FFFFFF/menu--v1.png"/>
                 </NavbarBS.Toggle>
