@@ -76,14 +76,12 @@ const Course = props => {
                         <Card.Title className={styles.title}>{courseData.name}</Card.Title>
                         {
                             courseData.sections.map((item, i) => {
-                                return <>
-                                    <Section 
-                                        key={`${i}`} 
-                                        {...item} 
-                                        courseId={courseData._id} 
-                                        courseCode={courseCode} 
-                                        completed={completedSections?.includes(item._id)}/>
-                                </>
+                                return <Section 
+                                    key={`${i}`} 
+                                    {...item} 
+                                    courseId={courseData._id} 
+                                    courseCode={courseCode} 
+                                    completed={completedSections?.includes(item._id)}/>
                             })
                         }
                     </Card>

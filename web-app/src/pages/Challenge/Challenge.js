@@ -81,13 +81,17 @@ const Challenge = props => {
 	}
 
 	const multipleAnswer = (id) => {
+		let newIsChosen = [...isChosen];
+
 		if (isChosen.includes(id)) {
 			console.log('remove');
-			isChosen.splice(isChosen.findIndex(answer => answer === id), 1);
+			newIsChosen.splice(isChosen.findIndex(answer => answer === id), 1);
+			setIsChosen(newIsChosen);
 		}
 		else {
 			console.log('add');
-			isChosen.push(id);
+			newIsChosen.push(id);
+			setIsChosen(newIsChosen);
 		}
 		if (isCorrectCounter.includes(id)) {
 			isCorrectCounter.splice(isCorrectCounter.findIndex(answer => answer === id), 1);
@@ -96,6 +100,10 @@ const Challenge = props => {
 			isCorrectCounter.push(id);
 		}
 	}
+
+	useEffect(()=>{
+		console.log('isChosen:', isChosen);
+	}, [isChosen]);
 
 	const ansSelected = () => {
 		if (questions[questionIndex].type === 'multiple-answer') {
@@ -341,6 +349,15 @@ const Challenge = props => {
 								className={styles.img}
 								src={`http://localhost:5000/s3/image/?key=${questions[questionIndex].imgKey}`} />
 						}
+						{
+							questions[questionIndex].type === 'multiple-answer' &&
+							<span style={{
+								fontSize: 'small',
+								fontStyle: 'italic',
+								color: 'gray',
+								marginBottom: '1em',
+							}}>Multiple answer question</span>
+						}
 							<div className={styles.text}>{questions[questionIndex].text}</div>
 							<div className={styles.answersection}>
 							{
@@ -348,7 +365,14 @@ const Challenge = props => {
 								questions[questionIndex].options.map((answerOption, i) => (
 									<div key={`${i + questionIndex * 10}`} className={styles.button}>
 										<input type="checkbox" className="btn-check" name="options" id={answerOption._id} />
-										<label className={`${styles.label} btn btn-outline-primary`} htmlFor={answerOption._id} onClick={() => multipleAnswer(i)}>{answerOption.text}</label>
+										<label 
+											className={`${isChosen.includes(i) ? styles.label_chosen : styles.label} btn btn-outline-primary`} 
+											htmlFor={answerOption._id} 
+											onClick={() => multipleAnswer(i)}>
+
+											{answerOption.text}
+
+										</label>
 										<hr></hr>
 									</div>
 								))

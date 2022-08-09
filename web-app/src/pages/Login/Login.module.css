@@ -48,6 +48,10 @@
 .left_pane .content .slogan{
     font-style: italic;
 }
+.left_pane .content .subslogan{
+    font-style: italic;
+    font-size: small;
+}
 
 .right_pane{
     display: flex;
@@ -68,6 +72,11 @@
 .right_pane .content .slogan{
     font-size: 1.5em;
     font-style: italic;
+}
+.right_pane .content .subslogan{
+    font-size: 1.5em;
+    font-style: italic;
+    font-size: medium;
 }
 .right_pane .content .login_btn{
     width: 100%;

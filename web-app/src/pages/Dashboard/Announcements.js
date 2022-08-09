@@ -18,7 +18,7 @@ const Announcements = props => {
     const [announcements, setAnnouncements] = useState([]);
     const [isCollapsed, setCollapsedState] = useState(false);
     const { user } = useAuth0();
-    const [userRoles, setUserRoles] = useState(false);
+    const [userRoles, setUserRoles] = useState(null);
     const [showMore, setShowMore] = useState(true);
 
     useEffect((userId) => {
@@ -111,6 +111,8 @@ const Announcements = props => {
         <Card className={styles.wrapper}>
             <Card.Title>
                 Announcements
+            {
+                userRoles?.some(role => role === 'Admin' || role === 'Lecturer') &&
                 <Link to='/home/announcement/create'>
                     <Button
                         variant='primary'
@@ -118,6 +120,7 @@ const Announcements = props => {
                         <IoAddSharp className={styles.create_icon} />
                     </Button>
                 </Link>
+            }
                 <Button
                     variant='outline-secondary'
                     className={styles.collaspible_button}

@@ -14,7 +14,7 @@ const Login = props => {
             <div className={styles.left_pane}>
                 <h1 className={styles.title}>Super-Learn</h1>
                 <div className={styles.description}>
-                    A Gamified Learning Management System
+                    A Gamified Learning Platform
                 </div>
             {
                 screenType !== 'phone' ?
@@ -27,6 +27,7 @@ const Login = props => {
 
                 <div className={styles.content}>
                     <p className={styles.slogan}>Making Poly Learning Fun</p>
+                    <p className={styles.subslogan}>By Students. For Students</p>
                     <LoginButton />
                 </div>
             }
@@ -36,6 +37,7 @@ const Login = props => {
             <div className={styles.right_pane}>
                 <div className={styles.content}>
                     <p className={styles.slogan}>Making Poly Learning Fun</p>
+                    <p className={styles.subslogan}>By Students. For Students</p>
                     <LoginButton />
                 </div>
             </div>

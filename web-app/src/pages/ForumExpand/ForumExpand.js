@@ -169,7 +169,9 @@ const ForumExpand = props => {
                         <Button variant='primary' className={styles.action_button}>
                             <BsLayers className={styles.action_icon}/>
                             <span>Save</span>
-                        </Button> 
+                        </Button>
+                    {
+                        (user?.userRoles?.some(role => role === 'Admin' || role === 'Lecturer') || user._id === postData?.user?._id)&&
                         <form
                             action='http://localhost:5000/forum-post/delete/'
                             method='POST'>
@@ -182,6 +184,7 @@ const ForumExpand = props => {
                                 <span>Delete</span>
                             </Button>
                         </form>
+                    }
                     </div>
                     <form action='http://localhost:5000/add-comment' method='POST' className={styles.comment_form}>
                         <Form.Group>

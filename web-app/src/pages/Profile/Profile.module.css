@@ -52,7 +52,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    
     font-size: 1.5em;
     color: goldenrod;
 }
@@ -74,4 +74,9 @@
 }
 .user_info .info .value{
     float: right;
+}
+
+.game .pet{
+    max-width: 250px;
+    width: 100%;
 }

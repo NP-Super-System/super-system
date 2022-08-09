@@ -81,15 +81,6 @@ const Forum = props=>{
                     )
                 }
                 </Col>
-            {
-                screenType === 'phone' ||
-
-                <Col className={styles.friends_list}>
-                    <Card>
-                        <Card.Title>Friends List</Card.Title>
-                    </Card>
-                </Col>
-            }
             </div>
         </PageContainer>
     );

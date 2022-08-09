@@ -90,13 +90,25 @@
 
     width: 100%;
 }
+.question .answersection .label_chosen{
+    text-align: left;
+    width: 100%;
+
+    padding: 0.5em 1em;
+    color: white;
+    border: none;
+}
 .question .answersection .label{
     text-align: left;
     width: 100%;
 
     padding: 0.5em 1em;
     color: black;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+.question .answersection .label:hover{
+    background-color: white;
+    border: 1px solid #0d6efd;
 }
 .question .answersection .submission_text{
     font-style: italic;
