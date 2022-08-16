@@ -67,6 +67,7 @@ const operations = app => {
                 res.send({msg: 'Not enough coins to redeem reward'});
                 return;
             }
+            console.log(rewardToUser.user.coinCount, reward.cost, rewardToUser.user.coinCount < reward.cost);
             
             user.coinCount -= reward.cost;
             rewardToUser.redeemedRewards.push(reward);
